@@ -4,6 +4,7 @@
  */
 package ui;
 
-public class jogador {
-	static int count = 0;
+public enum cor {
+	BRANCO,
+	PRETO;
 }

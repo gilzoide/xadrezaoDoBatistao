@@ -4,6 +4,8 @@
  */
 package xadrez;
 
+import ui.cor;
+
 public class tabuleiro {
 
 }
