@@ -1,29 +1,26 @@
 # Make do Xadrezão do Batistão
 
-# todos os pacotes do projeto
-pacotes = peca gui tabuleiro jogador
+# pacotes do projeto
+pacotes = xadrez ui
 src = */*.java
 
 
 # compila todo o projeto
 all : $(pacotes)
 
-.PHONY : $(pacotes) header zip clean
-
+.PHONY : $(pacotes) run header zip clean
 # compila cada pacote, usando o makefile lá dentro
-peca :
+xadrez :
 	$(MAKE) -C $@
 
-gui :
-	$(MAKE) -C $@
-
-tabuleiro :
-	$(MAKE) -C $@
-
-jogador :
+ui :
 	$(MAKE) -C $@
 
 
+
+# roda o projeto compilado
+run :
+	@java -classpath build/ xadrez.xadrez
 
 
 # Atualiza a data do cabeçalho de cada um dos arquivos-fonte

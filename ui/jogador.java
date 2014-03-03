@@ -2,8 +2,8 @@
  * SCC 604 - POO - Turma C
  * 03/03/2014
  */
-package peca;
+package ui;
 
-public abstract class peca {
+public class jogador {
 
-};
+}

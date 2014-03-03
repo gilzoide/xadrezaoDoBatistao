@@ -2,8 +2,8 @@
  * SCC 604 - POO - Turma C
  * 03/03/2014
  */
-package gui;
+package xadrez;
 
-public class gui {
+public abstract class peca {
 
-};
+}

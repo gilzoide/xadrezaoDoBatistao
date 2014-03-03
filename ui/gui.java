@@ -2,8 +2,8 @@
  * SCC 604 - POO - Turma C
  * 03/03/2014
  */
-package tabuleiro;
+package ui;
 
-public class tabuleiro {
+public class gui {
 
-};
+}

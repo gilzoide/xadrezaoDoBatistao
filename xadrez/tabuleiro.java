@@ -2,8 +2,8 @@
  * SCC 604 - POO - Turma C
  * 03/03/2014
  */
-package jogador;
+package xadrez;
 
-public class jogador {
+public class tabuleiro {
 
-};
+}
