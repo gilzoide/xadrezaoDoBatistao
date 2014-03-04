@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 03/03/2014
+ * 04/03/2014
  */
 package xadrez;
 
@@ -11,6 +11,6 @@ class Xadrez {
 		Jogador J1 = new Jogador();
 		Jogador J2 = new Jogador();
 		Tabuleiro tab = new Tabuleiro ();
-		tab.PrintTabuleiro ();
+		System.out.println ("xadrez, modafusca!");
 	}
 }

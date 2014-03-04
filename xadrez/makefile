@@ -1,6 +1,29 @@
-# Package: Peça
-
+# Package: Xadrez (motor do jogo)
+pacotes = peca
 src = *.java
 
-all : $(src)
-	$(foreach file, $(src), javac $(file) -d ../build -sourcepath ..)
+export ROOT BUILD JFLAGS HEADERIZE
+
+.PHONY : all $(pacotes) header clean
+
+.SUFFIXES : .java .class
+.java.class :
+	javac $(JFLAGS) $*.java
+
+# Compila cada .java desse pacote
+all : $(src:.java=.class)
+
+# Compila os subpacotes
+$(pacotes) :
+	$(MAKE) -C $@ all
+
+
+# Atualiza a data do cabeçalho de cada um dos arquivos-fonte
+header :
+	$(foreach file, $(src), $(HEADERIZE) $(file);)
+	$(foreach pac, $(pacotes), $(MAKE) -C $(pac) header;)
+
+# limpa os descartáveis da vida
+clean :
+	$(RM) *~
+	$(foreach pac, $(pacotes), $(MAKE) -C $(pac) clean;)

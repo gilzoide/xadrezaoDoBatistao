@@ -1,4 +1,4 @@
-# Package: UI (interface com o usuário: jogador e GUI)
+# Package: Peça (as peças do jogo de xadrez)
 src = *.java
 
 .PHONY : all header clean
