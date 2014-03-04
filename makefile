@@ -20,7 +20,7 @@ ui :
 
 # roda o projeto compilado
 run :
-	@java -classpath build/ xadrez.xadrez
+	@java -classpath build/ xadrez.Xadrez
 
 
 # Atualiza a data do cabeçalho de cada um dos arquivos-fonte

@@ -2,10 +2,8 @@
  * SCC 604 - POO - Turma C
  * 03/03/2014
  */
-package xadrez;
+package ui;
 
-import ui.cor;
-
-public class tabuleiro {
+public class Gui {
 
 }

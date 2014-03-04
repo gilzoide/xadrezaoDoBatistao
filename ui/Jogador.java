@@ -4,6 +4,6 @@
  */
 package ui;
 
-public class gui {
+public class Jogador {
 
 }

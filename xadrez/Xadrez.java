@@ -6,10 +6,11 @@ package xadrez;
 
 import ui.*;
 
-class xadrez {
+class Xadrez {
 	public static void main (String[] args) {
-		jogador P1 = new jogador();
-		jogador P2 = new jogador();
-		System.out.println ("oi");
+		Jogador J1 = new Jogador();
+		Jogador J2 = new Jogador();
+		Tabuleiro tab = new Tabuleiro ();
+		tab.PrintTabuleiro ();
 	}
 }
