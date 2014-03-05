@@ -1,9 +1,19 @@
+# Gil Barbosa Reis - 8532248
+# SCC 604 - POO - Turma C
+# 05/03/2014
+
 # Make do Xadrezão do Batistão
 
-export ROOT := $(CURDIR)		# root dir: lugar dos arquivos-fonte .java
-export BUILD := $(ROOT)/build	# build dir: lugar dos arquivos-objetos .class
-export JFLAGS := -d $(BUILD) -sourcepath $(ROOT)	# flags pro javac
+
+# root dir: lugar dos arquivos-fonte .java
+export ROOT := $(CURDIR)
+# build dir: lugar dos arquivos-objetos .class
+export BUILD := $(ROOT)/build
+# flags pro javac
+export JFLAGS := -d $(BUILD) -sourcepath $(ROOT)
+# comando no sed pra atualizar a data dos cabeçalhos
 export HEADERIZE = sed -i "3 c\ * $(shell date +%d/%m/%Y)"
+export HEADERIZE_MAKE = sed -i "3 c\# $(shell date +%d/%m/%Y)" makefile
 
 # pacotes do projeto
 pacotes = xadrez ui
@@ -26,6 +36,7 @@ run :
 
 # Atualiza a data do cabeçalho de cada um dos arquivos-fonte
 header :
+	$(HEADERIZE_MAKE)
 	$(foreach pac, $(pacotes), $(MAKE) -C $(pac) header;)
 
 # zipa o projeto, pra mandar no SSP

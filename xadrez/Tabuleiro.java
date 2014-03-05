@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 04/03/2014
+ * 05/03/2014
  */
 package xadrez;
 
@@ -8,15 +8,35 @@ import ui.Cor;
 import xadrez.peca.*;
 
 public class Tabuleiro {
-	Casa[][] casa = new Casa[8][8];
+	Casa[][] casa;
 	
+	/**
+	 * Ctor: constrói cada casa do tabuleiro
+	 */
 	public Tabuleiro () {
-		// colore o tabuleiro do jeito que deve
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
+		// nosso tabuleiro 8x8
+		casa = new Casa[8][8];
+		
+		for (byte i = 0; i < 8; i++) {
+			for (byte j = 0; j < 8; j++) {
 				casa[i][j] = new Casa (i, j);
 			}
 		}
+	}
+	
+	/* Posição está dentro do tabuleiro? */
+	public static boolean estaDentro (byte linha, byte coluna) {
+		if ((linha >= 0 && linha < 8) && (coluna >= 0 && coluna < 8))
+			return true;
+		else
+			return false;
+	}
+	/* Posição do tabuleiro está ocupada? */
+	public boolean estaOcupado (byte linha, byte coluna) {
+		if (estaDentro (linha, coluna) && casa[linha][coluna].getPeca () != null)
+			return true;
+		else
+			return false;
 	}
 }
 
@@ -31,9 +51,9 @@ class Casa {
 	/**
 	 * Ctor: depende da posição no tabuleiro, 
 	 */
-	public Casa (int i, int j) {
+	public Casa (byte i, byte j) {
 		// Únicas posições possíveis são de 0~7
-		if (i >= 8 || j >= 8) {
+		if (!Tabuleiro.estaDentro (i, j)) {
 			System.err.println ("Cê tá loko? Xadrez é só 8x8, irmão!");
 			System.exit (-1);
 		}
