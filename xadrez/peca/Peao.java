@@ -7,7 +7,10 @@ package xadrez.peca;
 import ui.Cor;
 
 public class Peao extends Peca {
+	private boolean en_passant;
+	
 	public Peao (Cor nova_cor) {
-		super (nova_cor, ' ');
+		super (nova_cor);
+		en_passant = false;
 	}	
 }

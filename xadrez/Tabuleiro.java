@@ -7,13 +7,24 @@ package xadrez;
 import ui.Cor;
 import xadrez.peca.*;
 
+/**
+ * Tabuleiro: padrão singleton em POO, já que o tabuleiro nosso é único e global
+ */
 public class Tabuleiro {
-	Casa[][] casa;
+	// a única instância de tabuleiro permitida
+	private static Tabuleiro tabuleiro = new Tabuleiro ();
+	// quer o tabuleiro? usa esse método aqui
+	public static Tabuleiro getTabuleiro () {
+		return tabuleiro;
+	}
+
+	// as casas do tabuleiro, matriz 8x8
+	private static Casa[][] casa;
 	
 	/**
 	 * Ctor: constrói cada casa do tabuleiro
 	 */
-	public Tabuleiro () {
+	private Tabuleiro () {
 		// nosso tabuleiro 8x8
 		casa = new Casa[8][8];
 		
@@ -32,7 +43,7 @@ public class Tabuleiro {
 			return false;
 	}
 	/* Posição do tabuleiro está ocupada? */
-	public boolean estaOcupado (byte linha, byte coluna) {
+	public static boolean estaOcupado (byte linha, byte coluna) {
 		if (estaDentro (linha, coluna) && casa[linha][coluna].getPeca () != null)
 			return true;
 		else

@@ -8,6 +8,6 @@ import ui.Cor;
 
 public class Dama extends Peca {
 	public Dama (Cor nova_cor) {
-		super (nova_cor, 'D');
+		super (nova_cor);
 	}	
 }

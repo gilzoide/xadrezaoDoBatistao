@@ -9,6 +9,6 @@ import ui.Cor;
 public class Cavalo extends Peca {
 	
 	public Cavalo (Cor nova_cor) {
-		super (nova_cor, 'C');
+		super (nova_cor);
 	}
 }

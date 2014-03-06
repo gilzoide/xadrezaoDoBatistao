@@ -7,7 +7,11 @@ package xadrez.peca;
 import ui.Cor;
 
 public class Rei extends Peca {
+	/* Esse rei pode fazer roque? */
+	private boolean roque;
+	
 	public Rei (Cor nova_cor) {
-		super (nova_cor, 'R');
+		super (nova_cor);
+		roque = true;
 	}	
 }

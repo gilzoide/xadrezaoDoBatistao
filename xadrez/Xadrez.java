@@ -10,7 +10,7 @@ class Xadrez {
 	public static void main (String[] args) {
 		Jogador J1 = new Jogador();
 		Jogador J2 = new Jogador();
-		Tabuleiro tab = new Tabuleiro ();
+		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		System.out.println ("xadrez, modafusca!");
 	}
 }

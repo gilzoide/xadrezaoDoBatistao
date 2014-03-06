@@ -8,6 +8,6 @@ import ui.Cor;
 
 public class Torre extends Peca {
 	public Torre (Cor nova_cor) {
-		super (nova_cor, 'T');
+		super (nova_cor);
 	}	
 }
