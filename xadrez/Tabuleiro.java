@@ -35,6 +35,11 @@ public class Tabuleiro {
 		}
 	}
 	
+	/* GETTERS */
+	public Casa getCasa (byte linha, byte coluna) {
+		return this.casa[linha][coluna];
+	}
+	
 	/* Posição está dentro do tabuleiro? */
 	public static boolean estaDentro (byte linha, byte coluna) {
 		if ((linha >= 0 && linha < 8) && (coluna >= 0 && coluna < 8))
@@ -121,7 +126,7 @@ class Casa {
 	public Peca getPeca () {
 		return peca;
 	}
-	/* SETTER */
+	/* SETTERS */
 	public void setPeca (Peca nova_peca) {
 		peca = nova_peca;
 	}
