@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 05/03/2014
+ * 09/03/2014
  */
 package xadrez;
 
@@ -51,6 +51,15 @@ public class Tabuleiro {
 	public static boolean estaOcupado (byte linha, byte coluna) {
 		if (estaDentro (linha, coluna) && casa[linha][coluna].getPeca () != null)
 			return true;
+		else
+			return false;
+	}
+	/* Posição do tabuleiro está ocupada pela cor contrária? */
+	public static boolean estaOcupadoPeloInimigo (byte linha, byte coluna, Cor cor_minha) {
+		if (estaDentro (linha, coluna)) {
+			Peca aux = casa[linha][coluna].getPeca ();
+			return (cor_minha.ehCorOposta (aux.getCor ()));
+		}
 		else
 			return false;
 	}

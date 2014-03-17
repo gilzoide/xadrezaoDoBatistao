@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 05/03/2014
+ * 09/03/2014
  */
 package xadrez.peca;
 
@@ -9,7 +9,7 @@ import xadrez.Movimento;
 import java.util.ArrayList;
 
 public abstract class Peca {
-	private Cor cor;	// cor da peça
+	protected Cor cor;	// cor da peça
 	
 	/**
 	 * Ctor: ajusta a cor
@@ -28,5 +28,9 @@ public abstract class Peca {
 	 */
 	public ArrayList<Movimento> possiveisMovimentos (byte linha, byte coluna) {
 		return null;
+	}
+	/* GETTERS */
+	public Cor getCor () {
+		return this.cor;
 	}
 }

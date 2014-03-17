@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 05/03/2014
+ * 09/03/2014
  */
 package xadrez.peca;
 
@@ -35,8 +35,8 @@ public class Bispo extends Peca {
 			for (i = linha + direcoes[count], j = coluna + direcoes[count + 1]; Tabuleiro.estaDentro (i.byteValue(), j.byteValue()); i += direcoes[count], j += direcoes[count + 1]) {
 				aux.add (new Movimento (this, i.byteValue(), j.byteValue()));
 				// e se tiver alguém ocupando a casa, ainda é uma possibilidade, mas a direção acaba por aí
-				if (Tabuleiro.estaOcupado (i.byteValue(), j.byteValue()))
-						break;
+				if (Tabuleiro.estaOcupadoPeloInimigo (i.byteValue(), j.byteValue(), this.cor))
+					break;
 			}
 		}
 		
