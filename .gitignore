@@ -3,4 +3,7 @@
 */*~
 
 # objetos do java
-~.class
+*.class
+
+# strem do kdevelop
+*kdev*

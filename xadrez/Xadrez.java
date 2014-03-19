@@ -1,10 +1,11 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 09/03/2014
+ * 17/03/2014
  */
 package xadrez;
 
-import ui.*;
+import ui.Gui;
+import ui.Jogador;
 import javax.swing.SwingUtilities;
 
 class Xadrez {
@@ -12,7 +13,7 @@ class Xadrez {
 		Jogador J1 = new Jogador();
 		Jogador J2 = new Jogador();
 		//Tabuleiro tab = Tabuleiro.getTabuleiro ();
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

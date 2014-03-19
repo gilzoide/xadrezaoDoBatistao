@@ -1,6 +1,6 @@
 # Gil Barbosa Reis - 8532248
 # SCC 604 - POO - Turma C
-# 09/03/2014
+# 17/03/2014
 
 # Make do Xadrezão do Batistão
 
@@ -21,6 +21,7 @@ pacotes = xadrez ui
 
 # compila todo o projeto
 all : $(pacotes)
+	cp -r ui/img build/ui
 
 .PHONY : $(pacotes) run header zip clean
 # compila cada pacote, usando o makefile lá dentro

@@ -1,6 +1,6 @@
 # Gil Barbosa Reis - 8532248
 # SCC 604 - POO - Turma C
-# 09/03/2014
+# 17/03/2014
 
 # Package: Peça (as peças do jogo de xadrez)
 src = *.java

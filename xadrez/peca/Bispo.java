@@ -1,13 +1,16 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 09/03/2014
+ * 17/03/2014
  */
 package xadrez.peca;
 
 import ui.Cor;
+import ui.Icone;
 import xadrez.Tabuleiro;
 import xadrez.Movimento;
+
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 
 public class Bispo extends Peca {
 
@@ -41,5 +44,10 @@ public class Bispo extends Peca {
 		}
 		
 		return aux;
+	}
+	
+	/* GETTER */
+	public ImageIcon getIcone () {
+		return Icone.BISPO.getImg ();
 	}
 }
