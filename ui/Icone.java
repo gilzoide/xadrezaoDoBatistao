@@ -4,10 +4,7 @@
  */
 package ui;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 
 public enum Icone {
@@ -18,11 +15,13 @@ public enum Icone {
 	REI ("rei"),
 	TORRE ("torre");
 
-	ImageIcon img;
+	ImageIcon img_branca;
+	ImageIcon img_preta;
 	String nome;
 
 	private Icone (String arq) {
-		img = new ImageIcon (getClass ().getResource ("img/" + arq + ".png"));
+		img_branca = new ImageIcon (getClass ().getResource ("img/" + arq + ".png"));
+		img_preta = new ImageIcon (getClass ().getResource ("img/!" + arq + ".png"));
 		nome = arq;
 	}
 	
@@ -31,7 +30,7 @@ public enum Icone {
 	}
 
 	/* GETTER */
-	public ImageIcon getImg () {
-		return img;
+	public ImageIcon getImg (Cor cor) {
+		return (cor == Cor.BRANCO) ? img_branca : img_preta;
 	}
 }

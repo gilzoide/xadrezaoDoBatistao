@@ -17,6 +17,6 @@ public class Cavalo extends Peca {
 	
 	/* GETTER */
 	public ImageIcon getIcone () {
-		return Icone.CAVALO.getImg ();
+		return Icone.CAVALO.getImg (cor);
 	}
 }

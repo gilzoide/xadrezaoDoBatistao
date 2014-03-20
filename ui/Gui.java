@@ -63,7 +63,7 @@ public class Gui extends JFrame {
 				JButton botao = new JButton ();
 				botao.setBounds (j * TAM_QUADRADO, i * TAM_QUADRADO, TAM_QUADRADO, TAM_QUADRADO);
 				// cor do fundo, preto ou branco
-				Color cor = ((i + j) % 2 == 0) ? Color.WHITE : Color.BLACK;
+				Color cor = ((i + j) % 2 == 0) ? Color.WHITE : Color.GRAY;
 				botao.setBackground (cor);
 				//botao.setIcon (aux.getIcone ());
 				

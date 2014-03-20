@@ -5,6 +5,7 @@
 package xadrez.peca;
 
 import ui.Cor;
+import ui.Icone;
 import xadrez.Movimento;
 
 import java.util.ArrayList;

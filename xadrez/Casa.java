@@ -89,10 +89,9 @@ public class Casa {
 		this.botao = novo_botao;
 	}
 	public void atualizaIcone () {
-		if (peca != null) {
-			//botao.setIcon (peca.getIcone ());
+		if (peca != null)
 			botao.setIcon (peca.getIcone ());
-			//System.out.println (Icone.PEAO.getImg ());
-		}
+		else
+			botao.setIcon (null);
 	}
 }

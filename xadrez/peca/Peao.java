@@ -19,6 +19,6 @@ public class Peao extends Peca {
 	
 	/* GETTER */
 	public ImageIcon getIcone () {
-		return Icone.PEAO.getImg ();
+		return Icone.PEAO.getImg (cor);
 	}
 }

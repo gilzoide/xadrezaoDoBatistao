@@ -20,6 +20,6 @@ public class Rei extends Peca {
 	
 	/* GETTER */
 	public ImageIcon getIcone () {
-		return Icone.REI.getImg ();
+		return Icone.REI.getImg (cor);
 	}
 }

@@ -16,6 +16,6 @@ public class Torre extends Peca {
 	
 	/* GETTER */
 	public ImageIcon getIcone () {
-		return Icone.TORRE.getImg ();
+		return Icone.TORRE.getImg (cor);
 	}
 }

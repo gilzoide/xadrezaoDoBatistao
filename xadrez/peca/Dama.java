@@ -16,6 +16,6 @@ public class Dama extends Peca {
 	
 	/* GETTER */
 	public ImageIcon getIcone () {
-		return Icone.DAMA.getImg ();
+		return Icone.DAMA.getImg (cor);
 	}
 }

@@ -48,6 +48,6 @@ public class Bispo extends Peca {
 	
 	/* GETTER */
 	public ImageIcon getIcone () {
-		return Icone.BISPO.getImg ();
+		return Icone.BISPO.getImg (cor);
 	}
 }
