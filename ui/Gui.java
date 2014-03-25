@@ -9,10 +9,16 @@ import xadrez.Tabuleiro;
 import xadrez.Casa;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.KeyStroke;
 import javax.swing.JFrame;
@@ -53,7 +59,6 @@ public class Gui extends JFrame {
 	
 	public void init (Xadrez motor) {
 		montaTabuleiro (motor);
-		//printTelaInicial ();
 		menu ();
 	}
 
@@ -76,13 +81,13 @@ public class Gui extends JFrame {
 				Color cor = ((i + j) % 2 == 0) ? Color.WHITE : Color.GRAY;
 				botao.setBackground (cor);
 				
-				// o que o botao faz!
+				// o que o botao faz (escreve linha x coluna, e motor processa a casa clicada)
 				botao.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed (ActionEvent event) {
 						int linha = Integer.parseInt (botao.getName ().substring (0, 1));
 						int coluna = Integer.parseInt (botao.getName ().substring (1, 2));
-						System.out.println (linha + " " + coluna);
+						//System.out.println (linha + " " + coluna);
 						motor.cliquei (linha, coluna);
 					}
 				});
@@ -95,25 +100,7 @@ public class Gui extends JFrame {
 				panel.add (botao);
 			}
 		}
-	}
-	/**
-	 * monta a telinha inicial, que aparece uma vez na vida
-	 */
-	private void printTelaInicial () {
-		// JPanel: telinha
-		final JPanel panel = new JPanel ();
-		add (panel);
-		panel.setLayout (null);
-		
-		ImageIcon img = new ImageIcon ("img/telaInicial.png");
-		JLabel label = new JLabel ();
-		label.setIcon (img);
-		label.setBounds (0, 0, JANELA_LARGURA, JANELA_ALTURA);
-		label.setToolTipText ("Clica logo pra começar!");
-		
-		panel.add (label);
-	}
-	
+	}	
 	/**
 	 * monta o menu
 	 */

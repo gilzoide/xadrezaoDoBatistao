@@ -5,8 +5,10 @@
 package xadrez;
 
 import ui.Cor;
+
 import xadrez.Casa;
 import xadrez.peca.Peca;
+import xadrez.peca.Peao;
 
 public class Movimento {
 	private Casa donde, pronde;		// Casas: donde saiu, pronde vai
@@ -41,6 +43,15 @@ public class Movimento {
 		if (aux != null) {
 			notacao_extra += "x" + aux;
 		}
+		// pega a peça a ser movida e atualiza sua posição
+		aux = donde.getPeca ();
+		aux.setLinha (pronde.getLinha ());
+		aux.setColuna (pronde.getColuna ());
+		// se for um peão, podem acontecer coisas muito loucas
+		if (aux instanceof Peao) {
+			((Peao)aux).update (true);
+		}
+		
 		pronde.setPeca (donde.getPeca ());
 		pronde.atualizaIcone ();
 		donde.setPeca (null);

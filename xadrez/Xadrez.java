@@ -52,13 +52,14 @@ public class Xadrez {
 			// se tem peça lá dentro
 			if (atual.estaOcupada ()) {
 				anterior = atual;
-				mov = atual.getPeca ().possiveisMovimentos (atual.getLinha (), atual.getColuna ());
+				mov = atual.getPeca ().possiveisMovimentos ();
 				casa_marcada = true;
 			}
 		}
-		else {
-			mov.get (0).mover ();
-			System.out.println ("tinha marcado a " + anterior.getLinha () + " " + anterior.getColuna ());
+		else {	// casa_marcada = true
+			if (!mov.isEmpty ())
+				mov.get (0).mover ();
+			//System.out.println ("tinha marcado a " + anterior.getLinha () + " " + anterior.getColuna ());
 			casa_marcada = false;
 		}
 	}

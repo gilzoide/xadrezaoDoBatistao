@@ -8,46 +8,55 @@ import ui.Cor;
 import ui.Icone;
 
 import xadrez.Tabuleiro;
+import xadrez.Casa;
 import xadrez.Movimento;
 
 import java.util.ArrayList;
+
+import java.awt.Point;
 
 import javax.swing.ImageIcon;
 
 public class Bispo extends Peca {
 
-	public Bispo (Cor nova_cor) {
-		super (nova_cor);
+	public Bispo (Cor nova_cor, byte linha, byte coluna) {
+		super (nova_cor, linha, coluna);
 	}
 	
 	public String toString () {
 		return "B";
 	}
 	
-	public ArrayList<Movimento> possiveisMovimentos (byte linha, byte coluna) {
-		ArrayList<Movimento> aux = new ArrayList<>();
+	public ArrayList<Movimento> possiveisMovimentos () {
+		ArrayList<Casa> casas = new ArrayList<>();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		
-		int[] direcoes = {
-			1, 1,	// diagonal principal, pra baixo
-			1, -1,	// diagonal secundária, pra cima
-			-1, 1,	// diagonal secundária, pra baixo
-			-1, -1	// diagonal principal, pra cima
-		};
+		ArrayList<Point> direcoes = new ArrayList<> ();
+		direcoes.add (new Point (1, 1));	// diagonal principal, pra baixo
+		direcoes.add (new Point (1, -1));	// diagonal secundária, pra cima
+		direcoes.add (new Point (-1, 1));	// diagonal secundária, pra baixo
+		direcoes.add (new Point (-1, -1));	// diagonal principal, pra cima
 
 		// pra cada direção possível
-		for (int count = 0; count < 8; count += 2) {
-			Integer i, j;
+		for (int count = 0; count < direcoes.size (); count++) {
+			int i, j;
+			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
 			// se ainda estiver no tabuleiro, é uma possibilidade
-			for (i = linha + direcoes[count], j = coluna + direcoes[count + 1]; Tabuleiro.estaDentro (i.byteValue(), j.byteValue()); i += direcoes[count], j += direcoes[count + 1]) {
-				aux.add (new Movimento (tab.getCasa (linha, coluna), tab.getCasa (i, j)));
-				//// e se tiver alguém ocupando a casa, ainda é uma possibilidade, mas a direção acaba por aí
-				//if (Tabuleiro.estaOcupadoPeloInimigo (i.byteValue(), j.byteValue(), this.cor))
-					//break;
+			for (i = linha + (int) direcoes.get (count).getX (), j = coluna + (int) direcoes.get (count).getY (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getX (), j += (int) direcoes.get (count).getY ()) {
+				aux = tab.getCasa (i, j);
+				
+				if (!aux.estaOcupadaCor (cor))
+					casas.add (aux);
+				else
+					break;
 			}
 		}
 		
-		return aux;
+		ArrayList<Movimento> movs = new ArrayList<>();
+		for (int i = 0; i < casas.size (); i++)
+			movs.add (new Movimento (tab.getCasa (linha, coluna), casas.get (i)));
+		
+		return movs;
 	}
 	
 	/* GETTER */

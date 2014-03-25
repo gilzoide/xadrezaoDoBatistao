@@ -50,6 +50,12 @@ public class Tabuleiro {
 		else
 			return false;
 	}
+	public static boolean estaDentro (int linha, int coluna) {
+		if ((linha >= 0 && linha < 8) && (coluna >= 0 && coluna < 8))
+			return true;
+		else
+			return false;
+	}
 	/* Posição do tabuleiro está ocupada? */
 	public static boolean estaOcupado (byte linha, byte coluna) {
 		if (estaDentro (linha, coluna) && casa[linha][coluna].estaOcupada ())

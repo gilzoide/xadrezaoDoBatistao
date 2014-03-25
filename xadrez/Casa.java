@@ -34,37 +34,37 @@ public class Casa {
 			// Peças PRETAS: primeira fila (torres, cavalos, bispos, dama e rei)
 			case 0:
 				if (coluna % 7 == 0)
-					peca = new Torre (Cor.PRETO);
+					peca = new Torre (Cor.PRETO, linha, coluna);
 				else if (coluna % 5 == 1)
-					peca = new Cavalo (Cor.PRETO);
+					peca = new Cavalo (Cor.PRETO, linha, coluna);
 				else if (coluna % 3 == 2)
-					peca = new Bispo (Cor.PRETO);
+					peca = new Bispo (Cor.PRETO, linha, coluna);
 				else if (coluna == 4)
-					peca = new Dama (Cor.PRETO);
+					peca = new Dama (Cor.PRETO, linha, coluna);
 				else
-					peca = new Rei (Cor.PRETO);
+					peca = new Rei (Cor.PRETO, linha, coluna);
 				break;
 			// segunda fila (peões)
 			case 1:
-				peca = new Peao (Cor.PRETO);
+				peca = new Peao (Cor.PRETO, linha, coluna);
 				break;
 
 			// Peças BRANCAS: segunda fila (peões)
 			case 6:
-				peca = new Peao (Cor.BRANCO);
+				peca = new Peao (Cor.BRANCO, linha, coluna);
 				break;
 			// primeira fila ((torres, cavalos, bispos, dama e rei)
 			case 7:
 				if (coluna % 7 == 0)
-					peca = new Torre (Cor.BRANCO);
+					peca = new Torre (Cor.BRANCO, linha, coluna);
 				else if (coluna % 5 == 1)
-					peca = new Cavalo (Cor.BRANCO);
+					peca = new Cavalo (Cor.BRANCO, linha, coluna);
 				else if (coluna % 3 == 2)
-					peca = new Bispo (Cor.BRANCO);
+					peca = new Bispo (Cor.BRANCO, linha, coluna);
 				else if (coluna == 4)
-					peca = new Dama (Cor.BRANCO);
+					peca = new Dama (Cor.BRANCO, linha, coluna);
 				else
-					peca = new Rei (Cor.BRANCO);
+					peca = new Rei (Cor.BRANCO, linha, coluna);
 				break;
 
 			default:
@@ -115,5 +115,9 @@ public class Casa {
 			botao.setIcon (peca.getIcone ());
 		else
 			botao.setIcon (null);
+	}
+	
+	public String toString () {
+		return ("casa " + linha + " " + coluna);
 	}
 }
