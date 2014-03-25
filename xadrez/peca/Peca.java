@@ -29,9 +29,7 @@ public abstract class Peca {
 	 *
 	 * @return Lista de possíveis movimentos, cada um organizado em um vetor de 2 ints: linha e coluna
 	 */
-	public ArrayList<Movimento> possiveisMovimentos (byte linha, byte coluna) {
-		return null;
-	}
+	abstract public ArrayList<Movimento> possiveisMovimentos (byte linha, byte coluna);
 	
 	/* GETTERS */
 	public Cor getCor () {

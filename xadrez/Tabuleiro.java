@@ -13,10 +13,6 @@ import xadrez.peca.Peca;
 public class Tabuleiro {
 	// a única instância de tabuleiro permitida
 	private static Tabuleiro tabuleiro = new Tabuleiro ();
-	// quer o tabuleiro? usa esse método aqui
-	public static Tabuleiro getTabuleiro () {
-		return tabuleiro;
-	}
 
 	// as casas do tabuleiro, matriz 8x8
 	private static Casa[][] casa;
@@ -34,9 +30,16 @@ public class Tabuleiro {
 			}
 		}
 	}
+	// quer o tabuleiro? usa esse método aqui
+	public static Tabuleiro getTabuleiro () {
+		return tabuleiro;
+	}
 
 	/* GETTERS */
 	public Casa getCasa (byte linha, byte coluna) {
+		return this.casa[linha][coluna];
+	}
+	public Casa getCasa (int linha, int coluna) {
 		return this.casa[linha][coluna];
 	}
 
@@ -49,7 +52,7 @@ public class Tabuleiro {
 	}
 	/* Posição do tabuleiro está ocupada? */
 	public static boolean estaOcupado (byte linha, byte coluna) {
-		if (estaDentro (linha, coluna) && casa[linha][coluna].getPeca () != null)
+		if (estaDentro (linha, coluna) && casa[linha][coluna].estaOcupada ())
 			return true;
 		else
 			return false;
@@ -62,5 +65,16 @@ public class Tabuleiro {
 		}
 		else
 			return false;
+	}
+	
+	/**
+	 * Reposiciona as peças para um novo jogo
+	 */
+	public void novoJogo () {
+		for (byte i = 0; i < 8; i++) {
+			for (byte j = 0; j < 8; j++) {
+				casa[i][j].casaNovoJogo ();
+			}
+		}
 	}
 }

@@ -6,10 +6,12 @@ package xadrez.peca;
 
 import ui.Cor;
 import ui.Icone;
+
 import xadrez.Tabuleiro;
 import xadrez.Movimento;
 
 import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 
 public class Bispo extends Peca {
@@ -23,7 +25,9 @@ public class Bispo extends Peca {
 	}
 	
 	public ArrayList<Movimento> possiveisMovimentos (byte linha, byte coluna) {
-		ArrayList<Movimento> aux = null;
+		ArrayList<Movimento> aux = new ArrayList<>();
+		Tabuleiro tab = Tabuleiro.getTabuleiro ();
+		
 		int[] direcoes = {
 			1, 1,	// diagonal principal, pra baixo
 			1, -1,	// diagonal secundária, pra cima
@@ -36,10 +40,10 @@ public class Bispo extends Peca {
 			Integer i, j;
 			// se ainda estiver no tabuleiro, é uma possibilidade
 			for (i = linha + direcoes[count], j = coluna + direcoes[count + 1]; Tabuleiro.estaDentro (i.byteValue(), j.byteValue()); i += direcoes[count], j += direcoes[count + 1]) {
-				aux.add (new Movimento (this, i.byteValue(), j.byteValue()));
-				// e se tiver alguém ocupando a casa, ainda é uma possibilidade, mas a direção acaba por aí
-				if (Tabuleiro.estaOcupadoPeloInimigo (i.byteValue(), j.byteValue(), this.cor))
-					break;
+				aux.add (new Movimento (tab.getCasa (linha, coluna), tab.getCasa (i, j)));
+				//// e se tiver alguém ocupando a casa, ainda é uma possibilidade, mas a direção acaba por aí
+				//if (Tabuleiro.estaOcupadoPeloInimigo (i.byteValue(), j.byteValue(), this.cor))
+					//break;
 			}
 		}
 		

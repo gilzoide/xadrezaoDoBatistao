@@ -16,29 +16,30 @@ import javax.swing.ImageIcon;
  */
 public class Casa {
 	private Peca peca;
+	private byte linha, coluna;
 	
 	private JButton botao;
+	
+	public Casa (byte i, byte j) {
+		linha = i;
+		coluna = j;
+	}
 
 	/**
-	 * Ctor: depende da posição no tabuleiro
+	 * Constrói casas do novo jogo (ou seja, só seta as peças no lugar certo =P)
 	 */
-	Casa (byte i, byte j) {
-		// Únicas posições possíveis são de 0~7
-		if (!Tabuleiro.estaDentro (i, j)) {
-			System.err.println ("Cê tá loko? Xadrez é só 8x8, irmão!");
-			System.exit (-1);
-		}
-
-		switch (i) {
+	void casaNovoJogo () {
+		
+		switch (linha) {
 			// Peças PRETAS: primeira fila (torres, cavalos, bispos, dama e rei)
 			case 0:
-				if (j % 7 == 0)
+				if (coluna % 7 == 0)
 					peca = new Torre (Cor.PRETO);
-				else if (j % 5 == 1)
+				else if (coluna % 5 == 1)
 					peca = new Cavalo (Cor.PRETO);
-				else if (j % 3 == 2)
+				else if (coluna % 3 == 2)
 					peca = new Bispo (Cor.PRETO);
-				else if (j == 4)
+				else if (coluna == 4)
 					peca = new Dama (Cor.PRETO);
 				else
 					peca = new Rei (Cor.PRETO);
@@ -54,13 +55,13 @@ public class Casa {
 				break;
 			// primeira fila ((torres, cavalos, bispos, dama e rei)
 			case 7:
-				if (j % 7 == 0)
+				if (coluna % 7 == 0)
 					peca = new Torre (Cor.BRANCO);
-				else if (j % 5 == 1)
+				else if (coluna % 5 == 1)
 					peca = new Cavalo (Cor.BRANCO);
-				else if (j % 3 == 2)
+				else if (coluna % 3 == 2)
 					peca = new Bispo (Cor.BRANCO);
-				else if (j == 4)
+				else if (coluna == 4)
 					peca = new Dama (Cor.BRANCO);
 				else
 					peca = new Rei (Cor.BRANCO);
@@ -69,6 +70,21 @@ public class Casa {
 			default:
 				peca = null;
 		}
+		
+		atualizaIcone ();
+	}
+	
+	/**
+	 * Ve se casa está ocupada
+	 */
+	public boolean estaOcupada () {
+		return peca != null;
+	}
+	public boolean estaOcupadaCor (Cor cor) {
+		if (estaOcupada ())
+			return peca.getCor () == cor;
+		else
+			return false;
 	}
 
 	/* GETTERS */
@@ -80,6 +96,12 @@ public class Casa {
 	}
 	public JButton getBotao () {
 		return botao;
+	}
+	public byte getLinha () {
+		return linha;
+	}
+	public byte getColuna () {
+		return coluna;
 	}
 	/* SETTERS */
 	public void setPeca (Peca nova_peca) {

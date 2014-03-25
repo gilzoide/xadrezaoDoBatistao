@@ -5,11 +5,11 @@
 package xadrez;
 
 import ui.Cor;
+import xadrez.Casa;
 import xadrez.peca.Peca;
 
 public class Movimento {
-	private Peca ator;	// quem está movendo
-	private byte linha, coluna;	// aonde está movendo
+	private Casa donde, pronde;		// Casas: donde saiu, pronde vai
 	
 	private String notacao_extra;	// notação extra (que nem sempre ocorre): xeque, mate, roque, toma peça
 	
@@ -20,38 +20,38 @@ public class Movimento {
 	/**
 	 * Ctor: ator move pra 'linha'x'coluna', e se dá xeque
 	 */
-	public Movimento (Peca ator, byte linha, byte coluna, boolean xeque) {
-		this.ator = ator;
-		this.linha = linha;
-		this.coluna = coluna;
+	public Movimento (Casa donde, Casa pronde, boolean xeque) {
+		this.donde = donde;
+		this.pronde = pronde;
 		this.xeque = xeque;
 		notacao_extra = "";
 	}
 	/**
 	 * Ctor: igual o outro, mas com xeque constante = false
 	 */
-	public Movimento (Peca ator, byte linha, byte coluna) {
-		this (ator, linha, coluna, false);
+	public Movimento (Casa donde, Casa pronde) {
+		this (donde, pronde, false);
 	}
 	/**
 	 * Quando escolher qual movimento realmente fazer, chame o método 'Mover' dele
 	 */
 	public void mover () {
-		Tabuleiro tab = Tabuleiro.getTabuleiro ();
-		Peca aux = tab.getCasa(linha, coluna).getPeca ();
+		Peca aux = pronde.getPeca ();
 		// se a casa está ocupada, notação de 'tomou peça'
 		if (aux != null) {
 			notacao_extra += "x" + aux;
 		}
-		tab.getCasa(linha, coluna).setPeca (ator);
-		
+		pronde.setPeca (donde.getPeca ());
+		pronde.atualizaIcone ();
+		donde.setPeca (null);
+		donde.atualizaIcone ();
 	}
 	
 	public String notacaoEscrita () {
-		String str = new String ();	// exemplo de notação
-		str += ator;			// D (peça)
-		str += 8 - linha;		// 3 (linha)
-		str += 'a' + coluna;	// g (coluna)
+		String str = new String ();			// exemplo de notação
+		str += donde.getPeca ();			// D (peça)
+		str += 8 - donde.getLinha ();		// 3 (linha)
+		str += 'a' + donde.getColuna ();	// g (coluna)
 		if (xeque) {
 			str += '+';
 			if (mate)
