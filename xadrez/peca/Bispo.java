@@ -28,7 +28,7 @@ public class Bispo extends Peca {
 	}
 	
 	public ArrayList<Movimento> possiveisMovimentos () {
-		ArrayList<Casa> casas = new ArrayList<>();
+		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		
 		ArrayList<Point> direcoes = new ArrayList<> ();
@@ -52,7 +52,7 @@ public class Bispo extends Peca {
 			}
 		}
 		
-		ArrayList<Movimento> movs = new ArrayList<>();
+		ArrayList<Movimento> movs = new ArrayList<> ();
 		for (int i = 0; i < casas.size (); i++)
 			movs.add (new Movimento (tab.getCasa (linha, coluna), casas.get (i)));
 		

@@ -46,7 +46,7 @@ public class Gui extends JFrame {
 
 	final private int JANELA_LARGURA = 800;
 	final private int JANELA_ALTURA = 600;
-	final private int TAM_QUADRADO = 60;
+	final static int TAM_QUADRADO = 60;
 	/**
 	 * Ctor: contrói a tela principal
 	 */

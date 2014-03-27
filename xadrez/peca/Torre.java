@@ -23,7 +23,7 @@ public class Torre extends Peca {
 	}
 	
 	public ArrayList<Movimento> possiveisMovimentos () {
-		ArrayList<Casa> casas = new ArrayList<>();
+		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		
 		ArrayList<Point> direcoes = new ArrayList<> ();

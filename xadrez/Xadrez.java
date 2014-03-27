@@ -53,10 +53,21 @@ public class Xadrez {
 			if (atual.estaOcupada ()) {
 				anterior = atual;
 				mov = atual.getPeca ().possiveisMovimentos ();
+				// se não tem movimento possível, nem adianta, cara =/
+				if (mov.isEmpty ())
+					return;
+				
+				// pra cada movimento possível faz ele aparecer possível
+				for (Movimento m : mov)
+					m.printPossivel ();
+				
+				// marquei a casa ;]
 				casa_marcada = true;
 			}
 		}
 		else {	// casa_marcada = true
+			for (Movimento m : mov)
+				m.unPrintPossivel ();
 			if (!mov.isEmpty ())
 				mov.get (0).mover ();
 			//System.out.println ("tinha marcado a " + anterior.getLinha () + " " + anterior.getColuna ());

@@ -5,10 +5,13 @@
 package xadrez;
 
 import ui.Cor;
+import ui.Icone;
 
 import xadrez.Casa;
 import xadrez.peca.Peca;
 import xadrez.peca.Peao;
+
+import javax.swing.ImageIcon;
 
 public class Movimento {
 	private Casa donde, pronde;		// Casas: donde saiu, pronde vai
@@ -58,6 +61,24 @@ public class Movimento {
 		donde.atualizaIcone ();
 	}
 	
+	/**
+	 * Icone do rolê fica colorido, assim aparece como uma possível jogada
+	 */
+	public void printPossivel () {
+		ImageIcon possivel = Icone.possibilita ((ImageIcon) pronde.getBotao ().getIcon ());
+		
+		pronde.getBotao ().setIcon (possivel);
+	}
+	/**
+	 * Icone do rolê desfica colorido, assim volta ao normal as coisa
+	 */
+	public void unPrintPossivel () {
+		pronde.atualizaIcone ();
+	}
+	
+	/**
+	 * Formula e retorna a notação estrita da jogada
+	 */
 	public String notacaoEscrita () {
 		String str = new String ();			// exemplo de notação
 		str += donde.getPeca ();			// D (peça)

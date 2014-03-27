@@ -10,7 +10,7 @@ export ROOT := $(CURDIR)
 # build dir: lugar dos arquivos-objetos .class
 export BUILD := $(ROOT)/build
 # flags pro javac
-export JFLAGS := -d $(BUILD) -sourcepath $(ROOT)
+export JFLAGS := -d $(BUILD) -sourcepath $(ROOT) -g
 # comando no sed pra atualizar a data dos cabeçalhos
 export HEADERIZE = sed -i "3 c\ * $(shell date +%d/%m/%Y)"
 export HEADERIZE_MAKE = sed -i "3 c\# $(shell date +%d/%m/%Y)" makefile
@@ -23,7 +23,7 @@ pacotes = xadrez ui
 all : $(pacotes)
 	cp -r ui/img build/ui
 
-.PHONY : $(pacotes) run header zip clean
+.PHONY : $(pacotes) run header zip clean debug
 # compila cada pacote, usando o makefile lá dentro
 $(pacotes) :
 	$(MAKE) -C $@ all
@@ -33,6 +33,9 @@ $(pacotes) :
 # roda o projeto compilado
 run :
 	@java -classpath $(BUILD) xadrez.Xadrez
+
+debug :
+	jdb -classpath $(BUILD) xadrez.Xadrez
 
 
 # Atualiza a data do cabeçalho de cada um dos arquivos-fonte

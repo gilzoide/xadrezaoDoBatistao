@@ -4,8 +4,13 @@
  */
 package ui;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
+
 import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
+import javax.swing.Icon;
 
 public enum Icone {
 	BISPO ("bispo"),
@@ -13,7 +18,8 @@ public enum Icone {
 	DAMA ("dama"),
 	PEAO ("peao"),
 	REI ("rei"),
-	TORRE ("torre");
+	TORRE ("torre"),
+	POSSIVEL ("possivel");
 
 	ImageIcon img_branca;
 	ImageIcon img_preta;
@@ -32,5 +38,25 @@ public enum Icone {
 	/* GETTER */
 	public ImageIcon getImg (Cor cor) {
 		return (cor == Cor.BRANCO) ? img_branca : img_preta;
+	}
+	
+	/**
+	 * Faz o ícone receber aquele quadradinho de possível
+	 */
+	public static ImageIcon possibilita (ImageIcon img) {
+		BufferedImage junto = new BufferedImage (Gui.TAM_QUADRADO, Gui.TAM_QUADRADO, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = junto.createGraphics ();
+		
+		// img que já estava
+		if (img != null) {
+			Image normal = img.getImage ();
+			g2.drawImage (normal, 0, 0, null);
+		}
+		// imagem de possibilidade
+		Image possivel = Icone.POSSIVEL.getImg (Cor.BRANCO).getImage ();
+		g2.drawImage (possivel, 0, 0, null);
+		g2.dispose ();
+		
+		return new ImageIcon (junto);
 	}
 }

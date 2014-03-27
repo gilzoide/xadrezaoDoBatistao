@@ -40,7 +40,7 @@ public class Peao extends Peca {
 	}
 	
 	public ArrayList<Movimento> possiveisMovimentos () {
-		ArrayList<Casa> casas = new ArrayList<>();
+		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		
 		// dependendo da cor, vai pra frente ou pra trás
@@ -57,7 +57,7 @@ public class Peao extends Peca {
 				casas.add (aux);
 		}
 		
-		ArrayList<Movimento> movs = new ArrayList<>();
+		ArrayList<Movimento> movs = new ArrayList<> ();
 		for (int i = 0; i < casas.size (); i++)
 			movs.add (new Movimento (tab.getCasa (linha, coluna), casas.get (i)));
 		
