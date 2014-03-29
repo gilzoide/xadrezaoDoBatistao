@@ -48,12 +48,12 @@ public class Peao extends Peca {
 
 		Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
 		aux = tab.getCasa (linha + lado, coluna);
-		if (!aux.estaOcupadaCor (cor))
+		if (!aux.estaOcupada ())
 			casas.add (aux);
 			
 		if (estado == Estado.PRIMEIRA) {
 			aux = tab.getCasa (linha + (2 * lado), coluna);
-			if (!aux.estaOcupadaCor (cor))
+			if (!aux.estaOcupada ())
 				casas.add (aux);
 		}
 		

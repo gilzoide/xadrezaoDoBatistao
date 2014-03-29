@@ -45,8 +45,13 @@ public class Bispo extends Peca {
 			for (i = linha + (int) direcoes.get (count).getX (), j = coluna + (int) direcoes.get (count).getY (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getX (), j += (int) direcoes.get (count).getY ()) {
 				aux = tab.getCasa (i, j);
 				
-				if (!aux.estaOcupadaCor (cor))
+				// não tá ocupada por uma peça da mesma cor
+				if (!aux.estaOcupadaCor (cor)) {
 					casas.add (aux);
+					// mas talvez uma do inimigo, então só essa e cabou
+					if (aux.estaOcupada ())
+						break;
+				}
 				else
 					break;
 			}

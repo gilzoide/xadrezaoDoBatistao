@@ -65,7 +65,7 @@ public class Movimento {
 	 * Icone do rolê fica colorido, assim aparece como uma possível jogada
 	 */
 	public void printPossivel () {
-		ImageIcon possivel = Icone.possibilita ((ImageIcon) pronde.getBotao ().getIcon ());
+		ImageIcon possivel = Icone.possibilita ((ImageIcon) pronde.getBotao ().getIcon (), pronde.estaOcupada ());
 		
 		pronde.getBotao ().setIcon (possivel);
 	}

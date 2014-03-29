@@ -43,7 +43,7 @@ public enum Icone {
 	/**
 	 * Faz o ícone receber aquele quadradinho de possível
 	 */
-	public static ImageIcon possibilita (ImageIcon img) {
+	public static ImageIcon possibilita (ImageIcon img, boolean marcado_pra_morrer) {
 		BufferedImage junto = new BufferedImage (Gui.TAM_QUADRADO, Gui.TAM_QUADRADO, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = junto.createGraphics ();
 		
@@ -53,7 +53,12 @@ public enum Icone {
 			g2.drawImage (normal, 0, 0, null);
 		}
 		// imagem de possibilidade
-		Image possivel = Icone.POSSIVEL.getImg (Cor.BRANCO).getImage ();
+		Image possivel;
+		if (marcado_pra_morrer)
+			possivel = Icone.POSSIVEL.getImg (Cor.PRETO).getImage ();
+		else
+			possivel = Icone.POSSIVEL.getImg (Cor.BRANCO).getImage ();
+
 		g2.drawImage (possivel, 0, 0, null);
 		g2.dispose ();
 		
