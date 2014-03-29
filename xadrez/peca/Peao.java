@@ -29,6 +29,14 @@ public class Peao extends Peca {
 		EN_PASSANT,
 		NADA;
 	};
+	public enum AcaoEspecial {
+		ANDOU_DUAS,
+		EN_PASSANT,
+		PROMOCAO,
+		NADA;
+	};
+	
+	private AcaoEspecial acao;
 	private Estado estado;
 	
 	/**
@@ -37,6 +45,7 @@ public class Peao extends Peca {
 	public Peao (Cor nova_cor, byte linha, byte coluna) {
 		super (nova_cor, linha, coluna);
 		estado = Estado.PRIMEIRA;
+		acao = AcaoEspecial.NADA;
 	}
 	
 	public ArrayList<Movimento> possiveisMovimentos () {
@@ -46,7 +55,7 @@ public class Peao extends Peca {
 		// dependendo da cor, vai pra frente ou pra trás
 		int lado = (cor == Cor.BRANCO) ? -1 : 1;
 
-		Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
+		Casa aux, aux_en_passant;	// auxiliares, pra testar à vontade pra por ou não em 'casas'
 		aux = tab.getCasa (linha + lado, coluna);
 		if (!aux.estaOcupada ())
 			casas.add (aux);
@@ -57,6 +66,17 @@ public class Peao extends Peca {
 				casas.add (aux);
 		}
 		
+		// pode tomar
+		aux = tab.getCasa (linha + lado, coluna + 1);
+		aux_en_passant = tab.getCasa (linha, coluna + 1);
+		if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ()))
+			casas.add (aux);
+			
+		aux = tab.getCasa (linha + lado, coluna - 1);
+		aux_en_passant = tab.getCasa (linha, coluna - 1);
+		if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ()))
+			casas.add (aux);
+
 		ArrayList<Movimento> movs = new ArrayList<> ();
 		for (int i = 0; i < casas.size (); i++)
 			movs.add (new Movimento (tab.getCasa (linha, coluna), casas.get (i)));
@@ -67,14 +87,24 @@ public class Peao extends Peca {
 	/**
 	 * Se moveu, talvez mude o estado, talz...
 	 */
-	public void update (boolean moveu) {
+	public AcaoEspecial update (boolean moveu) {
 		if (moveu) {
-			if (estado == Estado.PRIMEIRA)
-				estado = Estado.EN_PASSANT;
+			if (estado == Estado.PRIMEIRA) {
+				if (linha == 3 || linha == 4)
+					estado = Estado.EN_PASSANT;
+			}
+			else
+				estado = Estado.NADA;
 		}
-		else if (estado == Estado.EN_PASSANT)
+		else if (estado == Estado.EN_PASSANT) {
 			estado = Estado.NADA;
+		}
+		else if (linha == 0 || linha == 8) {
+			return AcaoEspecial.PROMOCAO;
+		}
 		
+		// default
+		return AcaoEspecial.NADA;
 	}
 	
 	/* GETTER */

@@ -92,4 +92,15 @@ public class Movimento {
 		
 		return str;
 	}
+	
+	/**
+	 * Verifica, a partir da posição indicada (ou da casa), se a casa é a daquele movimento mesmo
+	 */
+	public boolean ehEsseMovimento (int linha, int coluna) {
+		Casa aux = Tabuleiro.getTabuleiro ().getCasa (linha, coluna);
+		return aux == pronde;
+	}
+	public boolean ehEsseMovimento (Casa aux) {
+		return aux == pronde;
+	}
 }

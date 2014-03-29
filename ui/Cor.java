@@ -8,6 +8,13 @@ public enum Cor {
 	BRANCO,
 	PRETO;
 	
+	public Cor oposta () {
+		if (this == BRANCO)
+			return PRETO;
+		else
+			return BRANCO;
+	}
+	
 	public boolean ehCorOposta (Cor cmp) {
 		return (this == cmp);
 	}

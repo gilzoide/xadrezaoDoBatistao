@@ -66,10 +66,17 @@ public class Xadrez {
 			}
 		}
 		else {	// casa_marcada = true
-			for (Movimento m : mov)
+			boolean clicou_movimento_previsto = false;
+			Movimento a_ser_feito = null;
+			for (Movimento m : mov) {
+				if (m.ehEsseMovimento (linha, coluna)) {
+					a_ser_feito = m;
+					clicou_movimento_previsto = true;
+				}
 				m.unPrintPossivel ();
-			if (!mov.isEmpty ())
-				mov.get (0).mover ();
+			}
+			if (clicou_movimento_previsto)
+				a_ser_feito.mover ();
 			//System.out.println ("tinha marcado a " + anterior.getLinha () + " " + anterior.getColuna ());
 			casa_marcada = false;
 		}
