@@ -11,9 +11,8 @@ import xadrez.Movimento;
 import xadrez.Casa;
 import xadrez.Tabuleiro;
 
-import java.util.ArrayList;
-
 import java.awt.Point;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
@@ -42,8 +41,8 @@ public class Peao extends Peca {
 	/**
 	 * Ctor
 	 */
-	public Peao (Cor nova_cor, byte linha, byte coluna) {
-		super (nova_cor, linha, coluna);
+	public Peao (Cor nova_cor, Point P) {
+		super (nova_cor, P);
 		estado = Estado.PRIMEIRA;
 		acao = AcaoEspecial.NADA;
 	}
@@ -56,30 +55,30 @@ public class Peao extends Peca {
 		int lado = (cor == Cor.BRANCO) ? -1 : 1;
 
 		Casa aux, aux_en_passant;	// auxiliares, pra testar à vontade pra por ou não em 'casas'
-		aux = tab.getCasa (linha + lado, coluna);
-		if (!aux.estaOcupada ())
+		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX ());
+		if (!aux.estaOcupada ()) {
 			casas.add (aux);
-			
-		if (estado == Estado.PRIMEIRA) {
-			aux = tab.getCasa (linha + (2 * lado), coluna);
-			if (!aux.estaOcupada ())
-				casas.add (aux);
+			// se for a primeira jogada, e ninguém tá na frente, pode andar 2 casas
+			if (estado == Estado.PRIMEIRA) {
+				aux = tab.getCasa ((int) coord.getY () + (2 * lado), (int) coord.getX ());
+				if (!aux.estaOcupada ())
+					casas.add (aux);
+			}
 		}
-		
 		// pode tomar
-		aux = tab.getCasa (linha + lado, coluna + 1);
-		aux_en_passant = tab.getCasa (linha, coluna + 1);
-		if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ()))
+		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () + 1);
+		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () + 1);
+		if (aux != null && aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ()))
 			casas.add (aux);
 			
-		aux = tab.getCasa (linha + lado, coluna - 1);
-		aux_en_passant = tab.getCasa (linha, coluna - 1);
-		if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ()))
+		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () - 1);
+		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () - 1);
+		if (aux != null && aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ()))
 			casas.add (aux);
 
 		ArrayList<Movimento> movs = new ArrayList<> ();
 		for (int i = 0; i < casas.size (); i++)
-			movs.add (new Movimento (tab.getCasa (linha, coluna), casas.get (i)));
+			movs.add (new Movimento (getEssaCasa (), casas.get (i)));
 		
 		return movs;
 	}
@@ -90,7 +89,8 @@ public class Peao extends Peca {
 	public AcaoEspecial update (boolean moveu) {
 		if (moveu) {
 			if (estado == Estado.PRIMEIRA) {
-				if (linha == 3 || linha == 4)
+				// se moveu 2 casas, pode ser tomado por 'en passant'
+				if ((int) coord.getY () == 3 || (int) coord.getY () == 4)
 					estado = Estado.EN_PASSANT;
 			}
 			else
@@ -99,7 +99,7 @@ public class Peao extends Peca {
 		else if (estado == Estado.EN_PASSANT) {
 			estado = Estado.NADA;
 		}
-		else if (linha == 0 || linha == 8) {
+		else if ((int) coord.getY () == 0 || (int) coord.getY () == 8) {
 			return AcaoEspecial.PROMOCAO;
 		}
 		

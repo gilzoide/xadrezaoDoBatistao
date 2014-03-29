@@ -7,6 +7,8 @@ package xadrez;
 import ui.Cor;
 import xadrez.peca.Peca;
 
+import java.awt.Point;
+
 /**
  * Tabuleiro: padrão singleton em POO, já que o tabuleiro nosso é único e global
  */
@@ -24,8 +26,8 @@ public class Tabuleiro {
 		// nosso tabuleiro 8x8
 		casa = new Casa[8][8];
 
-		for (byte i = 0; i < 8; i++) {
-			for (byte j = 0; j < 8; j++) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				casa[i][j] = new Casa (i, j);
 			}
 		}
@@ -36,37 +38,43 @@ public class Tabuleiro {
 	}
 
 	/* GETTERS */
-	public Casa getCasa (byte linha, byte coluna) {
-		return this.casa[linha][coluna];
-	}
 	public Casa getCasa (int linha, int coluna) {
-		return this.casa[linha][coluna];
+		if (estaDentro (linha, coluna))
+			return this.casa[linha][coluna];
+		else
+			return null;
+	}
+	public Casa getCasa (Point P) {
+		if (estaDentro (P))
+			return this.casa[(int) P.getY ()][(int) P.getX ()];
+		else
+			return null;
 	}
 
 	/* Posição está dentro do tabuleiro? */
-	public static boolean estaDentro (byte linha, byte coluna) {
-		if ((linha >= 0 && linha < 8) && (coluna >= 0 && coluna < 8))
-			return true;
-		else
-			return false;
-	}
 	public static boolean estaDentro (int linha, int coluna) {
 		if ((linha >= 0 && linha < 8) && (coluna >= 0 && coluna < 8))
 			return true;
 		else
 			return false;
 	}
+	public static boolean estaDentro (Point P) {
+		if ((P.getX () >= 0 && P.getX () < 8) && (P.getY () >= 0 && P.getY () < 8))
+			return true;
+		else
+			return false;
+	}
 	/* Posição do tabuleiro está ocupada? */
-	public static boolean estaOcupado (byte linha, byte coluna) {
-		if (estaDentro (linha, coluna) && casa[linha][coluna].estaOcupada ())
+	public static boolean estaOcupado (Point P) {
+		if (estaDentro (P) && casa[(int) P.getX ()][(int) P.getY ()].estaOcupada ())
 			return true;
 		else
 			return false;
 	}
 	/* Posição do tabuleiro está ocupada pela cor contrária? */
-	public static boolean estaOcupadoPeloInimigo (byte linha, byte coluna, Cor cor_minha) {
-		if (estaDentro (linha, coluna)) {
-			Peca aux = casa[linha][coluna].getPeca ();
+	public static boolean estaOcupadoPeloInimigo (Point P, Cor cor_minha) {
+		if (estaDentro (P)) {
+			Peca aux = casa[(int) P.getY ()][(int) P.getX ()].getPeca ();
 			return (cor_minha.ehCorOposta (aux.getCor ()));
 		}
 		else
@@ -77,8 +85,8 @@ public class Tabuleiro {
 	 * Reposiciona as peças para um novo jogo
 	 */
 	public void novoJogo () {
-		for (byte i = 0; i < 8; i++) {
-			for (byte j = 0; j < 8; j++) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				casa[i][j].casaNovoJogo ();
 			}
 		}

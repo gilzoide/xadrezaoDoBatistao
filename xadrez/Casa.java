@@ -8,6 +8,8 @@ import ui.Cor;
 import ui.Icone;
 import xadrez.peca.*;
 
+import java.awt.Point;
+
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
@@ -16,13 +18,12 @@ import javax.swing.ImageIcon;
  */
 public class Casa {
 	private Peca peca;
-	private byte linha, coluna;
+	private Point coord;
 	
 	private JButton botao;
 	
-	public Casa (byte i, byte j) {
-		linha = i;
-		coluna = j;
+	public Casa (int i, int j) {
+		coord = new Point (j, i);
 	}
 
 	/**
@@ -30,41 +31,41 @@ public class Casa {
 	 */
 	void casaNovoJogo () {
 		
-		switch (linha) {
+		switch ((int) coord.getY ()) {
 			// Peças PRETAS: primeira fila (torres, cavalos, bispos, dama e rei)
 			case 0:
-				if (coluna % 7 == 0)
-					peca = new Torre (Cor.PRETO, linha, coluna);
-				else if (coluna % 5 == 1)
-					peca = new Cavalo (Cor.PRETO, linha, coluna);
-				else if (coluna % 3 == 2)
-					peca = new Bispo (Cor.PRETO, linha, coluna);
-				else if (coluna == 4)
-					peca = new Dama (Cor.PRETO, linha, coluna);
+				if (coord.getX () % 7 == 0)
+					peca = new Torre (Cor.PRETO, coord);
+				else if (coord.getX () % 5 == 1)
+					peca = new Cavalo (Cor.PRETO, coord);
+				else if (coord.getX () % 3 == 2)
+					peca = new Bispo (Cor.PRETO, coord);
+				else if (coord.getX () == 4)
+					peca = new Dama (Cor.PRETO, coord);
 				else
-					peca = new Rei (Cor.PRETO, linha, coluna);
+					peca = new Rei (Cor.PRETO, coord);
 				break;
 			// segunda fila (peões)
 			case 1:
-				peca = new Peao (Cor.PRETO, linha, coluna);
+				peca = new Peao (Cor.PRETO, coord);
 				break;
 
 			// Peças BRANCAS: segunda fila (peões)
 			case 6:
-				peca = new Peao (Cor.BRANCO, linha, coluna);
+				peca = new Peao (Cor.BRANCO, coord);
 				break;
 			// primeira fila ((torres, cavalos, bispos, dama e rei)
 			case 7:
-				if (coluna % 7 == 0)
-					peca = new Torre (Cor.BRANCO, linha, coluna);
-				else if (coluna % 5 == 1)
-					peca = new Cavalo (Cor.BRANCO, linha, coluna);
-				else if (coluna % 3 == 2)
-					peca = new Bispo (Cor.BRANCO, linha, coluna);
-				else if (coluna == 4)
-					peca = new Dama (Cor.BRANCO, linha, coluna);
+				if (coord.getX () % 7 == 0)
+					peca = new Torre (Cor.BRANCO, coord);
+				else if (coord.getX () % 5 == 1)
+					peca = new Cavalo (Cor.BRANCO, coord);
+				else if (coord.getX () % 3 == 2)
+					peca = new Bispo (Cor.BRANCO, coord);
+				else if (coord.getX () == 4)
+					peca = new Dama (Cor.BRANCO, coord);
 				else
-					peca = new Rei (Cor.BRANCO, linha, coluna);
+					peca = new Rei (Cor.BRANCO, coord);
 				break;
 
 			default:
@@ -97,11 +98,14 @@ public class Casa {
 	public JButton getBotao () {
 		return botao;
 	}
-	public byte getLinha () {
-		return linha;
+	public Point getCoord () {
+		return coord;
 	}
-	public byte getColuna () {
-		return coluna;
+	public int getLinha () {
+		return (int) coord.getY ();
+	}
+	public int getColuna () {
+		return (int) coord.getX ();
 	}
 	/* SETTERS */
 	public void setPeca (Peca nova_peca) {
@@ -118,6 +122,6 @@ public class Casa {
 	}
 	
 	public String toString () {
-		return ("casa " + linha + " " + coluna);
+		return ("casa " + coord.getY () + " " + coord.getX ());
 	}
 }

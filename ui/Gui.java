@@ -9,6 +9,7 @@ import xadrez.Tabuleiro;
 import xadrez.Casa;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
@@ -44,15 +45,15 @@ public class Gui extends JFrame {
 		return tela;
 	}
 
-	final private int JANELA_LARGURA = 800;
-	final private int JANELA_ALTURA = 600;
-	final static int TAM_QUADRADO = 60;
+	final private Point TAM_JANELA = new Point (800, 600);	/// tamanho total da janela
+	final private Point INICIO_TABULEIRO = new Point (300, 49);	/// início do tabuleiro (pra n ficar hardcodando se quiser trocar)
+	final static int TAM_QUADRADO = 60;	/// tamanho do lado do quadrado (casa do tabuleiro)
 	/**
 	 * Ctor: contrói a tela principal
 	 */
 	private Gui () {
 		setTitle ("Xadrezão do Batistão");
-		setSize (JANELA_LARGURA, JANELA_ALTURA);		// 800x600, é um tamanho bom
+		setSize ((int) TAM_JANELA.getX (), (int) TAM_JANELA.getY ());		// 800x600, é um tamanho bom
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation (EXIT_ON_CLOSE);
 	}
@@ -75,7 +76,7 @@ public class Gui extends JFrame {
 		for (byte i = 0; i < 8; i++) {
 			for (byte j = 0; j < 8; j++) {
 				final JButton botao = new JButton ();
-				botao.setBounds (j * TAM_QUADRADO, i * TAM_QUADRADO, TAM_QUADRADO, TAM_QUADRADO);
+				botao.setBounds ((int) INICIO_TABULEIRO.getX () + j * TAM_QUADRADO, (int) INICIO_TABULEIRO.getY () + i * TAM_QUADRADO, TAM_QUADRADO, TAM_QUADRADO);
 				botao.setName (Integer.toString(i) + Integer.toString(j));
 				// cor do fundo, preto ou branco
 				Color cor = ((i + j) % 2 == 0) ? Color.WHITE : Color.GRAY;
@@ -85,10 +86,9 @@ public class Gui extends JFrame {
 				botao.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed (ActionEvent event) {
-						int linha = Integer.parseInt (botao.getName ().substring (0, 1));
-						int coluna = Integer.parseInt (botao.getName ().substring (1, 2));
+						Point P = new Point (Integer.parseInt (botao.getName ().substring (1, 2)), Integer.parseInt (botao.getName ().substring (0, 1)));
 						//System.out.println (linha + " " + coluna);
-						motor.cliquei (linha, coluna);
+						motor.cliquei (P);
 					}
 				});
 				
@@ -100,6 +100,9 @@ public class Gui extends JFrame {
 				panel.add (botao);
 			}
 		}
+
+		// Xadrez.novoJogo()
+		motor.novoJogo ();
 	}	
 	/**
 	 * monta o menu
@@ -120,14 +123,14 @@ public class Gui extends JFrame {
 		Novo.getActionMap ().put ("novo", new AbstractAction () {
 			@Override
 			public void actionPerformed (ActionEvent event) {
-				Reinicia ();
+				novoJogo ();
 			}
 		});
 
 		Novo.addActionListener (new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				Reinicia ();
+				novoJogo ();
 			}
 		});
 		
@@ -163,7 +166,7 @@ public class Gui extends JFrame {
 	 * Se tem que recomeçar um novo jogo (seja por fim do de antes, ou pediu no menu),
 	 * repõe as peças no lugar certo =]
 	 */
-	private void Reinicia () {
-		Tabuleiro.getTabuleiro ().novoJogo ();
+	private void novoJogo () {
+		Xadrez.novoJogo ();
 	}
 }

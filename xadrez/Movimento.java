@@ -11,6 +11,8 @@ import xadrez.Casa;
 import xadrez.peca.Peca;
 import xadrez.peca.Peao;
 
+import java.awt.Point;
+
 import javax.swing.ImageIcon;
 
 public class Movimento {
@@ -48,8 +50,7 @@ public class Movimento {
 		}
 		// pega a peça a ser movida e atualiza sua posição
 		aux = donde.getPeca ();
-		aux.setLinha (pronde.getLinha ());
-		aux.setColuna (pronde.getColuna ());
+		aux.setCoord (pronde.getCoord ());
 		// se for um peão, podem acontecer coisas muito loucas
 		if (aux instanceof Peao) {
 			((Peao)aux).update (true);
@@ -96,8 +97,8 @@ public class Movimento {
 	/**
 	 * Verifica, a partir da posição indicada (ou da casa), se a casa é a daquele movimento mesmo
 	 */
-	public boolean ehEsseMovimento (int linha, int coluna) {
-		Casa aux = Tabuleiro.getTabuleiro ().getCasa (linha, coluna);
+	public boolean ehEsseMovimento (Point P) {
+		Casa aux = Tabuleiro.getTabuleiro ().getCasa (P);
 		return aux == pronde;
 	}
 	public boolean ehEsseMovimento (Casa aux) {

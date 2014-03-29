@@ -7,22 +7,29 @@ package xadrez.peca;
 import ui.Cor;
 import ui.Icone;
 import xadrez.Movimento;
+import xadrez.Tabuleiro;
+import xadrez.Casa;
 
+import java.awt.Point;
 import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 
 public abstract class Peca {
 	protected Cor cor;	/// cor da peça
 	
-	protected byte linha, coluna;	/// posição da peça
+	protected Point coord;
 
 	/**
-	 * Ctor: ajusta a cor
+	 * Ctor: ajusta a cor e põe as coordenadas em 'coord'
 	 */
-	public Peca (Cor nova_cor, byte linha, byte coluna) {
+	public Peca (Cor nova_cor, int linha, int coluna) {
 		this.cor = nova_cor;
-		this.linha = linha;
-		this.coluna = coluna;
+		coord = new Point (coluna, linha);
+	}
+	public Peca (Cor nova_cor, Point P) {
+		this.cor = nova_cor;
+		coord = new Point (P);
 	}
 
 	/**
@@ -38,11 +45,14 @@ public abstract class Peca {
 	public Cor getCor () {
 		return this.cor;
 	}
-	/* SETTERS */
-	public void setLinha (byte linha) {
-		this.linha = linha;
+	public Casa getEssaCasa () {
+		return Tabuleiro.getTabuleiro ().getCasa (coord);
 	}
-	public void setColuna (byte coluna) {
-		this.coluna = coluna;
+	/* SETTERS */
+	public void setCoord (Point P) {
+		coord.setLocation (P);
+	}
+	public void setCoord (int linha, int coluna) {
+		coord.setLocation (coluna, linha);
 	}
 }

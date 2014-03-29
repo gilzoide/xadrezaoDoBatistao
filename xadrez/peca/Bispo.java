@@ -11,16 +11,15 @@ import xadrez.Tabuleiro;
 import xadrez.Casa;
 import xadrez.Movimento;
 
-import java.util.ArrayList;
-
 import java.awt.Point;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
 public class Bispo extends Peca {
 
-	public Bispo (Cor nova_cor, byte linha, byte coluna) {
-		super (nova_cor, linha, coluna);
+	public Bispo (Cor nova_cor, Point P) {
+		super (nova_cor, P);
 	}
 	
 	public String toString () {
@@ -42,7 +41,7 @@ public class Bispo extends Peca {
 			int i, j;
 			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
 			// se ainda estiver no tabuleiro, é uma possibilidade
-			for (i = linha + (int) direcoes.get (count).getX (), j = coluna + (int) direcoes.get (count).getY (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getX (), j += (int) direcoes.get (count).getY ()) {
+			for (i = (int) coord.getY () + (int) direcoes.get (count).getY (), j = (int) coord.getX () + (int) direcoes.get (count).getX (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getY (), j += (int) direcoes.get (count).getX ()) {
 				aux = tab.getCasa (i, j);
 				
 				// não tá ocupada por uma peça da mesma cor
@@ -59,7 +58,7 @@ public class Bispo extends Peca {
 		
 		ArrayList<Movimento> movs = new ArrayList<> ();
 		for (int i = 0; i < casas.size (); i++)
-			movs.add (new Movimento (tab.getCasa (linha, coluna), casas.get (i)));
+			movs.add (new Movimento (getEssaCasa (), casas.get (i)));
 		
 		return movs;
 	}

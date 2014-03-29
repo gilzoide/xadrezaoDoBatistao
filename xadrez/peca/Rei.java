@@ -11,9 +11,8 @@ import xadrez.Casa;
 import xadrez.Tabuleiro;
 import xadrez.Movimento;
 
-import java.util.ArrayList;
-
 import java.awt.Point;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
@@ -21,8 +20,8 @@ public class Rei extends Peca {
 	/* Esse rei pode fazer roque? */
 	private boolean roque;
 	
-	public Rei (Cor nova_cor, byte linha, byte coluna) {
-		super (nova_cor, linha, coluna);
+	public Rei (Cor nova_cor, Point P) {
+		super (nova_cor, P);
 		roque = true;
 	}
 	
@@ -43,21 +42,19 @@ public class Rei extends Peca {
 		// pra cada direção possível
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
-			i = linha + (int) direcoes.get (count).getX ();
-			j = coluna + (int) direcoes.get (count).getY ();
+			i = (int) coord.getY () + (int) direcoes.get (count).getY ();
+			j = (int) coord.getX () + (int) direcoes.get (count).getX ();
 			
 			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
-			if (Tabuleiro.estaDentro (i, j)) {
-				aux = tab.getCasa (i, j);
+			aux = tab.getCasa (i, j);
 				
-				if (!aux.estaOcupadaCor (cor))
-					casas.add (aux);
-			}
+			if (aux != null && !aux.estaOcupadaCor (cor))
+				casas.add (aux);
 		}
 		
 		ArrayList<Movimento> movs = new ArrayList<>();
 		for (int i = 0; i < casas.size (); i++)
-			movs.add (new Movimento (tab.getCasa (linha, coluna), casas.get (i)));
+			movs.add (new Movimento (getEssaCasa (), casas.get (i)));
 		
 		return movs;
 	}
