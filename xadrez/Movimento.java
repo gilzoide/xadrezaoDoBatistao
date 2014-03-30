@@ -1,10 +1,11 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 17/03/2014
+ * 30/03/2014
  */
 package xadrez;
 
 import ui.Cor;
+import ui.Gui;
 import ui.Icone;
 
 import xadrez.Casa;
@@ -43,13 +44,8 @@ public class Movimento {
 	 * Quando escolher qual movimento realmente fazer, chame o método 'Mover' dele
 	 */
 	public void mover () {
-		Peca aux = pronde.getPeca ();
-		// se a casa está ocupada, notação de 'tomou peça'
-		if (aux != null) {
-			notacao_extra += "x" + aux;
-		}
 		// pega a peça a ser movida e atualiza sua posição
-		aux = donde.getPeca ();
+		Peca aux = donde.getPeca ();
 		aux.setCoord (pronde.getCoord ());
 		// se for um peão, podem acontecer coisas muito loucas
 		if (aux instanceof Peao) {
@@ -81,10 +77,17 @@ public class Movimento {
 	 * Formula e retorna a notação estrita da jogada
 	 */
 	public String notacaoEscrita () {
+		Peca aux = pronde.getPeca ();
+		// se a casa está ocupada, notação de 'tomou peça'
+		if (aux != null) {
+			notacao_extra = "x" + aux;
+		}
+		
 		String str = new String ();			// exemplo de notação
 		str += donde.getPeca ();			// D (peça)
-		str += 8 - donde.getLinha ();		// 3 (linha)
-		str += 'a' + donde.getColuna ();	// g (coluna)
+		str += notacao_extra;
+		str += 8 - pronde.getLinha ();		// 3 (linha)
+		str += (char) (pronde.getColuna () + 'a');	// g (coluna)
 		if (xeque) {
 			str += '+';
 			if (mate)
@@ -92,6 +95,10 @@ public class Movimento {
 		}
 		
 		return str;
+	}
+	
+	public void jogaNoLog () {
+		Gui.getTela ().logMovimento (this);
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 17/03/2014
+ * 30/03/2014
  */
 package xadrez.peca;
 
@@ -23,6 +23,10 @@ public class Rei extends Peca {
 	public Rei (Cor nova_cor, Point P) {
 		super (nova_cor, P);
 		roque = true;
+	}
+	
+	public String toString () {
+		return "R";
 	}
 	
 	public ArrayList<Movimento> possiveisMovimentos () {

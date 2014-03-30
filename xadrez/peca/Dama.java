@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 17/03/2014
+ * 30/03/2014
  */
 package xadrez.peca;
 
@@ -19,6 +19,10 @@ import javax.swing.ImageIcon;
 public class Dama extends Peca {
 	public Dama (Cor nova_cor, Point P) {
 		super (nova_cor, P);
+	}
+	
+	public String toString () {
+		return "D";
 	}
 	
 	public ArrayList<Movimento> possiveisMovimentos () {

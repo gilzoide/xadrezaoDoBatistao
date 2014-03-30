@@ -1,8 +1,12 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 17/03/2014
+ * 30/03/2014
  */
 package xadrez;
+/**
+ * @todo cheque na jogada
+ * @todo roque
+ */
 
 import ui.Gui;
 import ui.Cor;
@@ -94,6 +98,7 @@ public class Xadrez {
 				m.unPrintPossivel ();
 			}
 			if (clicou_movimento_previsto) {
+				a_ser_feito.jogaNoLog ();
 				a_ser_feito.mover ();
 				trocaJogador ();
 			}
@@ -107,6 +112,7 @@ public class Xadrez {
 	 private void trocaJogador () {
 		 jogador_da_vez = (jogador_da_vez == J1) ? J2 : J1;
 		 jogador_da_vez.update ();
+		 Gui.getTela ().trocaJogador (jogador_da_vez);
 	 }
 	 /**
 	  * Começa um novo jogo!

@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 17/03/2014
+ * 30/03/2014
  */
 package xadrez.peca;
 
@@ -38,7 +38,7 @@ public abstract class Peca {
 	 * @return Lista de possíveis movimentos, cada um organizado em um vetor de 2 ints: linha e coluna
 	 */
 	public abstract ArrayList<Movimento> possiveisMovimentos ();
-	
+
 	/* GETTERS */
 	public abstract ImageIcon getIcone ();
 	

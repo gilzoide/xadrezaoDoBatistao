@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 17/03/2014
+ * 30/03/2014
  */
 package xadrez.peca;
 
@@ -17,9 +17,12 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 public class Cavalo extends Peca {
-	
 	public Cavalo (Cor nova_cor, Point P) {
 		super (nova_cor, P);
+	}
+	
+	public String toString () {
+		return "C";
 	}
 	
 	public ArrayList<Movimento> possiveisMovimentos () {
