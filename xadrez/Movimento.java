@@ -44,15 +44,21 @@ public class Movimento {
 	 * Quando escolher qual movimento realmente fazer, chame o método 'Mover' dele
 	 */
 	public void mover () {
+		// se tinha alguém lá, morreu =P
+		Peca aux = pronde.getPeca ();
+		if (aux != null)
+			aux.morre ();
+
 		// pega a peça a ser movida e atualiza sua posição
-		Peca aux = donde.getPeca ();
+		aux = donde.getPeca ();
 		aux.setCoord (pronde.getCoord ());
 		// se for um peão, podem acontecer coisas muito loucas
 		if (aux instanceof Peao) {
 			((Peao)aux).update (true);
 		}
 		
-		pronde.setPeca (donde.getPeca ());
+		
+		pronde.setPeca (aux);
 		pronde.atualizaIcone ();
 		donde.setPeca (null);
 		donde.atualizaIcone ();

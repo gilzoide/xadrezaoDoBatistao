@@ -45,7 +45,7 @@ header :
 
 # zipa o projeto, pra mandar no SSP
 zip :
-	zip Xadrez -r $(pacotes) makefile
+	zip Xadrez -r $(pacotes) build makefile
 
 # limpa os descartáveis da vida
 clean :

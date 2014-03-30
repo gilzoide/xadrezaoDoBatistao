@@ -2,8 +2,13 @@
 *~
 */*~
 
+# zip
+*.zip
+
 # objetos do java
 *.class
+# pasta de build
+build
 
 # strem do kdevelop
 *kdev*

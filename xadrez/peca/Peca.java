@@ -18,7 +18,8 @@ import javax.swing.ImageIcon;
 public abstract class Peca {
 	protected Cor cor;	/// cor da peça
 	
-	protected Point coord;
+	protected Point coord;	/// coordenada da peça
+	protected boolean morreu;	/// se a peça tá em jogo ainda ou não
 
 	/**
 	 * Ctor: ajusta a cor e põe as coordenadas em 'coord'
@@ -26,6 +27,7 @@ public abstract class Peca {
 	public Peca (Cor nova_cor, int linha, int coluna) {
 		this.cor = nova_cor;
 		coord = new Point (coluna, linha);
+		morreu = false;
 	}
 	public Peca (Cor nova_cor, Point P) {
 		this.cor = nova_cor;
@@ -39,6 +41,11 @@ public abstract class Peca {
 	 */
 	public abstract ArrayList<Movimento> possiveisMovimentos ();
 
+	/**
+	 * Peça domina as casas que ela pode fazê-lo
+	 */
+	public abstract void domina ();
+
 	/* GETTERS */
 	public abstract ImageIcon getIcone ();
 	
@@ -48,11 +55,20 @@ public abstract class Peca {
 	public Casa getEssaCasa () {
 		return Tabuleiro.getTabuleiro ().getCasa (coord);
 	}
+	public boolean estaMorto () {
+		return morreu;
+	}
+	public Point getCoord () {
+		return coord;
+	}
 	/* SETTERS */
 	public void setCoord (Point P) {
 		coord.setLocation (P);
 	}
 	public void setCoord (int linha, int coluna) {
 		coord.setLocation (coluna, linha);
+	}
+	public void morre () {
+		morreu = true;
 	}
 }

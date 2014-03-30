@@ -22,11 +22,18 @@ public class Log {
 	
 	public void novoJogo () {
 		log.setText ("");
-		addLinha ("Log de Jogadas\n");
+		log.append ("Log de Jogadas\n");
 	}
 	
+	/**
+	 * Adiciona uma linha no log, sempre terminada em '\n'
+	 */
 	public void addLinha (String str) {
-		log.append (str + "\n");
+		log.append ("\n" + str);
+	}
+	
+	public void addXeque () {
+		log.append ("+");
 	}
 	
 	/**

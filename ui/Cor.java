@@ -6,7 +6,10 @@ package ui;
 
 public enum Cor {
 	BRANCO,
-	PRETO;
+	PRETO,
+	// específicos de domínio na casa
+	AMBOS,
+	LIVRE;
 	
 	public Cor oposta () {
 		if (this == BRANCO)
@@ -15,7 +18,44 @@ public enum Cor {
 			return BRANCO;
 	}
 	
-	public boolean ehCorOposta (Cor cmp) {
-		return (this == cmp);
+	/**
+	 * Pra domínio [na casa], adiciona nova cor
+	 */
+	public Cor dominioAdd (Cor nova) {
+		if (this == nova.oposta ())
+			return AMBOS;
+		else if (this == LIVRE)
+			return nova;
+		else
+			return this;
+	}
+	/**
+	 * Pra domínio [na casa], retira uma cor
+	 */
+	public Cor dominioRemove (Cor a_tirar) {
+		if (this == AMBOS)
+			return a_tirar.oposta ();
+		else if (this == a_tirar)
+			return LIVRE;
+		else
+			return this;
+	}
+	/**
+	 * verifica se peça da cor 'sua_cor' é ameaçada pelo domínio (pro rei não mover aonde não pode);
+	 */
+	public boolean ameaca (Cor sua_cor) {
+		if (sua_cor == BRANCO) {
+			if (this == BRANCO || this == LIVRE)
+				return false;
+			else
+				return true;
+		}
+		
+		else {
+			if (this == PRETO || this == LIVRE)
+				return false;
+			else
+				return true;
+		}
 	}
 }

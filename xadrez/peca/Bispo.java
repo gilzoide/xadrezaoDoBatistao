@@ -17,9 +17,17 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 public class Bispo extends Peca {
+	private ArrayList<Point> direcoes;
 
 	public Bispo (Cor nova_cor, Point P) {
 		super (nova_cor, P);
+		
+		// inicializa direções
+		direcoes = new ArrayList<> ();
+		direcoes.add (new Point (1, 1));	// diagonal principal, pra baixo
+		direcoes.add (new Point (1, -1));	// diagonal secundária, pra cima
+		direcoes.add (new Point (-1, 1));	// diagonal secundária, pra baixo
+		direcoes.add (new Point (-1, -1));	// diagonal principal, pra cima
 	}
 	
 	public String toString () {
@@ -29,12 +37,6 @@ public class Bispo extends Peca {
 	public ArrayList<Movimento> possiveisMovimentos () {
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
-		
-		ArrayList<Point> direcoes = new ArrayList<> ();
-		direcoes.add (new Point (1, 1));	// diagonal principal, pra baixo
-		direcoes.add (new Point (1, -1));	// diagonal secundária, pra cima
-		direcoes.add (new Point (-1, 1));	// diagonal secundária, pra baixo
-		direcoes.add (new Point (-1, -1));	// diagonal principal, pra cima
 
 		// pra cada direção possível
 		for (int count = 0; count < direcoes.size (); count++) {
@@ -61,6 +63,25 @@ public class Bispo extends Peca {
 			movs.add (new Movimento (getEssaCasa (), casas.get (i)));
 		
 		return movs;
+	}
+	
+	public void domina () {
+		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
+		
+		for (int count = 0; count < direcoes.size (); count++) {
+			int i, j;
+			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
+			// se ainda estiver no tabuleiro, é uma possibilidade
+			for (i = (int) coord.getY () + (int) direcoes.get (count).getY (), j = (int) coord.getX () + (int) direcoes.get (count).getX (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getY (), j += (int) direcoes.get (count).getX ()) {
+				aux = tab.getCasa (i, j);
+				
+				aux.addDominio (cor);
+				
+				// se tiver ocupada, ainda domina mais cabou a graça
+				if (aux.estaOcupada ())
+					break;
+			}
+		}
 	}
 	
 	/* GETTER */

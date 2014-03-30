@@ -71,15 +71,6 @@ public class Tabuleiro {
 		else
 			return false;
 	}
-	/* Posição do tabuleiro está ocupada pela cor contrária? */
-	public static boolean estaOcupadoPeloInimigo (Point P, Cor cor_minha) {
-		if (estaDentro (P)) {
-			Peca aux = casa[(int) P.getY ()][(int) P.getX ()].getPeca ();
-			return (cor_minha.ehCorOposta (aux.getCor ()));
-		}
-		else
-			return false;
-	}
 	
 	/**
 	 * Reposiciona as peças para um novo jogo
@@ -88,6 +79,15 @@ public class Tabuleiro {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				casa[i][j].casaNovoJogo ();
+			}
+		}
+	}
+	
+	
+	public void printDominio () {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				System.out.println (casa[i][j].getDominio ());
 			}
 		}
 	}

@@ -4,8 +4,10 @@
  */
 package xadrez;
 /**
- * @todo cheque na jogada
+ * @todo não deixar peça desproteger o rei
+ * @todo mate
  * @todo roque
+ * @todo en passant direito (não só checar, q já tá feito)
  */
 
 import ui.Gui;
@@ -110,9 +112,13 @@ public class Xadrez {
 	 * Inverte o jogador - passa a vez
 	 */
 	 private void trocaJogador () {
+		 jogador_da_vez.updatePiaums ();
 		 jogador_da_vez = (jogador_da_vez == J1) ? J2 : J1;
-		 jogador_da_vez.update ();
 		 Gui.getTela ().trocaJogador (jogador_da_vez);
+		 
+		 // vê se alguém tá em cheque
+		 J1.update ();
+		 J2.update ();
 	 }
 	 /**
 	  * Começa um novo jogo!

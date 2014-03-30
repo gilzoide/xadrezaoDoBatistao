@@ -29,7 +29,6 @@ public class Peao extends Peca {
 		NADA;
 	};
 	public enum AcaoEspecial {
-		ANDOU_DUAS,
 		EN_PASSANT,
 		PROMOCAO,
 		NADA;
@@ -37,6 +36,7 @@ public class Peao extends Peca {
 	
 	private AcaoEspecial acao;
 	private Estado estado;
+	private int lado;
 	
 	/**
 	 * Ctor
@@ -45,6 +45,9 @@ public class Peao extends Peca {
 		super (nova_cor, P);
 		estado = Estado.PRIMEIRA;
 		acao = AcaoEspecial.NADA;
+		
+		// dependendo da cor, vai pra frente ou pra trás
+		lado = (cor == Cor.BRANCO) ? -1 : 1;
 	}
 	
 	public String toString () {
@@ -54,9 +57,6 @@ public class Peao extends Peca {
 	public ArrayList<Movimento> possiveisMovimentos () {
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
-		
-		// dependendo da cor, vai pra frente ou pra trás
-		int lado = (cor == Cor.BRANCO) ? -1 : 1;
 
 		Casa aux, aux_en_passant;	// auxiliares, pra testar à vontade pra por ou não em 'casas'
 		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX ());
@@ -72,8 +72,10 @@ public class Peao extends Peca {
 		// pode tomar
 		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () + 1);
 		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () + 1);
-		if (aux != null && aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ()))
+		if (aux != null && aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ())) {
 			casas.add (aux);
+			acao = AcaoEspecial.EN_PASSANT;
+		}
 			
 		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () - 1);
 		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () - 1);
@@ -87,6 +89,17 @@ public class Peao extends Peca {
 		return movs;
 	}
 	
+	public void domina () {
+		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
+		Casa aux;
+		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () + 1);
+		if (aux != null)
+			aux.addDominio (cor);
+		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () - 1);
+		if (aux != null)
+			aux.addDominio (cor);
+	}
+	
 	/**
 	 * Se moveu, talvez mude o estado, talz...
 	 */
@@ -96,6 +109,8 @@ public class Peao extends Peca {
 				// se moveu 2 casas, pode ser tomado por 'en passant'
 				if ((int) coord.getY () == 3 || (int) coord.getY () == 4)
 					estado = Estado.EN_PASSANT;
+				else
+					estado = Estado.NADA;
 			}
 			else
 				estado = Estado.NADA;

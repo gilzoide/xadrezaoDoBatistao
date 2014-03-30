@@ -17,8 +17,21 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 public class Dama extends Peca {
+	private ArrayList<Point> direcoes;
+	
 	public Dama (Cor nova_cor, Point P) {
 		super (nova_cor, P);
+		
+		// inicializa direções
+		direcoes = new ArrayList<> ();
+		direcoes.add (new Point (1, 1));	// diagonal principal, pra baixo
+		direcoes.add (new Point (1, -1));	// diagonal secundária, pra cima
+		direcoes.add (new Point (-1, 1));	// diagonal secundária, pra baixo
+		direcoes.add (new Point (-1, -1));	// diagonal principal, pra cima
+		direcoes.add (new Point (1, 0));	// direita
+		direcoes.add (new Point (0, 1));	// cima
+		direcoes.add (new Point (-1, 0));	// esquerda
+		direcoes.add (new Point (0, -1));	// baixo
 	}
 	
 	public String toString () {
@@ -29,16 +42,6 @@ public class Dama extends Peca {
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		
-		ArrayList<Point> direcoes = new ArrayList<> ();
-		direcoes.add (new Point (1, 1));	// diagonal principal, pra baixo
-		direcoes.add (new Point (1, -1));	// diagonal secundária, pra cima
-		direcoes.add (new Point (-1, 1));	// diagonal secundária, pra baixo
-		direcoes.add (new Point (-1, -1));	// diagonal principal, pra cima
-		direcoes.add (new Point (1, 0));	// direita
-		direcoes.add (new Point (0, 1));	// cima
-		direcoes.add (new Point (-1, 0));	// esquerda
-		direcoes.add (new Point (0, -1));	// baixo
-
 		// pra cada direção possível
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
@@ -64,6 +67,25 @@ public class Dama extends Peca {
 			movs.add (new Movimento (getEssaCasa (), casas.get (i)));
 		
 		return movs;
+	}
+	
+	public void domina () {
+		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
+		
+		for (int count = 0; count < direcoes.size (); count++) {
+			int i, j;
+			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
+			// se ainda estiver no tabuleiro, é uma possibilidade
+			for (i = (int) coord.getY () + (int) direcoes.get (count).getY (), j = (int) coord.getX () + (int) direcoes.get (count).getX (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getY (), j += (int) direcoes.get (count).getX ()) {
+				aux = tab.getCasa (i, j);
+				
+				aux.addDominio (cor);
+				
+				// se tiver ocupada, ainda domina mais cabou a graça
+				if (aux.estaOcupada ())
+					break;
+			}
+		}
 	}
 	
 	/* GETTER */

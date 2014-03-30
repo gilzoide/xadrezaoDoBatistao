@@ -243,15 +243,15 @@ public class Gui extends JFrame {
 		};
 		String jogador;
 		
-		if (J.getCor () == Cor.BRANCO) {
-			jogador = "Jogador BRANCO, ";
-		}
-		else {
-			jogador = "Jogador PRETO, ";
-		}
-		
-		quem_joga.setText (jogador + str[rand.nextInt (14)]);
+		quem_joga.setText (J + ", " + str[rand.nextInt (14)]);
 	}
+	/**
+	 * Escreve na tela se deu xeque
+	 */
+	 public void xeque (Jogador J) {
+		 quem_joga.setText (J + " está em xeque, faça alguma coisa! =S");
+		 log.addXeque ();
+	 }
 	
 	/**
 	 * Escreve o movimento no log

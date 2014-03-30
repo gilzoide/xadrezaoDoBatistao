@@ -19,11 +19,17 @@ import javax.swing.ImageIcon;
 public class Casa {
 	private Peca peca;
 	private Point coord;
+	/**
+	 * Marca que jogador (pela cor) que tem domínio sobre a casa
+	 * Serve pra checar xeque ;]
+	 */
+	private Cor dominio;
 	
 	private JButton botao;
 	
 	public Casa (int i, int j) {
 		coord = new Point (j, i);
+		dominio = Cor.LIVRE;
 	}
 
 	/**
@@ -107,6 +113,9 @@ public class Casa {
 	public int getColuna () {
 		return (int) coord.getX ();
 	}
+	public Cor getDominio () {
+		return dominio;
+	}
 	/* SETTERS */
 	public void setPeca (Peca nova_peca) {
 		peca = nova_peca;
@@ -119,6 +128,18 @@ public class Casa {
 			botao.setIcon (peca.getIcone ());
 		else
 			botao.setIcon (null);
+	}
+	/**
+	 * Adiciona à casa domínio da cor do jogador
+	 */
+	public void addDominio (Cor jogador) {
+		dominio = dominio.dominioAdd (jogador);
+	}
+	/**
+	 * Remove à casa domínio da cor do jogador
+	 */
+	public void removeDominio (Cor jogador) {
+		dominio = dominio.dominioRemove (jogador);
 	}
 	
 	public String toString () {

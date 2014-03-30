@@ -17,8 +17,23 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 public class Cavalo extends Peca {
+	private ArrayList<Point> direcoes;
+
+
 	public Cavalo (Cor nova_cor, Point P) {
 		super (nova_cor, P);
+		
+		/// inicializa direções
+		// L -> 2 prum lado e 1 pro outro
+		direcoes = new ArrayList<> ();
+		direcoes.add (new Point (1, 2));
+		direcoes.add (new Point (2, 1));
+		direcoes.add (new Point (-1, 2));
+		direcoes.add (new Point (2, -1));
+		direcoes.add (new Point (1, -2));
+		direcoes.add (new Point (-2, 1));
+		direcoes.add (new Point (-1, -2));
+		direcoes.add (new Point (-2, -1));
 	}
 	
 	public String toString () {
@@ -28,17 +43,6 @@ public class Cavalo extends Peca {
 	public ArrayList<Movimento> possiveisMovimentos () {
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
-		
-		// L -> 2 prum lado e 1 pro outro
-		ArrayList<Point> direcoes = new ArrayList<> ();
-		direcoes.add (new Point (1, 2));
-		direcoes.add (new Point (2, 1));
-		direcoes.add (new Point (-1, 2));
-		direcoes.add (new Point (2, -1));
-		direcoes.add (new Point (1, -2));
-		direcoes.add (new Point (-2, 1));
-		direcoes.add (new Point (-1, -2));
-		direcoes.add (new Point (-2, -1));
 
 		// pra cada direção possível
 		for (int count = 0; count < direcoes.size (); count++) {
@@ -60,6 +64,20 @@ public class Cavalo extends Peca {
 		}
 		
 		return movs;
+	}
+	
+	public void domina () {
+		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
+		
+		for (int count = 0; count < direcoes.size (); count++) {
+			int i, j;
+			i = (int) coord.getY () + (int) direcoes.get (count).getY ();
+			j = (int) coord.getX () + (int) direcoes.get (count).getX ();
+
+			Casa aux = tab.getCasa (i, j);
+			if (aux != null)
+				aux.addDominio (cor);
+		}
 	}
 	
 	/* GETTER */
