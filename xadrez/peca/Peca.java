@@ -21,6 +21,8 @@ public abstract class Peca {
 	protected Point coord;	/// coordenada da peça
 	protected boolean morreu;	/// se a peça tá em jogo ainda ou não
 
+	protected int indice_comeco;	/// índice dos seus possíveis movimentos dentro de todos os possíveis movimentos
+	protected int indice_fim;	/// indice fim dos seus possíveis movimentos dentro de todos os possíveis movimentos
 	/**
 	 * Ctor: ajusta a cor e põe as coordenadas em 'coord'
 	 */
@@ -61,6 +63,12 @@ public abstract class Peca {
 	public Point getCoord () {
 		return coord;
 	}
+	public int getIndiceComeco () {
+		return this.indice_comeco;
+	}
+	public int getIndiceFim () {
+		return this.indice_fim;
+	}
 	/* SETTERS */
 	public void setCoord (Point P) {
 		coord.setLocation (P);
@@ -70,5 +78,11 @@ public abstract class Peca {
 	}
 	public void morre () {
 		morreu = true;
+	}
+	public void setIndiceComeco (int indice) {
+		this.indice_comeco = indice;
+	}
+	public void setIndiceFim (int indice) {
+		this.indice_fim = indice;
 	}
 }

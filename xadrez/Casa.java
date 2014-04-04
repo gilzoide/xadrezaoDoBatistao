@@ -47,9 +47,9 @@ public class Casa {
 				else if (coord.getX () % 3 == 2)
 					peca = new Bispo (Cor.PRETO, coord);
 				else if (coord.getX () == 4)
-					peca = new Dama (Cor.PRETO, coord);
-				else
 					peca = new Rei (Cor.PRETO, coord);
+				else
+					peca = new Dama (Cor.PRETO, coord);
 				break;
 			// segunda fila (peões)
 			case 1:
@@ -69,9 +69,9 @@ public class Casa {
 				else if (coord.getX () % 3 == 2)
 					peca = new Bispo (Cor.BRANCO, coord);
 				else if (coord.getX () == 4)
-					peca = new Dama (Cor.BRANCO, coord);
-				else
 					peca = new Rei (Cor.BRANCO, coord);
+				else
+					peca = new Dama (Cor.BRANCO, coord);
 				break;
 
 			default:

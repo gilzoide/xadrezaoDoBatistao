@@ -217,6 +217,7 @@ public class Gui extends JFrame {
 	private void novoJogo () {
 		Xadrez.novoJogo ();
 		log.novoJogo ();
+		quem_joga.setForeground (Color.BLACK);
 		quem_joga.setText ("Jogador BRANCO, comece o jogo!");
 	}
 	
@@ -243,12 +244,15 @@ public class Gui extends JFrame {
 		};
 		String jogador;
 		
+		
+		quem_joga.setForeground (Color.BLACK);
 		quem_joga.setText (J + ", " + str[rand.nextInt (14)]);
 	}
 	/**
 	 * Escreve na tela se deu xeque
 	 */
 	 public void xeque (Jogador J) {
+		 quem_joga.setForeground (Color.RED);
 		 quem_joga.setText (J + " está em xeque, faça alguma coisa! =S");
 		 log.addXeque ();
 	 }

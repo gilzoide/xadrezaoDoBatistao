@@ -16,6 +16,7 @@ import ui.Jogador;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.lang.NullPointerException;
 
 import javax.swing.SwingUtilities;
 
@@ -59,7 +60,7 @@ public class Xadrez {
 	// casa anterior clicada, se já tivar marcada (ali pra 'cliquei')
 	private static Casa anterior = null;
 	// movimentos possíveis da peça marcada (ali pra 'cliquei')
-	private static ArrayList<Movimento> mov;
+	private static ArrayList<Movimento> mov = new ArrayList<> ();
 	/**
 	 * Jogada em si: clica em uma peça [pra mover] e em outra pra mover pra lá
 	 * 
@@ -72,10 +73,14 @@ public class Xadrez {
 			// se tem peça lá dentro
 			if (atual.estaOcupadaCor (jogador_da_vez.getCor ())) {
 				anterior = atual;
-				mov = atual.getPeca ().possiveisMovimentos ();
+				mov.clear ();
+				try {
+					mov.addAll (jogador_da_vez.getMovs (atual.getPeca ()));
+				}
 				// se não tem movimento possível, nem adianta, cara =/
-				if (mov.isEmpty ())
+				catch (NullPointerException ex) {
 					return;
+				}
 				
 				// pra cada movimento possível faz ele aparecer possível
 				for (Movimento m : mov)
@@ -116,7 +121,7 @@ public class Xadrez {
 		 jogador_da_vez = (jogador_da_vez == J1) ? J2 : J1;
 		 Gui.getTela ().trocaJogador (jogador_da_vez);
 		 
-		 // vê se alguém tá em cheque
+		 // vê se alguém tá em cheque, checa possíveis movimentos
 		 J1.update ();
 		 J2.update ();
 	 }
@@ -129,6 +134,9 @@ public class Xadrez {
 		 // reinicia os jogadores
 		 J1.novoJogo ();
 		 J2.novoJogo ();
+		 // checa movimentos possíveis
+		 J1.update ();
+		 J2.update ();
 		 // só pra constar, o jogador branco é que começa
 		 jogador_da_vez = J1;
 	 }

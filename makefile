@@ -10,7 +10,7 @@ export ROOT := $(CURDIR)
 # build dir: lugar dos arquivos-objetos .class
 export BUILD := $(ROOT)/build
 # flags pro javac
-export JFLAGS := -d $(BUILD) -sourcepath $(ROOT) -g
+export JFLAGS := -d $(BUILD) -sourcepath $(ROOT) -g -Xlint:unchecked
 # comando no sed pra atualizar a data dos cabeçalhos
 export HEADERIZE = sed -i "3 c\ * $(shell date +%d/%m/%Y)"
 export HEADERIZE_MAKE = sed -i "3 c\# $(shell date +%d/%m/%Y)" makefile
