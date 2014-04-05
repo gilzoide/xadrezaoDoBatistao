@@ -72,23 +72,15 @@ public class Peao extends Peca {
 		// pode tomar
 		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () + 1);
 		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () + 1);
-		if (aux != null) {
-			aux.addDominio (cor);
-			if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ())) {
-				casas.add (aux);
-				acao = AcaoEspecial.EN_PASSANT;
-			}
+		if (aux != null && aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ())) {
+			casas.add (aux);
+			acao = AcaoEspecial.EN_PASSANT;
 		}
 			
 		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () - 1);
 		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () - 1);
-		if (aux != null) {
-			aux.addDominio (cor);
-			if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ())) {
-				casas.add (aux);
-				acao = AcaoEspecial.EN_PASSANT;
-			}
-		}
+		if (aux != null && aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ()))
+			casas.add (aux);
 
 		ArrayList<Movimento> movs = new ArrayList<> ();
 		for (int i = 0; i < casas.size (); i++)
@@ -97,14 +89,15 @@ public class Peao extends Peca {
 		return movs;
 	}
 	
-	public void domina (Casa[][] simulador) {
-		int i = (int) coord.getY () + lado;
-		int j = (int) coord.getX () + 1;
-		if (Tabuleiro.estaDentro (i, j))
-			simulador[i][j].addDominio (cor);
-		j = (int) coord.getX () - 1;
-		if (Tabuleiro.estaDentro (i, j))
-			simulador[i][j].addDominio (cor);
+	public void domina () {
+		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
+		Casa aux;
+		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () + 1);
+		if (aux != null)
+			aux.addDominio (cor);
+		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () - 1);
+		if (aux != null)
+			aux.addDominio (cor);
 	}
 	
 	/**

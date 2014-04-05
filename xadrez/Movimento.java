@@ -7,8 +7,8 @@ package xadrez;
 import ui.Cor;
 import ui.Gui;
 import ui.Icone;
-import ui.Jogador;
 
+import xadrez.Casa;
 import xadrez.peca.Peca;
 import xadrez.peca.Peao;
 
@@ -21,24 +21,24 @@ public class Movimento {
 	
 	private String notacao_extra;	// notação extra (que nem sempre ocorre): xeque, mate, roque, toma peça
 	
+	private boolean xeque;	// dá xeque?
+	private boolean mate;	// esse xeque é mate? (lembra que aqui só existe se xeque tb for true)
 	private boolean roque;	// vai ver foi um roque...
-	private boolean pode;
 	
-	private Casa[][] simulador;
 	/**
-	 * Ctor: ator move de 'donde' pra 'pronde'
+	 * Ctor: ator move pra 'linha'x'coluna', e se dá xeque
 	 */
-	public Movimento (Casa donde, Casa pronde) {
+	public Movimento (Casa donde, Casa pronde, boolean xeque) {
 		this.donde = donde;
 		this.pronde = pronde;
+		this.xeque = xeque;
 		notacao_extra = "";
-		pode = true;
-		simulador = new Casa[8][8];
-		
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++)
-				simulador[i][j] = new Casa (i, j);
-		}
+	}
+	/**
+	 * Ctor: igual o outro, mas com xeque constante = false
+	 */
+	public Movimento (Casa donde, Casa pronde) {
+		this (donde, pronde, false);
 	}
 	/**
 	 * Quando escolher qual movimento realmente fazer, chame o método 'Mover' dele
@@ -56,38 +56,12 @@ public class Movimento {
 		if (aux instanceof Peao) {
 			((Peao)aux).update (true);
 		}
-				
+		
+		
 		pronde.setPeca (aux);
 		pronde.atualizaIcone ();
 		donde.setPeca (null);
 		donde.atualizaIcone ();
-	}
-	/**
-	 * Função que simula o movimento e checa se este movimento deixa o próprio rei em xeque
-	 * 
-	 * @return retorna 'false' se puder fazer o movimento e 'true' se não puder (não se pode deixar o rei em xeque, né =P)
-	 */
-	public boolean simulaMovimentoEstaXeque (Jogador ator, Jogador outro) {
-		// simula a jogada (muda a peça de lugar)
-		Peca aux = donde.getPeca ();
-		Peca temp = pronde.getPeca ();
-		if (temp != null)
-			temp.morre ();
-		pronde.setPeca (aux);
-		donde.setPeca (null);
-		
-		ator.simulaDominios (simulador);
-		outro.simulaDominios (simulador);
-		
-		boolean retorno = ator.estaXeque (simulador);
-		
-		// volta peça à posição original
-		donde.setPeca (aux);
-		pronde.setPeca (temp);
-		if (temp != null)
-			temp.desmorre ();
-
-		return retorno;
 	}
 	
 	/**
@@ -107,8 +81,6 @@ public class Movimento {
 	
 	/**
 	 * Formula e retorna a notação estrita da jogada
-	 * 
-	 * @note Aqui não estão incluídas as notações de xeque e mate
 	 */
 	public String notacaoEscrita () {
 		Peca aux = pronde.getPeca ();
@@ -122,6 +94,11 @@ public class Movimento {
 		str += notacao_extra;
 		str += 8 - pronde.getLinha ();		// 3 (linha)
 		str += (char) (pronde.getColuna () + 'a');	// g (coluna)
+		if (xeque) {
+			str += '+';
+			if (mate)
+				str += '+';
+		}
 		
 		return str;
 	}
@@ -139,14 +116,5 @@ public class Movimento {
 	}
 	public boolean ehEsseMovimento (Casa aux) {
 		return aux == pronde;
-	}
-	
-	/* GETTERS */
-	public boolean podeSerRealizado () {
-		return pode;
-	}
-	/* SETTER */
-	public void inutiliza () {
-		pode = false;
 	}
 }

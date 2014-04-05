@@ -34,7 +34,6 @@ public class Xadrez {
 	private Xadrez () {
 		J1 = new Jogador (Cor.BRANCO);
 		J2 = new Jogador (Cor.PRETO);
-		mov = new ArrayList<> ();
 	}
 	
 	/**
@@ -61,7 +60,7 @@ public class Xadrez {
 	// casa anterior clicada, se já tivar marcada (ali pra 'cliquei')
 	private static Casa anterior = null;
 	// movimentos possíveis da peça marcada (ali pra 'cliquei')
-	private static ArrayList<Movimento> mov;
+	private static ArrayList<Movimento> mov = new ArrayList<> ();
 	/**
 	 * Jogada em si: clica em uma peça [pra mover] e em outra pra mover pra lá
 	 * 
@@ -83,33 +82,29 @@ public class Xadrez {
 					return;
 				}
 				
-				// pra cada movimento possível
-				for (Movimento m : mov) {
-					// marca como possível se não deixar rei em xeque
-					if (!m.simulaMovimentoEstaXeque (jogador_da_vez, outroJogador ()))
-						m.printPossivel ();
-					else
-						m.inutiliza ();
-				}
+				// pra cada movimento possível faz ele aparecer possível
+				for (Movimento m : mov)
+					m.printPossivel ();
 				
 				// marquei a casa ;]
-				if (!mov.isEmpty ())
-					casa_marcada = true;
+				casa_marcada = true;
 			}
 		}
 		else {	// casa_marcada = true
+			boolean clicou_movimento_previsto = false;
 			Movimento a_ser_feito = null;
 			// pra cada movimento anteriormente previso,
 			for (Movimento m : mov) {
 				// vê se o clicado atual é um movimento previsto
-				if (m.ehEsseMovimento (P) && m.podeSerRealizado ()) {
+				if (m.ehEsseMovimento (P)) {
 					// se sim, marca pra mover lá! (e marca q clicou em um previsto)
 					a_ser_feito = m;
+					clicou_movimento_previsto = true;
 				}
 				// descolore os quadradim de possibilidade
 				m.unPrintPossivel ();
 			}
-			if (a_ser_feito != null) {
+			if (clicou_movimento_previsto) {
 				a_ser_feito.jogaNoLog ();
 				a_ser_feito.mover ();
 				trocaJogador ();
@@ -123,19 +118,12 @@ public class Xadrez {
 	 */
 	 private void trocaJogador () {
 		 jogador_da_vez.updatePiaums ();
-		 // checa possíveis movimentos (e já adiciona domínio nas casas)
-		 J1.update (J2);
-		 J2.update (J1);
-		 // depois do domínio pronto, faz o rolê pros reis (que dependem do passo anterior)
-		 J1.updateRei ();
-		 J2.updateRei ();
-
-		 jogador_da_vez = outroJogador ();
+		 jogador_da_vez = (jogador_da_vez == J1) ? J2 : J1;
 		 Gui.getTela ().trocaJogador (jogador_da_vez);
 		 
-	 }
-	 private Jogador outroJogador () {
-		 return (jogador_da_vez == J1) ? J2 : J1;
+		 // vê se alguém tá em cheque, checa possíveis movimentos
+		 J1.update ();
+		 J2.update ();
 	 }
 	 /**
 	  * Começa um novo jogo!
@@ -147,8 +135,8 @@ public class Xadrez {
 		 J1.novoJogo ();
 		 J2.novoJogo ();
 		 // checa movimentos possíveis
-		 J1.update (J2);
-		 J2.update (J1);
+		 J1.update ();
+		 J2.update ();
 		 // só pra constar, o jogador branco é que começa
 		 jogador_da_vez = J1;
 	 }

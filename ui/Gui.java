@@ -225,53 +225,37 @@ public class Gui extends JFrame {
 	 * Escreve de quem é a vez (pra ser chamado depois de trocar jogador atual)
 	 */
 	public void trocaJogador (Jogador J) {
-		if (!J.estaXeque ()) {
-			Random rand = new Random ();
-			String [] str = {
-				"sua vez",
-				"não me desaponte!",
-				"faça aqueeeeeeela jogada!",
-				"manda ver!",
-				"vai aí",
-				"pense com carinho e jogue!",
-				"destrói esse palhaço!",
-				"vai com fé, irmão!",
-				"vai, não desista!",
-				"bola pra frente",
-				"relaxa e joga",
-				"fique sempre atento ao rei, valeu?",
-				"cuidado aí, rapaz!",
-				"vai, vai, vai, tchananã,nananãã",
-				"é sua vez, sô",
-				"vai que é tua!"
-			};
-			String jogador;
-			
-			
-			quem_joga.setForeground (Color.BLACK);
-			quem_joga.setText (J + ", " + str[rand.nextInt (16)]);
-		}
-		else
-			xeque (J);
+		Random rand = new Random ();
+		String [] str = {
+			"sua vez",
+			"não me desaponte!",
+			"faça aqueeeeeeela jogada!",
+			"manda ver!",
+			"vai aí",
+			"pense com carinho e jogue!",
+			"destrói esse palhaço!",
+			"vai com fé, irmão!",
+			"vai, não desista!",
+			"bola pra frente",
+			"relaxa e joga",
+			"fique sempre atento ao rei, valeu?",
+			"cuidado aí, rapaz!",
+			"vai, vai, vai, tchananã,nananãã"
+		};
+		String jogador;
+		
+		
+		quem_joga.setForeground (Color.BLACK);
+		quem_joga.setText (J + ", " + str[rand.nextInt (14)]);
 	}
 	/**
 	 * Escreve na tela se deu xeque
 	 */
-	public void xeque (Jogador J) {
-		quem_joga.setForeground (Color.RED);
-		quem_joga.setText (J + " está em xeque, faça alguma coisa! =S");
-		log.addXeque ();
-	}
-	/**
-	 * Escreve na tela que deu mate! (e já 
-	 */
-	public void mate (Jogador J) {
-		quem_joga.setForeground (Color.RED);
-		quem_joga.setText ("Xeque mate! " + J + ", seu rei já era! VWAHAHAHAHA");
-		log.addXeque ();	// mais um '+', que quer dizer mate
-		// para a tela e pergunta se quer começar novo jogo, ou quitar
-		
-	}
+	 public void xeque (Jogador J) {
+		 quem_joga.setForeground (Color.RED);
+		 quem_joga.setText (J + " está em xeque, faça alguma coisa! =S");
+		 log.addXeque ();
+	 }
 	
 	/**
 	 * Escreve o movimento no log
