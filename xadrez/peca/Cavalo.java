@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 30/03/2014
+ * 05/04/2014
  */
 package xadrez.peca;
 
@@ -53,8 +53,11 @@ public class Cavalo extends Peca {
 			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
 			aux = tab.getCasa (i, j);
 				
-			if (aux != null && !aux.estaOcupadaCor (cor))
-				casas.add (aux);
+			if (aux != null) {
+				aux.addDominio (cor);
+				if (!aux.estaOcupadaCor (cor))
+					casas.add (aux);
+			}
 		}
 		
 		

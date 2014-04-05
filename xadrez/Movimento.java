@@ -1,9 +1,10 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 30/03/2014
+ * 05/04/2014
  */
 package xadrez;
 
+import ui.Jogador;
 import ui.Cor;
 import ui.Gui;
 import ui.Icone;
@@ -11,39 +12,31 @@ import ui.Icone;
 import xadrez.Casa;
 import xadrez.peca.Peca;
 import xadrez.peca.Peao;
+import xadrez.peca.Rei;
+import xadrez.peca.Torre;
+import xadrez.peca.PromoveuException;
 
 import java.awt.Point;
 
 import javax.swing.ImageIcon;
 
 public class Movimento {
-	private Casa donde, pronde;		// Casas: donde saiu, pronde vai
+	protected Casa donde, pronde;		// Casas: donde saiu, pronde vai
 	
-	private String notacao_extra;	// notação extra (que nem sempre ocorre): xeque, mate, roque, toma peça
-	
-	private boolean xeque;	// dá xeque?
-	private boolean mate;	// esse xeque é mate? (lembra que aqui só existe se xeque tb for true)
-	private boolean roque;	// vai ver foi um roque...
+	private String notacao_extra;	// notação extra (que nem sempre ocorre): toma peça
 	
 	/**
-	 * Ctor: ator move pra 'linha'x'coluna', e se dá xeque
-	 */
-	public Movimento (Casa donde, Casa pronde, boolean xeque) {
-		this.donde = donde;
-		this.pronde = pronde;
-		this.xeque = xeque;
-		notacao_extra = "";
-	}
-	/**
-	 * Ctor: igual o outro, mas com xeque constante = false
+	 * Ctor: ator move de 'donde' pra 'pronde'
 	 */
 	public Movimento (Casa donde, Casa pronde) {
-		this (donde, pronde, false);
+		this.donde = donde;
+		this.pronde = pronde;
+		notacao_extra = "";
 	}
 	/**
 	 * Quando escolher qual movimento realmente fazer, chame o método 'Mover' dele
 	 */
-	public void mover () {
+	public void mover (Jogador ator) {
 		// se tinha alguém lá, morreu =P
 		Peca aux = pronde.getPeca ();
 		if (aux != null)
@@ -54,7 +47,23 @@ public class Movimento {
 		aux.setCoord (pronde.getCoord ());
 		// se for um peão, podem acontecer coisas muito loucas
 		if (aux instanceof Peao) {
-			((Peao)aux).update (true);
+			try {
+				((Peao)aux).update (true);
+			}
+			// se não é peão mais (foi promovido, UHUL xD)
+			catch (PromoveuException ex) {
+				Peca nova = Tabuleiro.getTabuleiro ().getCasa (aux.getCoord ()).getPeca ();
+				ator.addPeca (nova);
+			}
+		}
+		if (aux instanceof Rei) {
+			ator.setRoques (false, false);
+		}
+		if (aux instanceof Torre) {
+			if (aux.getCoord ().getX () == 7)
+				ator.setRoques (ator.getRoqueMaior (), false);
+			else
+				ator.setRoques (false, ator.getRoqueMenor ());
 		}
 		
 		
@@ -81,6 +90,8 @@ public class Movimento {
 	
 	/**
 	 * Formula e retorna a notação estrita da jogada
+	 * 
+	 * @note Aqui não estão incluídas as notações de xeque e mate
 	 */
 	public String notacaoEscrita () {
 		Peca aux = pronde.getPeca ();
@@ -94,11 +105,6 @@ public class Movimento {
 		str += notacao_extra;
 		str += 8 - pronde.getLinha ();		// 3 (linha)
 		str += (char) (pronde.getColuna () + 'a');	// g (coluna)
-		if (xeque) {
-			str += '+';
-			if (mate)
-				str += '+';
-		}
 		
 		return str;
 	}

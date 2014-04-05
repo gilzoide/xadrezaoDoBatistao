@@ -1,12 +1,11 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 30/03/2014
+ * 05/04/2014
  */
 package xadrez;
 /**
  * @todo não deixar peça desproteger o rei
  * @todo mate
- * @todo roque
  * @todo en passant direito (não só checar, q já tá feito)
  */
 
@@ -34,6 +33,7 @@ public class Xadrez {
 	private Xadrez () {
 		J1 = new Jogador (Cor.BRANCO);
 		J2 = new Jogador (Cor.PRETO);
+		mov = new ArrayList<> ();
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class Xadrez {
 	// casa anterior clicada, se já tivar marcada (ali pra 'cliquei')
 	private static Casa anterior = null;
 	// movimentos possíveis da peça marcada (ali pra 'cliquei')
-	private static ArrayList<Movimento> mov = new ArrayList<> ();
+	private static ArrayList<Movimento> mov;
 	/**
 	 * Jogada em si: clica em uma peça [pra mover] e em outra pra mover pra lá
 	 * 
@@ -99,14 +99,13 @@ public class Xadrez {
 				if (m.ehEsseMovimento (P)) {
 					// se sim, marca pra mover lá! (e marca q clicou em um previsto)
 					a_ser_feito = m;
-					clicou_movimento_previsto = true;
 				}
 				// descolore os quadradim de possibilidade
 				m.unPrintPossivel ();
 			}
-			if (clicou_movimento_previsto) {
+			if (a_ser_feito != null) {
 				a_ser_feito.jogaNoLog ();
-				a_ser_feito.mover ();
+				a_ser_feito.mover (jogador_da_vez);
 				trocaJogador ();
 			}
 			casa_marcada = false;
@@ -118,12 +117,18 @@ public class Xadrez {
 	 */
 	 private void trocaJogador () {
 		 jogador_da_vez.updatePiaums ();
-		 jogador_da_vez = (jogador_da_vez == J1) ? J2 : J1;
+
+		 jogador_da_vez = outroJogador ();
 		 Gui.getTela ().trocaJogador (jogador_da_vez);
-		 
-		 // vê se alguém tá em cheque, checa possíveis movimentos
+		 // checa possíveis movimentos (e já adiciona domínio nas casas)
 		 J1.update ();
 		 J2.update ();
+		 // depois do domínio pronto, faz o rolê pros reis (que dependem do passo anterior)
+		 J1.updateRei ();
+		 J2.updateRei ();
+	 }
+	 private Jogador outroJogador () {
+		 return (jogador_da_vez == J1) ? J2 : J1;
 	 }
 	 /**
 	  * Começa um novo jogo!

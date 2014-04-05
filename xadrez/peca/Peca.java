@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 30/03/2014
+ * 05/04/2014
  */
 package xadrez.peca;
 
@@ -34,12 +34,14 @@ public abstract class Peca {
 	public Peca (Cor nova_cor, Point P) {
 		this.cor = nova_cor;
 		coord = new Point (P);
+		morreu = false;
 	}
 
 	/**
-	 * Calcula os possíveis movimentos da peça, retornando um array de possibilidades de movimentos
+	 * Calcula os possíveis movimentos da peça, retornando um array de possibilidades de movimentos;
+	 * Seta o domínio do jogador no tabuleiro
 	 *
-	 * @return Lista de possíveis movimentos, cada um organizado em um vetor de 2 ints: linha e coluna
+	 * @return Lista de possíveis movimentos
 	 */
 	public abstract ArrayList<Movimento> possiveisMovimentos ();
 

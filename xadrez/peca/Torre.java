@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 30/03/2014
+ * 05/04/2014
  */
 package xadrez.peca;
 
@@ -45,6 +45,8 @@ public class Torre extends Peca {
 			// se ainda estiver no tabuleiro, é uma possibilidade
 			for (i = (int) coord.getY () + (int) direcoes.get (count).getY (), j = (int) coord.getX () + (int) direcoes.get (count).getX (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getY (), j += (int) direcoes.get (count).getX ()) {
 				aux = tab.getCasa (i, j);
+				
+				aux.addDominio (cor);
 				
 				// não tá ocupada por uma peça da mesma cor
 				if (!aux.estaOcupadaCor (cor)) {

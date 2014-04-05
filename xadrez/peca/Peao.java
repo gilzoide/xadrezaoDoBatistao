@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 30/03/2014
+ * 05/04/2014
  */
 package xadrez.peca;
 
@@ -15,6 +15,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public class Peao extends Peca {
 	/**
@@ -72,15 +73,23 @@ public class Peao extends Peca {
 		// pode tomar
 		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () + 1);
 		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () + 1);
-		if (aux != null && aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ())) {
-			casas.add (aux);
-			acao = AcaoEspecial.EN_PASSANT;
+		if (aux != null) {
+			aux.addDominio (cor);
+			if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ())) {
+				casas.add (aux);
+				acao = AcaoEspecial.EN_PASSANT;
+			}
 		}
 			
 		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () - 1);
 		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () - 1);
-		if (aux != null && aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ()))
-			casas.add (aux);
+		if (aux != null) {
+			aux.addDominio (cor);
+			if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ())) {
+				casas.add (aux);
+				acao = AcaoEspecial.EN_PASSANT;
+			}
+		}
 
 		ArrayList<Movimento> movs = new ArrayList<> ();
 		for (int i = 0; i < casas.size (); i++)
@@ -103,7 +112,7 @@ public class Peao extends Peca {
 	/**
 	 * Se moveu, talvez mude o estado, talz...
 	 */
-	public AcaoEspecial update (boolean moveu) {
+	public void update (boolean moveu) throws PromoveuException {
 		if (moveu) {
 			if (estado == Estado.PRIMEIRA) {
 				// se moveu 2 casas, pode ser tomado por 'en passant'
@@ -112,18 +121,34 @@ public class Peao extends Peca {
 				else
 					estado = Estado.NADA;
 			}
+			
 			else
 				estado = Estado.NADA;
 		}
 		else if (estado == Estado.EN_PASSANT) {
 			estado = Estado.NADA;
 		}
-		else if ((int) coord.getY () == 0 || (int) coord.getY () == 8) {
-			return AcaoEspecial.PROMOCAO;
+		// promoção!
+		else if ((int) coord.getY () == 0 || (int) coord.getY () == 7) {
+			// não tem mais eu
+			morre ();
+			Object[] opcoes = { "Bispo", "Cavalo", "Dama", "Torre" };
+			Object selecionado = JOptionPane.showInputDialog (null, "Promove pra que peça?", "Promoção do Peão! Só aqui, no Xadrezão do Batistão!", JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+			Peca nova;
+			if (selecionado.toString () == "Bispo")
+				nova = new Bispo (cor, coord);
+			else if (selecionado.toString () == "Cavalo")
+				nova = new Cavalo (cor, coord);
+			else if (selecionado.toString () == "Dama")
+				nova = new Dama (cor, coord);
+			else
+				nova = new Torre (cor, coord);
+
+			Tabuleiro.getTabuleiro ().getCasa (coord).setPeca (nova);
+			Tabuleiro.getTabuleiro ().getCasa (coord).atualizaIcone ();
+
+			throw new PromoveuException ();
 		}
-		
-		// default
-		return AcaoEspecial.NADA;
 	}
 	
 	/* GETTER */

@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 30/03/2014
+ * 05/04/2014
  */
 package xadrez.peca;
 
@@ -8,6 +8,7 @@ import ui.Cor;
 import ui.Icone;
 
 import xadrez.Casa;
+import xadrez.Roque;
 import xadrez.Tabuleiro;
 import xadrez.Movimento;
 
@@ -52,11 +53,13 @@ public class Rei extends Peca {
 			i = (int) coord.getY () + (int) direcoes.get (count).getY ();
 			j = (int) coord.getX () + (int) direcoes.get (count).getX ();
 			
-			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
-			aux = tab.getCasa (i, j);
+			Casa aux = tab.getCasa (i, j);;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
 				
-			if (aux != null && !aux.getDominio ().ameaca (cor) && !aux.estaOcupadaCor (cor))
-				casas.add (aux);
+			if (aux != null) {
+				aux.addDominio (cor);
+				if (!aux.getDominio ().ameaca (cor) && !aux.estaOcupadaCor (cor))
+					casas.add (aux);
+			}
 		}
 		
 		ArrayList<Movimento> movs = new ArrayList<> ();
@@ -64,6 +67,45 @@ public class Rei extends Peca {
 			movs.add (new Movimento (getEssaCasa (), casas.get (i)));
 		
 		return movs;
+	}
+	
+	public ArrayList<Movimento> Roques (boolean maior, boolean menor) {
+		ArrayList<Movimento> movs = new ArrayList<> ();
+		Tabuleiro tab = Tabuleiro.getTabuleiro ();
+		
+		int linha = (cor == Cor.BRANCO) ? 7 : 0;
+		Casa do_rei = tab.getCasa (linha, 4);
+		
+		if (maior) {
+			// pega casa da torre
+			int i, coluna = 0;
+			Casa da_torre = Tabuleiro.getTabuleiro ().getCasa (linha, coluna);
+			
+			for (i = 3; i > coluna; i--) {
+				Casa aux = tab.getCasa (linha, i);
+				if (aux.estaOcupada () || aux.getDominio ().ameaca (cor))
+					break;
+			}
+
+			if (i == coluna)
+				movs.add (new Roque (do_rei, da_torre, Roque.roque_tipo.MAIOR));
+		}
+		if (menor) {
+			// pega casa da torre
+			int i, coluna = 7;
+			Casa da_torre = Tabuleiro.getTabuleiro ().getCasa (linha, coluna);
+			
+			for (i = 5; i < coluna; i++) {
+				Casa aux = tab.getCasa (linha, i);
+				if (aux.estaOcupada () || aux.getDominio ().ameaca (cor))
+					break;
+			}
+
+			if (i == coluna)
+				movs.add (new Roque (do_rei, da_torre, Roque.roque_tipo.MENOR));
+		}
+			
+		return movs;			
 	}
 	
 	public void domina () {

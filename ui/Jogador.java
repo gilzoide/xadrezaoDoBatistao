@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 30/03/2014
+ * 05/04/2014
  */
 package ui;
 
@@ -9,10 +9,11 @@ import xadrez.Movimento;
 import xadrez.peca.Peca;
 import xadrez.peca.Peao;
 import xadrez.peca.Rei;
+import xadrez.peca.PromoveuException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.NullPointerException;
+//import java.lang.NullPointerException;
 
 public class Jogador {
 	private Cor cor;
@@ -20,6 +21,7 @@ public class Jogador {
 	private ArrayList<Peca> todas_pecas;
 	private ArrayList<Peao> piaums;
 	private Rei reizaum;
+	private boolean roque_maior, roque_menor;	/// posso fazer roque? (maior e menor)
 	
 	/// Todos os movimentos possíveis naquela rodada!
 	private ArrayList<Movimento> movs;
@@ -51,28 +53,33 @@ public class Jogador {
 		// linha dos não peões
 		linha = (cor == Cor.BRANCO) ? 7 : 0;
 		for (int i = 0; i < 8; i++) {
-			todas_pecas.add (tab.getCasa (linha, i).getPeca ());
+			if (i != 4)		// pula o rei
+				todas_pecas.add (tab.getCasa (linha, i).getPeca ());
 		}
-		reizaum = (Rei) todas_pecas.get (12);
+		// e o reizão xD
+		reizaum = (Rei) tab.getCasa (linha, 4).getPeca ();
+		//todas_pecas.add (reizaum);
+		// por enquanto posso fazer qualquer roque
+		roque_maior = roque_menor = true;
 	}
 	
 	/**
-	 * Update por jogada: checa xeque
+	 * Update por jogada: movimentos possíveis, domina campo e checa xeque
 	 */
 	public void update () {
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
+			for (int j = 0; j < 8; j++)
 				tab.getCasa (i, j).removeDominio (cor);
-			}
 		}
 		
 		// recalcula movimentos possíveis e domina o campo
 		movs.clear ();
 		for (Peca P : todas_pecas) {
 			if (!P.estaMorto ()) {
-				P.domina ();
+				//P.domina ();
 				ArrayList<Movimento> aux = P.possiveisMovimentos ();
+								
 				// se não tem movimento possível, indice_comeco e indice_fim serão iguais
 				P.setIndiceComeco (movs.size ());
 				movs.addAll (aux);
@@ -83,9 +90,17 @@ public class Jogador {
 		if (estaXeque ()) {
 			Gui.getTela ().xeque (this);
 		}
-
-		//tab.printDominio ();
 	}
+	
+	public void updateRei () {
+		ArrayList<Movimento> aux = reizaum.possiveisMovimentos ();
+		aux.addAll (reizaum.Roques (roque_maior, roque_menor));
+		// se não tem movimento possível, indice_comeco e indice_fim serão iguais
+		reizaum.setIndiceComeco (movs.size ());
+		movs.addAll (aux);
+		reizaum.setIndiceFim (movs.size ());
+	}
+	
 	/**
 	 * Rei deste jogador está em xeque?
 	 */
@@ -96,8 +111,25 @@ public class Jogador {
 	 * Dá um update nos peões - só pra quem acabou de jogar
 	 */
 	public void updatePiaums () {
-		for (Peao P : piaums)
-			P.update (false);
+		for (Peao P : piaums) {
+			if (!P.estaMorto ())
+				try {
+					P.update (false);
+				}
+				catch (PromoveuException ex) {
+					Peca nova = Tabuleiro.getTabuleiro ().getCasa (P.getCoord ()).getPeca ();
+					addPeca (nova);
+				}
+		}
+	}
+	
+	/* SETTERS */
+	public void setRoques (boolean maior, boolean menor) {
+		this.roque_maior = maior;
+		this.roque_menor = menor;
+	}
+	public void addPeca (Peca nova) {
+		todas_pecas.add (nova);
 	}
 	
 	/* GETTERS */
@@ -106,6 +138,12 @@ public class Jogador {
 	}
 	public List<Movimento> getMovs (Peca P) {
 		return movs.subList (P.getIndiceComeco (), P.getIndiceFim ());
+	}
+	public boolean getRoqueMaior () {
+		return roque_maior;
+	}
+	public boolean getRoqueMenor () {
+		return roque_menor;
 	}
 	
 	
