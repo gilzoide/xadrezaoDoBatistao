@@ -52,11 +52,13 @@ public class Rei extends Peca {
 			i = (int) coord.getY () + (int) direcoes.get (count).getY ();
 			j = (int) coord.getX () + (int) direcoes.get (count).getX ();
 			
-			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
-			aux = tab.getCasa (i, j);
+			Casa aux = tab.getCasa (i, j);;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
 				
-			if (aux != null && !aux.getDominio ().ameaca (cor) && !aux.estaOcupadaCor (cor))
-				casas.add (aux);
+			if (aux != null) {
+				aux.addDominio (cor);
+				if (!aux.getDominio ().ameaca (cor) && !aux.estaOcupadaCor (cor))
+					casas.add (aux);
+			}
 		}
 		
 		ArrayList<Movimento> movs = new ArrayList<> ();
@@ -66,17 +68,14 @@ public class Rei extends Peca {
 		return movs;
 	}
 	
-	public void domina () {
-		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
-		
+	public void domina (Casa[][] simulador) {
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
 			i = (int) coord.getY () + (int) direcoes.get (count).getY ();
 			j = (int) coord.getX () + (int) direcoes.get (count).getX ();
 
-			Casa aux = tab.getCasa (i, j);
-			if (aux != null)
-				aux.addDominio (cor);
+			if (Tabuleiro.estaDentro (i, j))
+				simulador[i][j].addDominio (cor);
 		}
 	}
 	

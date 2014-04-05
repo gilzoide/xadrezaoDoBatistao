@@ -34,19 +34,21 @@ public abstract class Peca {
 	public Peca (Cor nova_cor, Point P) {
 		this.cor = nova_cor;
 		coord = new Point (P);
+		morreu = false;
 	}
 
 	/**
-	 * Calcula os possíveis movimentos da peça, retornando um array de possibilidades de movimentos
+	 * Calcula os possíveis movimentos da peça, retornando um array de possibilidades de movimentos;
+	 * Seta o domínio do jogador no tabuleiro
 	 *
-	 * @return Lista de possíveis movimentos, cada um organizado em um vetor de 2 ints: linha e coluna
+	 * @return Lista de possíveis movimentos
 	 */
 	public abstract ArrayList<Movimento> possiveisMovimentos ();
 
 	/**
-	 * Peça domina as casas que ela pode fazê-lo
+	 * Domina o simulador, pra ver se movimento põe o rei em xeque
 	 */
-	public abstract void domina ();
+	public abstract void domina (Casa[][] simulador);
 
 	/* GETTERS */
 	public abstract ImageIcon getIcone ();
@@ -78,6 +80,9 @@ public abstract class Peca {
 	}
 	public void morre () {
 		morreu = true;
+	}
+	public void desmorre () {
+		morreu = false;
 	}
 	public void setIndiceComeco (int indice) {
 		this.indice_comeco = indice;

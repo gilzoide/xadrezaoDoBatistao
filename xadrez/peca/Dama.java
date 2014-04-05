@@ -50,6 +50,8 @@ public class Dama extends Peca {
 			for (i = (int) coord.getY () + (int) direcoes.get (count).getY (), j = (int) coord.getX () + (int) direcoes.get (count).getX (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getY (), j += (int) direcoes.get (count).getX ()) {
 				aux = tab.getCasa (i, j);
 				
+				aux.addDominio (cor);
+				
 				// não tá ocupada por uma peça da mesma cor
 				if (!aux.estaOcupadaCor (cor)) {
 					casas.add (aux);
@@ -69,20 +71,20 @@ public class Dama extends Peca {
 		return movs;
 	}
 	
-	public void domina () {
-		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
-		
+	public void domina (Casa[][] simulador) {
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
-			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
+			i = (int) coord.getY () + (int) direcoes.get (count).getY ();
+			j = (int) coord.getX () + (int) direcoes.get (count).getX ();
 			// se ainda estiver no tabuleiro, é uma possibilidade
-			for (i = (int) coord.getY () + (int) direcoes.get (count).getY (), j = (int) coord.getX () + (int) direcoes.get (count).getX (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getY (), j += (int) direcoes.get (count).getX ()) {
-				aux = tab.getCasa (i, j);
+			for ( ; Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getY (), j += (int) direcoes.get (count).getX ()) {
+				Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
+				aux = simulador[i][j];
 				
 				aux.addDominio (cor);
 				
 				// se tiver ocupada, ainda domina mais cabou a graça
-				if (aux.estaOcupada ())
+				if (Tabuleiro.estaOcupado (aux.getCoord ()))
 					break;
 			}
 		}
