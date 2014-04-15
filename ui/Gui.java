@@ -245,8 +245,6 @@ public class Gui extends JFrame {
 				"é sua vez, sô",
 				"vai que é tua!"
 			};
-			String jogador;
-			
 			
 			quem_joga.setForeground (Color.BLACK);
 			quem_joga.setText (J + ", " + str[rand.nextInt (16)]);

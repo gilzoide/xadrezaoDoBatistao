@@ -91,7 +91,6 @@ public class Xadrez {
 			}
 		}
 		else {	// casa_marcada = true
-			boolean clicou_movimento_previsto = false;
 			Movimento a_ser_feito = null;
 			// pra cada movimento anteriormente previso,
 			for (Movimento m : mov) {

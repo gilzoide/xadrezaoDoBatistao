@@ -86,10 +86,6 @@ public class Jogador {
 				P.setIndiceFim (movs.size ());
 			}
 		}
-		
-		if (estaXeque ()) {
-			Gui.getTela ().xeque (this);
-		}
 	}
 	
 	public void updateRei () {
@@ -99,6 +95,10 @@ public class Jogador {
 		reizaum.setIndiceComeco (movs.size ());
 		movs.addAll (aux);
 		reizaum.setIndiceFim (movs.size ());
+
+		if (estaXeque ()) {
+			Gui.getTela ().xeque (this);
+		}
 	}
 	
 	/**
