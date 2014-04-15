@@ -143,6 +143,6 @@ public class Casa {
 	}
 	
 	public String toString () {
-		return ("casa " + coord.getY () + " " + coord.getX ());
+		return ("casa " + coord.getX () + " " + coord.getY ());
 	}
 }

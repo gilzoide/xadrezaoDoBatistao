@@ -121,11 +121,11 @@ public class Xadrez {
 		 jogador_da_vez = outroJogador ();
 		 Gui.getTela ().trocaJogador (jogador_da_vez);
 		 // checa possíveis movimentos (e já adiciona domínio nas casas)
-		 J1.update ();
-		 J2.update ();
+		 outroJogador ().update ();	// quem acabou de jogar
+		 jogador_da_vez.update ();	// o da vez agora
 		 // depois do domínio pronto, faz o rolê pros reis (que dependem do passo anterior)
-		 J1.updateRei ();
-		 J2.updateRei ();
+		 outroJogador ().updateRei ();	// quem acabou de jogar
+		 jogador_da_vez.updateRei ();	// o da vez agora
 	 }
 	 private Jogador outroJogador () {
 		 return (jogador_da_vez == J1) ? J2 : J1;

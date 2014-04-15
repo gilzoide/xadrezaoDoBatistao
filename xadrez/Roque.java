@@ -13,7 +13,7 @@ import java.awt.Point;
 
 /**
  * Roque é um movimento especial, por esse motivo precisa de atenção especial xP
- * ps: que boiola
+ * ps: ↑ que boiola
  */
 public class Roque extends Movimento {
 	public enum roque_tipo {
@@ -45,28 +45,32 @@ public class Roque extends Movimento {
 		ator.setRoques (false, false);
 		
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
-		Point do_rei = donde.getCoord ();
 		// o rei
 		Peca rei = donde.getPeca ();
 		donde.setPeca (null);
+		donde.atualizaIcone ();
 		// a torre em questão
 		Peca torre = pronde.getPeca ();
 		pronde.setPeca (null);
+		pronde.atualizaIcone ();
 
 		// pra que lado vai? (depende de se é maior ou menor)
 		int lado = (tipo == roque_tipo.MENOR) ? 1 : -1;
+		
+		Point do_rei = new Point (donde.getCoord ());
+		do_rei.translate (2 * lado, 0);
+		
+		Point da_torre = new Point (donde.getCoord ());
+		da_torre.translate (lado, 0);
+		
 		// move a torre
-		do_rei.translate (lado, 0);
-		torre.setCoord (do_rei);
-		tab.getCasa (do_rei).setPeca (torre);
-		tab.getCasa (do_rei).atualizaIcone ();
-		pronde.atualizaIcone ();
+		torre.setCoord (da_torre);
+		tab.getCasa (da_torre).setPeca (torre);
+		tab.getCasa (da_torre).atualizaIcone ();
 		// move o rei
-		do_rei.translate (lado, 0);
 		rei.setCoord (do_rei);
 		tab.getCasa (do_rei).setPeca (rei);
 		tab.getCasa (do_rei).atualizaIcone ();
-		donde.atualizaIcone ();
 	}
 	
 	@Override

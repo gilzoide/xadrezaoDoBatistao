@@ -5,8 +5,8 @@
 package xadrez.peca;
 
 public class PromoveuException extends Exception {
-	String oi;
+	String S;
 	public PromoveuException () {
-		oi = "promoveu, UHUL!";
+		S = "promoveu, UHUL!";
 	}
 }

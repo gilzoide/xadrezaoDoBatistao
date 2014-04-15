@@ -23,12 +23,16 @@ pacotes = xadrez ui
 all : $(pacotes)
 	cp -r ui/img build/ui
 
-.PHONY : $(pacotes) run header zip clean debug
+.PHONY : $(pacotes) run header zip clean debug edit
 # compila cada pacote, usando o makefile lá dentro
 $(pacotes) :
 	$(MAKE) -C $@ all
 
 
+
+# manda editar todos os .java
+edit:
+	geany `locate .java | grep xadrez`
 
 # roda o projeto compilado
 run :
