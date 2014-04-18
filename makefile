@@ -32,7 +32,7 @@ $(pacotes) :
 
 # manda editar todos os .java
 edit:
-	geany `locate .java | grep xadrez`
+	geany `locate .java | grep xadrezao`
 
 # roda o projeto compilado
 run :

@@ -23,7 +23,7 @@ import javax.swing.ImageIcon;
 
 public class Movimento {
 	protected Casa donde, pronde;		// Casas: donde saiu, pronde vai
-	private boolean posso;	// Posso fazer esse movimento? Bom, só saberei depois de simular o movimento
+	protected boolean posso;	// Posso fazer esse movimento? Bom, só saberei depois de simular o movimento
 	
 	private String notacao_extra;	// notação extra (que nem sempre ocorre): toma peça
 	

@@ -5,12 +5,15 @@
 package xadrez.movimento;
 
 import ui.Cor;
+import ui.Icone;
 import ui.Jogador;
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
 import xadrez.peca.Peca;
 
 import java.awt.Point;
+
+import javax.swing.ImageIcon;
 
 public class EnPassant extends Movimento {
 	private int lado;
@@ -35,5 +38,13 @@ public class EnPassant extends Movimento {
 		pronde.atualizaIcone ();
 		donde.setPeca (null);
 		donde.atualizaIcone ();
+	}
+	
+	@Override
+	public void printPossivel () {
+		if (posso) {
+			ImageIcon possivel = Icone.possibilita ((ImageIcon) pronde.getBotao ().getIcon (), true);
+			pronde.getBotao ().setIcon (possivel);
+		}
 	}
 }

@@ -120,10 +120,12 @@ public class Xadrez {
 	 * Inverte o jogador - passa a vez
 	 */
 	 private void trocaJogador () {
-		 jogador_da_vez.updatePiaums ();
-
+		 // troca o jogador
 		 jogador_da_vez = outroJogador ();
 		 Gui.getTela ().trocaJogador (jogador_da_vez);
+		 
+		 // peões que tinham andado 2 casas agora não podem mais ser tomados por en passant
+		 jogador_da_vez.updatePiaums ();
 		 // checa possíveis movimentos (e já adiciona domínio nas casas)
 		 outroJogador ().update ();	// quem acabou de jogar
 		 jogador_da_vez.update ();	// o da vez agora
