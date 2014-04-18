@@ -2,14 +2,15 @@
  * SCC 604 - POO - Turma C
  * 05/04/2014
  */
-package xadrez;
+package xadrez.movimento;
 
 import ui.Jogador;
 import ui.Cor;
 import ui.Gui;
 import ui.Icone;
 
-import xadrez.Casa;
+import xadrez.tabuleiro.Casa;
+import xadrez.tabuleiro.Tabuleiro;
 import xadrez.peca.Peca;
 import xadrez.peca.Peao;
 import xadrez.peca.Rei;

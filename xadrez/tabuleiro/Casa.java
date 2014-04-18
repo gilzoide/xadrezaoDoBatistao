@@ -2,7 +2,7 @@
  * SCC 604 - POO - Turma C
  * 05/04/2014
  */
-package xadrez;
+package xadrez.tabuleiro;
 
 import ui.Cor;
 import ui.Icone;

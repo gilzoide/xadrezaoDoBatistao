@@ -7,9 +7,9 @@ package xadrez.peca;
 import ui.Cor;
 import ui.Icone;
 
-import xadrez.Casa;
-import xadrez.Tabuleiro;
-import xadrez.Movimento;
+import xadrez.tabuleiro.Casa;
+import xadrez.tabuleiro.Tabuleiro;
+import xadrez.movimento.Movimento;
 
 import java.awt.Point;
 import java.util.ArrayList;

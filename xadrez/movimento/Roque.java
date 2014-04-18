@@ -2,11 +2,12 @@
  * SCC 604 - POO - Turma C
  * 05/04/2014
  */
-package xadrez;
+package xadrez.movimento;
 
 import ui.Cor;
 import ui.Jogador;
-import xadrez.Casa;
+import xadrez.tabuleiro.Casa;
+import xadrez.tabuleiro.Tabuleiro;
 import xadrez.peca.Peca;
 
 import java.awt.Point;

@@ -13,6 +13,10 @@ import ui.Gui;
 import ui.Cor;
 import ui.Jogador;
 
+import xadrez.tabuleiro.Casa;
+import xadrez.tabuleiro.Tabuleiro;
+import xadrez.movimento.Movimento;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.lang.NullPointerException;
@@ -125,6 +129,9 @@ public class Xadrez {
 		 // depois do domínio pronto, faz o rolê pros reis (que dependem do passo anterior)
 		 outroJogador ().updateRei ();	// quem acabou de jogar
 		 jogador_da_vez.updateRei ();	// o da vez agora
+		 
+		 // verifica situação de quem vai jogar: xeque/mate
+		 jogador_da_vez.checaXeque ();
 	 }
 	 private Jogador outroJogador () {
 		 return (jogador_da_vez == J1) ? J2 : J1;

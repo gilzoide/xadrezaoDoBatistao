@@ -2,11 +2,8 @@
 # SCC 604 - POO - Turma C
 # 05/04/2014
 
-# Package: Xadrez (motor do jogo)
-pacotes = peca tabuleiro movimento
+# Package: Tabuleiro (o tabuleiro do jogo, com suas casas)
 src = *.java
-
-export ROOT BUILD JFLAGS HEADERIZE HEADERIZE_MAKE
 
 .PHONY : all $(pacotes) header clean
 
@@ -17,18 +14,12 @@ export ROOT BUILD JFLAGS HEADERIZE HEADERIZE_MAKE
 # Compila cada .java desse pacote
 all : $(src:.java=.class)
 
-# Compila os subpacotes
-$(pacotes) :
-	$(MAKE) -C $@ all
-
 
 # Atualiza a data do cabeçalho de cada um dos arquivos-fonte
 header :
 	$(HEADERIZE_MAKE)
 	$(foreach file, $(src), $(HEADERIZE) $(file);)
-	$(foreach pac, $(pacotes), $(MAKE) -C $(pac) header;)
 
 # limpa os descartáveis da vida
 clean :
 	$(RM) *~
-	$(foreach pac, $(pacotes), $(MAKE) -C $(pac) clean;)

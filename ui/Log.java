@@ -4,7 +4,7 @@
  */
 package ui;
 
-import xadrez.Movimento;
+import xadrez.movimento.Movimento;
 
 import javax.swing.JTextArea;
 

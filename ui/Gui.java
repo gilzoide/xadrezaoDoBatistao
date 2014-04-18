@@ -5,9 +5,9 @@
 package ui;
 
 import xadrez.Xadrez;
-import xadrez.Movimento;
-import xadrez.Tabuleiro;
-import xadrez.Casa;
+import xadrez.tabuleiro.Casa;
+import xadrez.tabuleiro.Tabuleiro;
+import xadrez.movimento.Movimento;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -225,32 +225,28 @@ public class Gui extends JFrame {
 	 * Escreve de quem é a vez (pra ser chamado depois de trocar jogador atual)
 	 */
 	public void trocaJogador (Jogador J) {
-		if (!J.estaXeque ()) {
-			Random rand = new Random ();
-			String [] str = {
-				"sua vez",
-				"não me desaponte!",
-				"faça aqueeeeeeela jogada!",
-				"manda ver!",
-				"vai aí",
-				"pense com carinho e jogue!",
-				"destrói esse palhaço!",
-				"vai com fé, irmão!",
-				"vai, não desista!",
-				"bola pra frente",
-				"relaxa e joga",
-				"fique sempre atento ao rei, valeu?",
-				"cuidado aí, rapaz!",
-				"vai, vai, vai, tchananã,nananãã",
-				"é sua vez, sô",
-				"vai que é tua!"
-			};
-			
-			quem_joga.setForeground (Color.BLACK);
-			quem_joga.setText (J + ", " + str[rand.nextInt (16)]);
-		}
-		else
-			xeque (J);
+		Random rand = new Random ();
+		String [] str = {
+			"sua vez",
+			"não me desaponte!",
+			"faça aqueeeeeeela jogada!",
+			"manda ver!",
+			"vai aí",
+			"pense com carinho e jogue!",
+			"destrói esse palhaço!",
+			"vai com fé, irmão!",
+			"vai, não desista!",
+			"bola pra frente",
+			"relaxa e joga",
+			"fique sempre atento ao rei, valeu?",
+			"cuidado aí, rapaz!",
+			"vai, vai, vai, tchananã,nananãã",
+			"é sua vez, sô",
+			"vai que é tua!"
+		};
+		
+		quem_joga.setForeground (Color.BLACK);
+		quem_joga.setText (J + ", " + str[rand.nextInt (16)]);
 	}
 	/**
 	 * Escreve na tela se deu xeque

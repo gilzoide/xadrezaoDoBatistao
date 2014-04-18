@@ -4,8 +4,8 @@
  */
 package ui;
 
-import xadrez.Tabuleiro;
-import xadrez.Movimento;
+import xadrez.tabuleiro.Tabuleiro;
+import xadrez.movimento.Movimento;
 import xadrez.peca.Peca;
 import xadrez.peca.Peao;
 import xadrez.peca.Rei;
@@ -87,7 +87,9 @@ public class Jogador {
 			}
 		}
 	}
-	
+	/**
+	 * Update do rei: precisa ser feito depois dos updates dos 2 jogadores
+	 */
 	public void updateRei () {
 		ArrayList<Movimento> aux = reizaum.possiveisMovimentos ();
 		aux.addAll (reizaum.Roques (roque_maior, roque_menor));
@@ -95,10 +97,27 @@ public class Jogador {
 		reizaum.setIndiceComeco (movs.size ());
 		movs.addAll (aux);
 		reizaum.setIndiceFim (movs.size ());
-
-		if (estaXeque ()) {
+	}
+	
+	/**
+	 * Checa se jogador está em cheque, ou até mate!
+	 */
+	public void checaXeque () {
+		// se não tem mais movimentos, é mate!
+		if (!possoMover ()) {
+			Gui.getTela ().mate (this);
+		}
+		// talvez não mate, mas um xequezinho básico
+		else if (estaXeque ()) {
 			Gui.getTela ().xeque (this);
 		}
+		
+	}
+	/**
+	 * Verifica se todos os movimentos são possíveis
+	 */
+	private boolean possoMover () {
+		return !movs.isEmpty ();
 	}
 	
 	/**
@@ -112,7 +131,7 @@ public class Jogador {
 	 */
 	public void updatePiaums () {
 		for (Peao P : piaums) {
-			if (!P.estaMorto ())
+			if (!P.estaMorto ()) {
 				try {
 					P.update (false);
 				}
@@ -120,6 +139,7 @@ public class Jogador {
 					Peca nova = Tabuleiro.getTabuleiro ().getCasa (P.getCoord ()).getPeca ();
 					addPeca (nova);
 				}
+			}
 		}
 	}
 	
