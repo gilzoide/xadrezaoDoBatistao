@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 05/04/2014
+ * 18/04/2014
  */
 package xadrez.movimento;
 
@@ -23,6 +23,7 @@ import javax.swing.ImageIcon;
 
 public class Movimento {
 	protected Casa donde, pronde;		// Casas: donde saiu, pronde vai
+	private boolean posso;	// Posso fazer esse movimento? Bom, só saberei depois de simular o movimento
 	
 	private String notacao_extra;	// notação extra (que nem sempre ocorre): toma peça
 	
@@ -33,6 +34,7 @@ public class Movimento {
 		this.donde = donde;
 		this.pronde = pronde;
 		notacao_extra = "";
+		posso = true;
 	}
 	/**
 	 * Quando escolher qual movimento realmente fazer, chame o método 'Mover' dele
@@ -75,18 +77,27 @@ public class Movimento {
 	}
 	
 	/**
+	 * Simula o movimento, pra ver se pode (se não deixa o rei em xeque)
+	 */
+	public void simula () {
+		
+	}
+	
+	/**
 	 * Icone do rolê fica colorido, assim aparece como uma possível jogada
 	 */
 	public void printPossivel () {
-		ImageIcon possivel = Icone.possibilita ((ImageIcon) pronde.getBotao ().getIcon (), pronde.estaOcupada ());
-		
-		pronde.getBotao ().setIcon (possivel);
+		if (posso) {
+			ImageIcon possivel = Icone.possibilita ((ImageIcon) pronde.getBotao ().getIcon (), pronde.estaOcupada ());
+			pronde.getBotao ().setIcon (possivel);
+		}
 	}
 	/**
 	 * Icone do rolê desfica colorido, assim volta ao normal as coisa
 	 */
 	public void unPrintPossivel () {
-		pronde.atualizaIcone ();
+		if (posso)
+			pronde.atualizaIcone ();
 	}
 	
 	/**

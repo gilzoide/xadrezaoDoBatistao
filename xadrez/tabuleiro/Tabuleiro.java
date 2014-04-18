@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 05/04/2014
+ * 18/04/2014
  */
 package xadrez.tabuleiro;
 
@@ -17,12 +17,12 @@ public class Tabuleiro {
 	private static Tabuleiro tabuleiro = new Tabuleiro ();
 
 	// as casas do tabuleiro, matriz 8x8
-	private static Casa[][] casa;
+	protected static Casa[][] casa;
 
 	/**
 	 * Ctor: constrói cada casa do tabuleiro
 	 */
-	private Tabuleiro () {
+	protected Tabuleiro () {
 		// nosso tabuleiro 8x8
 		casa = new Casa[8][8];
 

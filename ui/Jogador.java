@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 05/04/2014
+ * 18/04/2014
  */
 package ui;
 
@@ -117,6 +117,9 @@ public class Jogador {
 	 * Verifica se todos os movimentos são possíveis
 	 */
 	private boolean possoMover () {
+		for (Movimento m : movs)
+			m.simula ();
+		
 		return !movs.isEmpty ();
 	}
 	
