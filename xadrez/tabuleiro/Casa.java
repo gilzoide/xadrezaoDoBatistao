@@ -82,6 +82,19 @@ public class Casa {
 	}
 	
 	/**
+	 * Copia 2 casas, de 'src' a 'dest'
+	 * 
+	 * @note Essa função cria uma duplicata da casa, não simplesmente passando a referência das coisas
+	 */
+	public static void copia (Casa dest, Casa src) {
+		// domínio
+		dest.setDominio (src.getDominio ());
+		// e peça
+		Peca.copia (dest.getPeca (), src.getPeca ());
+	}
+	
+	
+	/**
 	 * Ve se casa está ocupada
 	 */
 	public boolean estaOcupada () {
@@ -128,6 +141,9 @@ public class Casa {
 			botao.setIcon (peca.getIcone ());
 		else
 			botao.setIcon (null);
+	}
+	public void setDominio (Cor dominio) {
+		this.dominio = dominio;
 	}
 	/**
 	 * Adiciona à casa domínio da cor do jogador

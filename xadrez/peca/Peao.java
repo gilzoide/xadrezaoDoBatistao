@@ -10,6 +10,7 @@ import ui.Icone;
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
 import xadrez.movimento.Movimento;
+import xadrez.movimento.EnPassant;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -29,13 +30,7 @@ public class Peao extends Peca {
 		EN_PASSANT,
 		NADA;
 	};
-	public enum AcaoEspecial {
-		EN_PASSANT,
-		PROMOCAO,
-		NADA;
-	};
 	
-	private AcaoEspecial acao;
 	private Estado estado;
 	private int lado;
 	
@@ -44,9 +39,7 @@ public class Peao extends Peca {
 	 */
 	public Peao (Cor nova_cor, Point P) {
 		super (nova_cor, P);
-		estado = Estado.PRIMEIRA;
-		acao = AcaoEspecial.NADA;
-		
+		estado = Estado.PRIMEIRA;		
 		// dependendo da cor, vai pra frente ou pra trás
 		lado = (cor == Cor.BRANCO) ? -1 : 1;
 	}
@@ -56,6 +49,7 @@ public class Peao extends Peca {
 	}
 	
 	public ArrayList<Movimento> possiveisMovimentos () {
+		ArrayList<Movimento> movs = new ArrayList<> ();
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 
@@ -75,23 +69,22 @@ public class Peao extends Peca {
 		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () + 1);
 		if (aux != null) {
 			aux.addDominio (cor);
-			if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ())) {
+			if (aux.estaOcupadaCor (cor.oposta ()))
 				casas.add (aux);
-				acao = AcaoEspecial.EN_PASSANT;
-			}
+			else if (!aux.estaOcupada () && aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT)
+				movs.add (new EnPassant (getEssaCasa (), aux, aux_en_passant));
 		}
 			
 		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () - 1);
 		aux_en_passant = tab.getCasa ((int) coord.getY (), (int) coord.getX () - 1);
 		if (aux != null) {
 			aux.addDominio (cor);
-			if (aux.estaOcupadaCor (cor.oposta ()) || (aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT && !aux.estaOcupada ())) {
+			if (aux.estaOcupadaCor (cor.oposta ()))
 				casas.add (aux);
-				acao = AcaoEspecial.EN_PASSANT;
-			}
+			else if (!aux.estaOcupada () && aux_en_passant != null && aux_en_passant.estaOcupadaCor (cor.oposta ()) && aux_en_passant.getPeca () instanceof Peao && ((Peao) aux_en_passant.getPeca ()).estado == Estado.EN_PASSANT)
+				movs.add (new EnPassant (getEssaCasa (), aux, aux_en_passant));
 		}
 
-		ArrayList<Movimento> movs = new ArrayList<> ();
 		for (int i = 0; i < casas.size (); i++)
 			movs.add (new Movimento (getEssaCasa (), casas.get (i)));
 		

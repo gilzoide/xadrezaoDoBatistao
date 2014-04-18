@@ -7,6 +7,7 @@ package xadrez;
  * @todo não deixar peça desproteger o rei
  * @todo mate
  * @todo en passant direito (não só checar, q já tá feito)
+ * @todo Peca.copia
  */
 
 import ui.Gui;

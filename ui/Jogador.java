@@ -117,6 +117,7 @@ public class Jogador {
 	 * Verifica se todos os movimentos são possíveis
 	 */
 	private boolean possoMover () {
+		//~ Simulador sim = new Simulador ();
 		for (Movimento m : movs)
 			m.simula ();
 		

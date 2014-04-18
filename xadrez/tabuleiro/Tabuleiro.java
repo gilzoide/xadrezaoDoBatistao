@@ -17,12 +17,12 @@ public class Tabuleiro {
 	private static Tabuleiro tabuleiro = new Tabuleiro ();
 
 	// as casas do tabuleiro, matriz 8x8
-	protected static Casa[][] casa;
+	private static Casa[][] casa;
 
 	/**
 	 * Ctor: constrói cada casa do tabuleiro
 	 */
-	protected Tabuleiro () {
+	private Tabuleiro () {
 		// nosso tabuleiro 8x8
 		casa = new Casa[8][8];
 

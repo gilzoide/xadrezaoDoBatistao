@@ -36,6 +36,19 @@ public abstract class Peca {
 		coord = new Point (P);
 		morreu = false;
 	}
+	
+	/**
+	 * Copia 2 peças, de 'src' a 'dest'
+	 * 
+	 * @note Essa função cria uma duplicata da peça, não simplesmente passando a referência das coisas
+	 */
+	public static void copia (Peca dest, Peca src) {
+		if (src == null)
+			dest = null;
+		else {
+			
+		}
+	}
 
 	/**
 	 * Calcula os possíveis movimentos da peça, retornando um array de possibilidades de movimentos;

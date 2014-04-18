@@ -22,7 +22,7 @@ public enum Cor {
 	 * Pra domínio [na casa], adiciona nova cor
 	 */
 	public Cor dominioAdd (Cor nova) {
-		if (this == nova.oposta ())
+		if (nova == AMBOS || this == nova.oposta ())
 			return AMBOS;
 		else if (this == LIVRE)
 			return nova;
@@ -35,7 +35,7 @@ public enum Cor {
 	public Cor dominioRemove (Cor a_tirar) {
 		if (this == AMBOS)
 			return a_tirar.oposta ();
-		else if (this == a_tirar)
+		else if (a_tirar == AMBOS || this == a_tirar)
 			return LIVRE;
 		else
 			return this;
