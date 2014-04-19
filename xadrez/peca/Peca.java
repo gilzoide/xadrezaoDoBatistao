@@ -8,6 +8,7 @@ import ui.Cor;
 import ui.Icone;
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
+import xadrez.tabuleiro.Simulador;
 import xadrez.movimento.Movimento;
 
 import java.awt.Point;
@@ -42,22 +43,25 @@ public abstract class Peca {
 	 * 
 	 * @note Essa função cria uma duplicata da peça, não simplesmente passando a referência das coisas
 	 */
-	public static void copia (Peca dest, Peca src) {
+	public static Peca copia (final Peca src) {
 		if (src == null)
-			dest = null;
+			return null;
 		else {
+			Peca aux = null;
 			if (src instanceof Peao)
-				dest = new Peao (src.cor, src.coord);
+				aux = new Peao (src.cor, src.coord);
 			else if (src instanceof Dama)
-				dest = new Dama (src.cor, src.coord);
+				aux = new Dama (src.cor, src.coord);
 			else if (src instanceof Torre)
-				dest = new Torre (src.cor, src.coord);
+				aux = new Torre (src.cor, src.coord);
 			else if (src instanceof Bispo)
-				dest = new Bispo (src.cor, src.coord);
+				aux = new Bispo (src.cor, src.coord);
 			else if (src instanceof Cavalo)
-				dest = new Cavalo (src.cor, src.coord);
-			else 	// Rei
-				dest = new Rei (src.cor, src.coord);
+				aux = new Cavalo (src.cor, src.coord);
+			else if (src instanceof Rei)
+				aux = new Rei (src.cor, src.coord);
+			
+			return aux;
 		}
 	}
 
@@ -70,9 +74,9 @@ public abstract class Peca {
 	public abstract ArrayList<Movimento> possiveisMovimentos ();
 
 	/**
-	 * Peça domina as casas que ela pode fazê-lo
+	 * Peça domina as casas no simulador
 	 */
-	public abstract void domina ();
+	public abstract void domina (Simulador sim);
 
 	/* GETTERS */
 	public abstract ImageIcon getIcone ();

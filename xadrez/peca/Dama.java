@@ -9,6 +9,7 @@ import ui.Icone;
 
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
+import xadrez.tabuleiro.Simulador;
 import xadrez.movimento.Movimento;
 
 import java.awt.Point;
@@ -71,15 +72,13 @@ public class Dama extends Peca {
 		return movs;
 	}
 	
-	public void domina () {
-		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
-		
+	public void domina (Simulador sim) {
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
 			Casa aux;	// auxiliar, pra testar à vontade pra por ou não em 'casas'
 			// se ainda estiver no tabuleiro, é uma possibilidade
 			for (i = (int) coord.getY () + (int) direcoes.get (count).getY (), j = (int) coord.getX () + (int) direcoes.get (count).getX (); Tabuleiro.estaDentro (i, j); i += (int) direcoes.get (count).getY (), j += (int) direcoes.get (count).getX ()) {
-				aux = tab.getCasa (i, j);
+				aux = sim.getCasa (i, j);
 				
 				aux.addDominio (cor);
 				

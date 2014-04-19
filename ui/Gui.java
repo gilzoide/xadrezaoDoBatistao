@@ -35,6 +35,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingConstants;
@@ -61,7 +62,6 @@ public class Gui extends JFrame {
 	final private Point TAM_LOG = new Point ((int) INICIO_TABULEIRO.getX () - 10, (int) TAM_TABULEIRO);	/// tamanho do log de movimentos
 	final private Point INICIO_LOG = new Point ((int) INICIO_TABULEIRO.getX () + TAM_TABULEIRO + 10, (int) INICIO_TABULEIRO.getY ());	/// início do log de movimentos #xupa hardcode
 	
-	
 	private JLabel quem_joga;	// JLabel que escreve de quem é a vez
 	private Log log;		// lugar pra escrever o log de jogadas
 	
@@ -78,14 +78,14 @@ public class Gui extends JFrame {
 	 * Inicializa o tabuleiro, menu e log
 	 */
 	public void init (Xadrez motor) {
-		// JPanel: tudão
 		JPanel panel = new JPanel ();
 		getContentPane ().add (panel);
 		panel.setLayout (null);
 		
+		montaQuemJoga (panel);
 		montaTabuleiro (panel, motor);
 		montaLog (panel);
-		menu ();
+		menu (panel);
 	}
 
 	/**
@@ -134,8 +134,6 @@ public class Gui extends JFrame {
 
 		// Xadrez.novoJogo()
 		motor.novoJogo ();
-		
-		montaQuemJoga (panel);
 	}
 	/**
 	 * escreve em cima do tabuleiro de quem é a vez
@@ -159,7 +157,7 @@ public class Gui extends JFrame {
 	/**
 	 * monta o menu
 	 */
-	private void menu () {
+	private void menu (JPanel panel) {
 		JMenuBar barra = new JMenuBar ();
 		// MENU 'jogo'
 		JMenu Jogo = new JMenu ("Jogo");
@@ -203,7 +201,7 @@ public class Gui extends JFrame {
 		Sair.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				System.exit(0);
+				System.exit (0);
 			}
 		});
 		barra.add (Jogo);
@@ -222,6 +220,7 @@ public class Gui extends JFrame {
 	 */
 	private void novoJogo () {
 		Xadrez.novoJogo ();
+		Movimento.novoJogo ();
 		log.novoJogo ();
 		quem_joga.setForeground (Color.BLACK);
 		quem_joga.setText ("Jogador BRANCO, comece o jogo!");
@@ -268,9 +267,25 @@ public class Gui extends JFrame {
 	public void mate (Jogador J) {
 		quem_joga.setForeground (Color.RED);
 		quem_joga.setText ("Xeque mate! " + J + ", seu rei já era! VWAHAHAHAHA");
-		log.addXeque ();	// mais um '+', que quer dizer mate
-		// para a tela e pergunta se quer começar novo jogo, ou quitar
+		log.addMate ();	// um '++', é mate!
 		
+		// quantas rodadas durou o jogo
+		int rodadas = Movimento.getNumMovs () / 2 + 1;
+		// se foi 4, é xeque do pastor xP
+		String pastor = "";
+		if (rodadas == 4)
+			pastor = "Xeque do pastor, xupa essa!\n";
+			
+		// para a tela e pergunta se quer começar novo jogo, ou quitar
+		int n = JOptionPane.showConfirmDialog (this, "Você perdeu em " + rodadas + " rodadas.\n" + pastor + "Que tal um novo jogo?", "Fim de jogo!", JOptionPane.YES_NO_OPTION);
+		switch (n) {
+			case JOptionPane.YES_OPTION:
+				novoJogo ();
+				break;
+			
+			case JOptionPane.NO_OPTION: case JOptionPane.CLOSED_OPTION:
+				System.exit (0);
+		}
 	}
 	
 	/**

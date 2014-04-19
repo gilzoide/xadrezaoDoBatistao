@@ -28,6 +28,8 @@ public class Movimento {
 	
 	private String notacao_extra;	// notação extra (que nem sempre ocorre): toma peça
 	
+	private static int num;		// Número total de jogadas
+	
 	/**
 	 * Ctor: ator move de 'donde' pra 'pronde'
 	 */
@@ -41,6 +43,9 @@ public class Movimento {
 	 * Quando escolher qual movimento realmente fazer, chame o método 'Mover' dele
 	 */
 	public void mover (Jogador ator) {
+		// mais um movimento!
+		num++;
+		
 		// se tinha alguém lá, morreu =P
 		Peca aux = pronde.getPeca ();
 		if (aux != null)
@@ -76,9 +81,14 @@ public class Movimento {
 		donde.setPeca (null);
 		donde.atualizaIcone ();
 	}
-	// pro simulador, pra não afetar nenhum dos reais jogadores
+	// pro simulador, pra não afetar nenhum dos reais jogadores, nem a GUI
 	public void mover () {
-		mover (new Jogador (Cor.BRANCO));
+		// pega a peça a ser movida e atualiza sua posição
+		Peca aux = donde.getPeca ();
+		aux.setCoord (pronde.getCoord ());
+
+		pronde.setPeca (aux);
+		donde.setPeca (null);
 	}
 	
 	/**
@@ -86,9 +96,9 @@ public class Movimento {
 	 * 
 	 * Usando Threads pra simular, fica mais rapidim o rolê!
 	 */
-	public void simula () {
+	public Simulador simula () {
 		Simulador sim = new Simulador (donde, pronde);
-		sim.start ();
+		return sim;
 	}
 	
 	/**
@@ -142,5 +152,19 @@ public class Movimento {
 	}
 	public boolean ehEsseMovimento (Casa aux) {
 		return aux == pronde;
+	}
+	/* SETTERS */
+	public void naoPosso () {
+		posso = false;
+	}
+	public static void novoJogo () {
+		num = 0;
+	}
+	/* GETTERS */
+	public boolean getPosso () {
+		return posso;
+	}
+	public static int getNumMovs () {
+		return num;
 	}
 }

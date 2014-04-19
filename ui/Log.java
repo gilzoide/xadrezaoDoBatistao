@@ -36,6 +36,10 @@ public class Log {
 		log.append ("+");
 	}
 	
+	public void addMate () {
+		log.append ("++");
+	}
+	
 	/**
 	 * Adiciona ao log a notação escrita do movimento 'mov'
 	 */
