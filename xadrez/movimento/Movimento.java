@@ -11,6 +11,7 @@ import ui.Icone;
 
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
+import xadrez.tabuleiro.Simulador;
 import xadrez.peca.Peca;
 import xadrez.peca.Peao;
 import xadrez.peca.Rei;
@@ -75,12 +76,19 @@ public class Movimento {
 		donde.setPeca (null);
 		donde.atualizaIcone ();
 	}
+	// pro simulador, pra não afetar nenhum dos reais jogadores
+	public void mover () {
+		mover (new Jogador (Cor.BRANCO));
+	}
 	
 	/**
 	 * Simula o movimento, pra ver se pode (se não deixa o rei em xeque)
+	 * 
+	 * Usando Threads pra simular, fica mais rapidim o rolê!
 	 */
 	public void simula () {
-		
+		Simulador sim = new Simulador (donde, pronde);
+		sim.start ();
 	}
 	
 	/**

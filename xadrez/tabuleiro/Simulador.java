@@ -4,7 +4,11 @@
  */
 package xadrez.tabuleiro;
 
-import java.util.Thread;
+import xadrez.movimento.Movimento;
+
+import java.awt.Point;
+
+import java.lang.Thread;
 
 /**
  * Simulador é um simulador do tabuleiro
@@ -18,25 +22,45 @@ import java.util.Thread;
  */
 public class Simulador extends Thread {
 	private Casa casa[][];
+	private Casa donde, pronde;
+	private Movimento mov;	/// Movimento a ser simulado
 	
-	public Simulador () {
+	public Simulador (Casa donde, Casa pronde) {
 		casa = new Casa[8][8];
 
 		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++)
+			for (int j = 0; j < 8; j++) {
 				casa[i][j] = new Casa (i, j);
+			}
 		}
+		
+		// Casas do simulador ao invés das reais, do tabuleiro
+		this.donde = casa[(int) donde.getCoord ().getY ()][(int) donde.getCoord ().getX ()];
+		this.pronde = casa[(int) pronde.getCoord ().getY ()][(int) pronde.getCoord ().getX ()];
+		// cria o movimento nas casas simuladas
+		this.mov = new Movimento (this.donde, this.pronde);
 	}
 	
 	/**
 	 * Primeiro precisamos copiar o tabuleiro pra podermos brincar direito
 	 */
-	public void copiaTabuleiro {
+	public void copiaTabuleiro () {
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++)
 				Casa.copia (casa[i][j], tab.getCasa (i, j));
 		}
+	}
+	
+	// Simulação!
+	@Override
+	public void run () {
+		
+	}
+	
+	/* GETTERS */
+	public Casa getCasa (Point P) {
+		return casa[(int) P.getY ()][(int) P.getX ()];
 	}
 }

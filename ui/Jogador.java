@@ -5,6 +5,7 @@
 package ui;
 
 import xadrez.tabuleiro.Tabuleiro;
+import xadrez.tabuleiro.Simulador;
 import xadrez.movimento.Movimento;
 import xadrez.peca.Peca;
 import xadrez.peca.Peao;
@@ -114,10 +115,9 @@ public class Jogador {
 		
 	}
 	/**
-	 * Verifica se todos os movimentos são possíveis
+	 * Verifica se todos os movimentos são realmente possíveis (se não deixa o rei em xeque)
 	 */
 	private boolean possoMover () {
-		//~ Simulador sim = new Simulador ();
 		for (Movimento m : movs)
 			m.simula ();
 		
@@ -126,9 +126,14 @@ public class Jogador {
 	
 	/**
 	 * Rei deste jogador está em xeque?
+	 * 
+	 * Seja no tabuleiro real, ou em um simulador, esta função diz se sim ou não =]
 	 */
 	public boolean estaXeque () {
 		return Tabuleiro.getTabuleiro ().getCasa (reizaum.getCoord ()).getDominio ().ameaca (cor);
+	}
+	public boolean estaXeque (Simulador sim) {
+		return sim.getCasa (reizaum.getCoord ()).getDominio ().ameaca (cor);
 	}
 	/**
 	 * Dá um update nos peões - só pra quem acabou de jogar

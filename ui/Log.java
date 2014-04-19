@@ -22,7 +22,7 @@ public class Log {
 	
 	public void novoJogo () {
 		log.setText ("");
-		log.append ("Log de Jogadas\n");
+		log.append ("   Log de Jogadas\n");
 	}
 	
 	/**

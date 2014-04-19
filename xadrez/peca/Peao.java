@@ -108,14 +108,8 @@ public class Peao extends Peca {
 	 */
 	public void update (boolean moveu) throws PromoveuException {
 		if (moveu) {
-			if (estado == Estado.PRIMEIRA) {
-				// se moveu 2 casas, pode ser tomado por 'en passant'
-				if ((int) coord.getY () == 3 || (int) coord.getY () == 4)
+			if (estado == Estado.PRIMEIRA && ((int) coord.getY () == 3 || (int) coord.getY () == 4))
 					estado = Estado.MOVI_DUAS;
-				else
-					estado = Estado.NADA;
-			}
-			
 			else
 				estado = Estado.NADA;
 		}

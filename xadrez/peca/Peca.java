@@ -46,7 +46,18 @@ public abstract class Peca {
 		if (src == null)
 			dest = null;
 		else {
-			
+			if (src instanceof Peao)
+				dest = new Peao (src.cor, src.coord);
+			else if (src instanceof Dama)
+				dest = new Dama (src.cor, src.coord);
+			else if (src instanceof Torre)
+				dest = new Torre (src.cor, src.coord);
+			else if (src instanceof Bispo)
+				dest = new Bispo (src.cor, src.coord);
+			else if (src instanceof Cavalo)
+				dest = new Cavalo (src.cor, src.coord);
+			else 	// Rei
+				dest = new Rei (src.cor, src.coord);
 		}
 	}
 

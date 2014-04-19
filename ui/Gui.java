@@ -53,10 +53,14 @@ public class Gui extends JFrame {
 	/**
 	 * Constantes
 	 */
-	final private Point TAM_JANELA = new Point (800, 600);	/// tamanho total da janela
-	final private Point INICIO_TABULEIRO = new Point (300, 49);	/// início do tabuleiro (pra n ficar hardcodando se quiser trocar)
 	final static int TAM_QUADRADO = 60;	/// tamanho do lado do quadrado (casa do tabuleiro)
 	final private int TAM_TABULEIRO = TAM_QUADRADO * 8;	/// tamanho do lado do tabuleiro
+	
+	final private Point TAM_JANELA = new Point (800, 600);	/// tamanho total da janela
+	final private Point INICIO_TABULEIRO = new Point (150, 50);	/// início do tabuleiro (pra n ficar hardcodando se quiser trocar)
+	final private Point TAM_LOG = new Point ((int) INICIO_TABULEIRO.getX () - 10, (int) TAM_TABULEIRO);	/// tamanho do log de movimentos
+	final private Point INICIO_LOG = new Point ((int) INICIO_TABULEIRO.getX () + TAM_TABULEIRO + 10, (int) INICIO_TABULEIRO.getY ());	/// início do log de movimentos #xupa hardcode
+	
 	
 	private JLabel quem_joga;	// JLabel que escreve de quem é a vez
 	private Log log;		// lugar pra escrever o log de jogadas
@@ -148,7 +152,7 @@ public class Gui extends JFrame {
 	private void montaLog (JPanel panel) {
 		log = new Log (20, 1);
 		JScrollPane scroller = new JScrollPane (log.getTextArea ());
-		scroller.setBounds (0, 0, (int) INICIO_TABULEIRO.getX () - 10, (int) TAM_JANELA.getY ());
+		scroller.setBounds ((int) INICIO_LOG.getX (), (int) INICIO_LOG.getY (), (int) TAM_LOG.getX (), (int) TAM_LOG.getY ());
 		
 		panel.add (scroller);
 	}
@@ -202,9 +206,11 @@ public class Gui extends JFrame {
 				System.exit(0);
 			}
 		});
-
-
 		barra.add (Jogo);
+		
+		// MENU 'jogadas'
+		
+
 		setJMenuBar (barra);
 	}
 
