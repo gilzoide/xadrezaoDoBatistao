@@ -6,7 +6,14 @@ package xadrez.peca;
 
 public class PromoveuException extends Exception {
 	String S;
-	public PromoveuException () {
+	Peca nova;
+	
+	public PromoveuException (Peca nova) {
 		S = "promoveu, UHUL!";
+		this.nova = nova;
+	}
+	
+	public Peca getNova () {
+		return nova;
 	}
 }

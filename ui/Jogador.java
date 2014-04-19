@@ -140,7 +140,7 @@ public class Jogador {
 					P.update (false);
 				}
 				catch (PromoveuException ex) {
-					Peca nova = Tabuleiro.getTabuleiro ().getCasa (P.getCoord ()).getPeca ();
+					Peca nova = ex.getNova ();
 					addPeca (nova);
 				}
 			}

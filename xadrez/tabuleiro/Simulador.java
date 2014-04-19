@@ -4,6 +4,8 @@
  */
 package xadrez.tabuleiro;
 
+import java.util.Thread;
+
 /**
  * Simulador é um simulador do tabuleiro
  * 
@@ -14,7 +16,7 @@ package xadrez.tabuleiro;
  * determinar se movimento é permitido, no caso
  * de não deixar o próprio rei em xeque ;]
  */
-public class Simulador {
+public class Simulador extends Thread {
 	private Casa casa[][];
 	
 	public Simulador () {

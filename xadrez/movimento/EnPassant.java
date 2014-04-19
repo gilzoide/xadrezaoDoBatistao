@@ -40,6 +40,7 @@ public class EnPassant extends Movimento {
 		donde.atualizaIcone ();
 	}
 	
+	// Printa casa possível sempre como pra tomar peça; afinal, é o que fazemos aqui!
 	@Override
 	public void printPossivel () {
 		if (posso) {

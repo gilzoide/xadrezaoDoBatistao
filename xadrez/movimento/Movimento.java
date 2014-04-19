@@ -55,7 +55,7 @@ public class Movimento {
 			}
 			// se não é peão mais (foi promovido, UHUL xD)
 			catch (PromoveuException ex) {
-				Peca nova = Tabuleiro.getTabuleiro ().getCasa (aux.getCoord ()).getPeca ();
+				Peca nova = ex.getNova ();
 				ator.addPeca (nova);
 			}
 		}

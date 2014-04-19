@@ -26,9 +26,10 @@ public class Peao extends Peca {
 	 * 		NADA: se passou a chance de 'en passant', já era, tem mais nada não
 	 */
 	private enum Estado {
-		PRIMEIRA,
-		EN_PASSANT,
-		NADA;
+		PRIMEIRA,	// primeira jogada: posso mover duas
+		MOVI_DUAS,	// movi duas casas: tenho que poder ser tomado por en passant
+		EN_PASSANT,	// posso ser tomado por en passant
+		NADA;	// acabaram os estados especiais
 	};
 	
 	private Estado estado;
@@ -110,7 +111,7 @@ public class Peao extends Peca {
 			if (estado == Estado.PRIMEIRA) {
 				// se moveu 2 casas, pode ser tomado por 'en passant'
 				if ((int) coord.getY () == 3 || (int) coord.getY () == 4)
-					estado = Estado.EN_PASSANT;
+					estado = Estado.MOVI_DUAS;
 				else
 					estado = Estado.NADA;
 			}
@@ -118,29 +119,36 @@ public class Peao extends Peca {
 			else
 				estado = Estado.NADA;
 		}
-		else if (estado == Estado.EN_PASSANT) {
-			estado = Estado.NADA;
-		}
-		// promoção!
-		else if ((int) coord.getY () == 0 || (int) coord.getY () == 7) {
-			// não tem mais eu
-			morre ();
-			Object[] opcoes = { "Bispo", "Cavalo", "Dama", "Torre" };
-			Object selecionado = JOptionPane.showInputDialog (null, "Promove pra que peça?", "Promoção do Peão! Só aqui, no Xadrezão do Batistão!", JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
-			Peca nova;
-			if (selecionado.toString () == "Bispo")
-				nova = new Bispo (cor, coord);
-			else if (selecionado.toString () == "Cavalo")
-				nova = new Cavalo (cor, coord);
-			else if (selecionado.toString () == "Dama")
-				nova = new Dama (cor, coord);
-			else
-				nova = new Torre (cor, coord);
+		// não moveu - update de cada vez: do updatePiaums
+		else {
+			// movi duas, então posso ser tomado por en passant
+			if (estado == Estado.MOVI_DUAS) {
+				estado = Estado.EN_PASSANT;
+			}
+			else if (estado == Estado.EN_PASSANT) {
+				estado = Estado.NADA;
+			}
+			// promoção!
+			else if ((int) coord.getY () == 0 || (int) coord.getY () == 7) {
+				// não tem mais eu
+				morre ();
+				Object[] opcoes = { "Bispo", "Cavalo", "Dama", "Torre" };		// opções pra promoção
+				Object selecionado = JOptionPane.showInputDialog (null, "Promove pra que peça?", "Promoção do Peão! Só aqui, no Xadrezão do Batistão!", JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+				Peca nova;
+				if (selecionado.toString () == "Bispo")
+					nova = new Bispo (cor, coord);
+				else if (selecionado.toString () == "Cavalo")
+					nova = new Cavalo (cor, coord);
+				else if (selecionado.toString () == "Dama")
+					nova = new Dama (cor, coord);
+				else
+					nova = new Torre (cor, coord);
 
-			Tabuleiro.getTabuleiro ().getCasa (coord).setPeca (nova);
-			Tabuleiro.getTabuleiro ().getCasa (coord).atualizaIcone ();
+				Tabuleiro.getTabuleiro ().getCasa (coord).setPeca (nova);
+				Tabuleiro.getTabuleiro ().getCasa (coord).atualizaIcone ();
 
-			throw new PromoveuException ();
+				throw new PromoveuException (nova);
+			}
 		}
 	}
 	

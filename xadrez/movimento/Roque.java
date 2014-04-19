@@ -5,12 +5,15 @@
 package xadrez.movimento;
 
 import ui.Cor;
+import ui.Icone;
 import ui.Jogador;
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
 import xadrez.peca.Peca;
 
 import java.awt.Point;
+
+import javax.swing.ImageIcon;
 
 /**
  * Roque é um movimento especial, por esse motivo precisa de atenção especial xP
@@ -74,6 +77,16 @@ public class Roque extends Movimento {
 		tab.getCasa (do_rei).atualizaIcone ();
 	}
 	
+	// Printa casa possível nunca como pra tomar peça!
+	@Override
+	public void printPossivel () {
+		if (posso) {
+			ImageIcon possivel = Icone.possibilita ((ImageIcon) pronde.getBotao ().getIcon (), false);
+			pronde.getBotao ().setIcon (possivel);
+		}
+	}
+	
+	// Notação de roque é especial
 	@Override
 	public String notacaoEscrita () {
 		return tipo.toString ();
