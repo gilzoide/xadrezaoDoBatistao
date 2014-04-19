@@ -76,9 +76,14 @@ public class Movimento {
 		donde.setPeca (null);
 		donde.atualizaIcone ();
 	}
-	// pro simulador, pra não afetar nenhum dos reais jogadores
+	// pro simulador, pra não afetar nenhum dos reais jogadores, nem a GUI
 	public void mover () {
-		mover (new Jogador (Cor.BRANCO));
+		// pega a peça a ser movida e atualiza sua posição
+		Peca aux = donde.getPeca ();
+		aux.setCoord (pronde.getCoord ());
+
+		pronde.setPeca (aux);
+		donde.setPeca (null);
 	}
 	
 	/**
@@ -86,9 +91,9 @@ public class Movimento {
 	 * 
 	 * Usando Threads pra simular, fica mais rapidim o rolê!
 	 */
-	public void simula () {
+	public Simulador simula () {
 		Simulador sim = new Simulador (donde, pronde);
-		sim.start ();
+		return sim;
 	}
 	
 	/**
@@ -143,4 +148,13 @@ public class Movimento {
 	public boolean ehEsseMovimento (Casa aux) {
 		return aux == pronde;
 	}
+	/* SETTERS */
+	public void naoPosso () {
+		posso = false;
+	}
+	/* GETTERS */
+	public boolean getPosso () {
+		return posso;
+	}
+	
 }

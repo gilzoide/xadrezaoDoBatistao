@@ -9,6 +9,7 @@ import ui.Icone;
 
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
+import xadrez.tabuleiro.Simulador;
 import xadrez.movimento.Movimento;
 
 import java.awt.Point;
@@ -68,15 +69,13 @@ public class Cavalo extends Peca {
 		return movs;
 	}
 	
-	public void domina () {
-		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
-		
+	public void domina (Simulador sim) {	
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
 			i = (int) coord.getY () + (int) direcoes.get (count).getY ();
 			j = (int) coord.getX () + (int) direcoes.get (count).getX ();
 
-			Casa aux = tab.getCasa (i, j);
+			Casa aux = sim.getCasa (i, j);
 			if (aux != null)
 				aux.addDominio (cor);
 		}

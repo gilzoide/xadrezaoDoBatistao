@@ -5,10 +5,9 @@
 package xadrez.tabuleiro;
 
 import xadrez.movimento.Movimento;
+import xadrez.peca.Peca;
 
 import java.awt.Point;
-
-import java.lang.Thread;
 
 /**
  * Simulador é um simulador do tabuleiro
@@ -20,7 +19,7 @@ import java.lang.Thread;
  * determinar se movimento é permitido, no caso
  * de não deixar o próprio rei em xeque ;]
  */
-public class Simulador extends Thread {
+public class Simulador {
 	private Casa casa[][];
 	private Casa donde, pronde;
 	private Movimento mov;	/// Movimento a ser simulado
@@ -34,17 +33,23 @@ public class Simulador extends Thread {
 			}
 		}
 		
+		// duplica o tabuleiro
+		copiaTabuleiro ();
+		
 		// Casas do simulador ao invés das reais, do tabuleiro
 		this.donde = casa[(int) donde.getCoord ().getY ()][(int) donde.getCoord ().getX ()];
 		this.pronde = casa[(int) pronde.getCoord ().getY ()][(int) pronde.getCoord ().getX ()];
 		// cria o movimento nas casas simuladas
-		this.mov = new Movimento (this.donde, this.pronde);
+		mov = new Movimento (this.donde, this.pronde);
+		mov.mover ();
+		
+		domina ();
 	}
 	
 	/**
 	 * Primeiro precisamos copiar o tabuleiro pra podermos brincar direito
 	 */
-	public void copiaTabuleiro () {
+	private void copiaTabuleiro () {
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		
 		for (int i = 0; i < 8; i++) {
@@ -53,14 +58,30 @@ public class Simulador extends Thread {
 		}
 	}
 	
-	// Simulação!
-	@Override
-	public void run () {
-		
+	/**
+	 * Peças duplicadas dominam o simulador!
+	 */
+	private void domina () {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				Peca aux = casa[i][j].getPeca ();
+				if (aux != null)
+					aux.domina (this);
+			}
+		}
 	}
 	
 	/* GETTERS */
 	public Casa getCasa (Point P) {
-		return casa[(int) P.getY ()][(int) P.getX ()];
+		if (Tabuleiro.estaDentro (P))
+			return casa[(int) P.getY ()][(int) P.getX ()];
+		else
+			return null;
+	}
+	public Casa getCasa (int i, int j) {
+		if (Tabuleiro.estaDentro (i, j))
+			return casa[i][j];
+		else
+			return null;
 	}
 }

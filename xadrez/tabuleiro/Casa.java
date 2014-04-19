@@ -87,10 +87,8 @@ public class Casa {
 	 * @note Essa função cria uma duplicata da casa, não simplesmente passando a referência das coisas
 	 */
 	public static void copia (Casa dest, Casa src) {
-		// domínio
-		dest.setDominio (src.getDominio ());
 		// e peça
-		Peca.copia (dest.getPeca (), src.getPeca ());
+		dest.setPeca (Peca.copia (src.getPeca ()));
 	}
 	
 	

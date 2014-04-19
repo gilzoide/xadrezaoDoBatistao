@@ -9,6 +9,7 @@ import ui.Icone;
 
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
+import xadrez.tabuleiro.Simulador;
 import xadrez.movimento.Movimento;
 import xadrez.movimento.EnPassant;
 
@@ -92,13 +93,12 @@ public class Peao extends Peca {
 		return movs;
 	}
 	
-	public void domina () {
-		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
+	public void domina (Simulador sim) {
 		Casa aux;
-		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () + 1);
+		aux = sim.getCasa ((int) coord.getY () + lado, (int) coord.getX () + 1);
 		if (aux != null)
 			aux.addDominio (cor);
-		aux = tab.getCasa ((int) coord.getY () + lado, (int) coord.getX () - 1);
+		aux = sim.getCasa ((int) coord.getY () + lado, (int) coord.getX () - 1);
 		if (aux != null)
 			aux.addDominio (cor);
 	}

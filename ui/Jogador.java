@@ -78,7 +78,6 @@ public class Jogador {
 		movs.clear ();
 		for (Peca P : todas_pecas) {
 			if (!P.estaMorto ()) {
-				//P.domina ();
 				ArrayList<Movimento> aux = P.possiveisMovimentos ();
 								
 				// se não tem movimento possível, indice_comeco e indice_fim serão iguais
@@ -118,10 +117,21 @@ public class Jogador {
 	 * Verifica se todos os movimentos são realmente possíveis (se não deixa o rei em xeque)
 	 */
 	private boolean possoMover () {
-		for (Movimento m : movs)
-			m.simula ();
+		for (Movimento m : movs) {
+			// pega sua simulação
+			Simulador sim = m.simula ();
+			// se deixar em xeque, nem posso fazer esse movimento =/
+			if (estaXeque (sim))
+				m.naoPosso ();
+		}
 		
-		return !movs.isEmpty ();
+		for (Movimento m : movs) {
+			// se posso qualquer um, posso algum
+			if (m.getPosso ())
+				return true;
+		}
+		
+		return false;
 	}
 	
 	/**
