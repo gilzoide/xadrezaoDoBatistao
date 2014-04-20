@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 18/04/2014
+ * 20/04/2014
  */
 package ui;
 
@@ -10,6 +10,7 @@ import javax.swing.JTextArea;
 
 public class Log {
 	private JTextArea log;
+	Cor cor;
 	
 	/**
 	 * Ctor - constrói o log
@@ -21,15 +22,20 @@ public class Log {
 	}
 	
 	public void novoJogo () {
+		cor = Cor.BRANCO;
 		log.setText ("");
-		log.append ("   Log de Jogadas\n");
+		log.append ("         Log de Jogadas\n");
+		log.append ("Branco\tPreto\n");
 	}
 	
 	/**
 	 * Adiciona uma linha no log, sempre terminada em '\n'
 	 */
 	public void addLinha (String str) {
-		log.append ("\n" + str);
+		if (cor == Cor.BRANCO)
+			log.append ("\n" + str);
+		else
+			log.append ("\t" + str);
 	}
 	
 	public void addXeque () {
@@ -45,6 +51,7 @@ public class Log {
 	 */
 	public void addMovimento (Movimento mov) {
 		addLinha (mov.notacaoEscrita ());
+		cor = cor.oposta ();
 	}
 	
 	/* GETTERS */

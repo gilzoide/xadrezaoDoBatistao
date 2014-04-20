@@ -1,13 +1,12 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 18/04/2014
+ * 20/04/2014
  */
 package xadrez;
 /**
- * @todo não deixar peça desproteger o rei
- * @todo mate
- * @todo menu jogadas
- * @todo Peca.copia
+ * @todo menu jogadas → empate, desiste
+ * @todo sons?! xD
+ * @todo pt2 → relógios, exceção, desfaz/refaz, save/load
  */
 
 import ui.Gui;
@@ -127,8 +126,8 @@ public class Xadrez {
 		 Gui.getTela ().trocaJogador (jogador_da_vez);
 		 
 		 // checa possíveis movimentos (e já adiciona domínio nas casas)
-		 outroJogador ().update ();	// quem acabou de jogar
 		 jogador_da_vez.update ();	// o da vez agora
+		 outroJogador ().update ();	// quem acabou de jogar
 		 // depois do domínio pronto, faz o rolê pros reis (que dependem do passo anterior)
 		 outroJogador ().updateRei ();	// quem acabou de jogar
 		 jogador_da_vez.updateRei ();	// o da vez agora

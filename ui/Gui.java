@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 18/04/2014
+ * 20/04/2014
  */
 package ui;
 
@@ -58,8 +58,8 @@ public class Gui extends JFrame {
 	final private int TAM_TABULEIRO = TAM_QUADRADO * 8;	/// tamanho do lado do tabuleiro
 	
 	final private Point TAM_JANELA = new Point (800, 600);	/// tamanho total da janela
-	final private Point INICIO_TABULEIRO = new Point (150, 50);	/// início do tabuleiro (pra n ficar hardcodando se quiser trocar)
-	final private Point TAM_LOG = new Point ((int) INICIO_TABULEIRO.getX () - 10, (int) TAM_TABULEIRO);	/// tamanho do log de movimentos
+	final private Point INICIO_TABULEIRO = new Point (110, 50);	/// início do tabuleiro (pra n ficar hardcodando se quiser trocar)
+	final private Point TAM_LOG = new Point (180, (int) TAM_TABULEIRO);	/// tamanho do log de movimentos
 	final private Point INICIO_LOG = new Point ((int) INICIO_TABULEIRO.getX () + TAM_TABULEIRO + 10, (int) INICIO_TABULEIRO.getY ());	/// início do log de movimentos #xupa hardcode
 	
 	private JLabel quem_joga;	// JLabel que escreve de quem é a vez
@@ -270,11 +270,11 @@ public class Gui extends JFrame {
 		log.addMate ();	// um '++', é mate!
 		
 		// quantas rodadas durou o jogo
-		int rodadas = Movimento.getNumMovs () / 2 + 1;
+		int rodadas = (int) Math.ceil (Movimento.getNumMovs () / 2.0);
 		// se foi 4, é xeque do pastor xP
 		String pastor = "";
 		if (rodadas == 4)
-			pastor = "Xeque do pastor, xupa essa!\n";
+			pastor = "Po, " + J + ", de xeque do pastor... Xupa essa!\n";
 			
 		// para a tela e pergunta se quer começar novo jogo, ou quitar
 		int n = JOptionPane.showConfirmDialog (this, "Você perdeu em " + rodadas + " rodadas.\n" + pastor + "Que tal um novo jogo?", "Fim de jogo!", JOptionPane.YES_NO_OPTION);

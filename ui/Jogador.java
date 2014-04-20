@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 18/04/2014
+ * 20/04/2014
  */
 package ui;
 
@@ -111,7 +111,6 @@ public class Jogador {
 		else if (estaXeque ()) {
 			Gui.getTela ().xeque (this);
 		}
-		
 	}
 	/**
 	 * Verifica se todos os movimentos são realmente possíveis (se não deixa o rei em xeque)
