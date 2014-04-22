@@ -18,6 +18,7 @@ import java.util.List;
 
 public class Jogador {
 	private Cor cor;
+	private String nome;	// nome do jogador; padrão: "Jogador 'cor'"
 	/// Referências de peças importantes (que têm update);
 	private ArrayList<Peca> todas_pecas;
 	private ArrayList<Peao> piaums;
@@ -31,6 +32,7 @@ public class Jogador {
 	 */
 	public Jogador (Cor nova_cor) {
 		cor = nova_cor;
+		nome = "Jogador " + cor;
 		piaums = new ArrayList<> ();
 		todas_pecas = new ArrayList<> ();
 		movs = new ArrayList<> ();
@@ -169,6 +171,9 @@ public class Jogador {
 	public void addPeca (Peca nova) {
 		todas_pecas.add (nova);
 	}
+	public void setNome (String novo_nome) {
+		this.nome = novo_nome;
+	}
 	
 	/* GETTERS */
 	public Cor getCor () {
@@ -186,6 +191,6 @@ public class Jogador {
 	
 	
 	public String toString () {
-		return "Jogador " + cor;
+		return nome;
 	}
 }

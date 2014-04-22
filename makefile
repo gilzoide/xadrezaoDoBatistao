@@ -23,7 +23,7 @@ pacotes = xadrez ui
 all : $(pacotes)
 	cp -r ui/img build/ui
 
-.PHONY : $(pacotes) run header zip clean debug edit
+.PHONY : $(pacotes) run header zip clean debug edit todo
 # compila cada pacote, usando o makefile lá dentro
 $(pacotes) :
 	$(MAKE) -C $@ all
@@ -40,6 +40,10 @@ run :
 
 debug :
 	jdb -classpath $(BUILD) xadrez.Xadrez
+
+# Lista o que falta
+todo :
+	@cat xadrez/Xadrez.java | grep --color=auto @todo
 
 
 # Atualiza a data do cabeçalho de cada um dos arquivos-fonte

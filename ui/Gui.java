@@ -164,7 +164,7 @@ public class Gui extends JFrame {
 		Jogo.setMnemonic (KeyEvent.VK_J);
 		
 		// Item 'novo jogo'
-		JMenuItem Novo = new JMenuItem ("Novo jogo");
+		JMenuItem Novo = new JMenuItem ("Novo jogo   ^N");
 		Novo.setMnemonic (KeyEvent.VK_N);
 		Novo.setToolTipText ("Começa um novo jogo");
 		Jogo.add (Novo);
@@ -185,7 +185,7 @@ public class Gui extends JFrame {
 		});
 		
 		// Item 'sair'
-		JMenuItem Sair = new JMenuItem ("Sair");
+		JMenuItem Sair = new JMenuItem ("Sair   ^Q");
 		Sair.setMnemonic (KeyEvent.VK_S);
 		Sair.setToolTipText ("Sai do jogo (você quer mesmo fazer isso?)");
 		//ctrlQ sai do jogo
@@ -196,7 +196,6 @@ public class Gui extends JFrame {
 				System.exit (0);
 			}
 		});
-		Jogo.add (Sair);
 
 		Sair.addActionListener(new ActionListener() {
 			@Override
@@ -204,10 +203,68 @@ public class Gui extends JFrame {
 				System.exit (0);
 			}
 		});
-		barra.add (Jogo);
+		Jogo.add (Sair);
 		
 		// MENU 'jogadas'
+		JMenu jogador = new JMenu ("Jogador");
+		jogador.setMnemonic (KeyEvent.VK_O);
 		
+		// Item 'renomear'
+		JMenuItem Renomear = new JMenuItem ("Renomear jogador");
+		Renomear.setMnemonic (KeyEvent.VK_R);
+		Renomear.setToolTipText ("Conte-nos seu nome, jovem guerreiro");
+		Renomear.addActionListener (new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent event) {
+				Jogador j = Xadrez.getDaVez ();
+				
+				String novo_nome = JOptionPane.showInputDialog ("Novo nome pr@ " + j);
+				
+				j.setNome (novo_nome);
+				trocaJogador (j);	// escreve lá novo nome
+			}
+		});
+		jogador.add (Renomear);
+		
+		// Item 'empatar'
+		JMenuItem Empatar = new JMenuItem ("Empatar jogo");
+		Empatar.setMnemonic (KeyEvent.VK_E);
+		Empatar.setToolTipText ("Propõe um empate ao outro jogador");
+		Empatar.addActionListener (new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent event) {
+				// para a tela e pergunta se quer começar novo jogo, ou quitar
+				int n = JOptionPane.showConfirmDialog (Gui.getTela (), Xadrez.getDaVez () + " está propondo um empate. Aceitas?", "Proposta de empate", JOptionPane.YES_NO_OPTION);
+				
+				if (n == JOptionPane.YES_OPTION) {	// quer empatar
+					quem_joga.setText ("Jogo empatado!");
+					Xadrez.acabaPartida ();
+				}
+			}
+		});
+		jogador.add (Empatar);
+		
+		// Item 'desistir'
+		JMenuItem Desistir = new JMenuItem ("Desistir do jogo");
+		Desistir.setMnemonic (KeyEvent.VK_D);
+		Desistir.setToolTipText ("Dá um peteleco no rei e desiste da partida");
+		Desistir.addActionListener (new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent event) {
+				// para a tela e pergunta se quer começar novo jogo, ou quitar
+				int n = JOptionPane.showConfirmDialog (Gui.getTela (), Xadrez.getDaVez () + ", vai mesmo desistir?", "¿Fim de jogo?", JOptionPane.YES_NO_OPTION);
+				
+				if (n == JOptionPane.YES_OPTION) {	// quer empatar
+					quem_joga.setText (Xadrez.getDaVez () + " jogou a toalha!");
+					Xadrez.acabaPartida ();
+				}
+			}
+		});
+		jogador.add (Desistir);
+		
+		// povoa a barra de menu
+		barra.add (Jogo);
+		barra.add (jogador);
 
 		setJMenuBar (barra);
 	}
