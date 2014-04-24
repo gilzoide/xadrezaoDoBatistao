@@ -39,7 +39,7 @@ public class EnPassant extends Movimento {
 		donde.setPeca (null);
 		donde.atualizaIcone ();
 	}
-	
+		
 	// Printa casa possível sempre como pra tomar peça; afinal, é o que fazemos aqui!
 	@Override
 	public void printPossivel () {
@@ -47,5 +47,20 @@ public class EnPassant extends Movimento {
 			ImageIcon possivel = Icone.possibilita ((ImageIcon) pronde.getBotao ().getIcon (), true);
 			pronde.getBotao ().setIcon (possivel);
 		}
+	}
+	
+	@Override
+	public String notacaoEscrita () {
+		Peca aux = do_inimigo.getPeca ();
+		notacao_extra = "x" + aux;
+		
+		String str = new String ();			// exemplo de notação
+		str += donde.getPeca ();			// D (peça)
+		str += notacao_extra;
+		str += (char) (pronde.getColuna () + 'a');	// g (coluna)
+		str += 8 - pronde.getLinha ();		// 3 (linha)
+		str += "e.p.";
+		
+		return str;
 	}
 }

@@ -24,9 +24,10 @@ public class Jogador {
 	private ArrayList<Peao> piaums;
 	private Rei reizaum;
 	private boolean roque_maior, roque_menor;	/// posso fazer roque? (maior e menor)
-	
 	/// Todos os movimentos possíveis naquela rodada!
 	private ArrayList<Movimento> movs;
+
+
 	/**
 	 * Ctor
 	 */
@@ -93,8 +94,11 @@ public class Jogador {
 	 * Update do rei: precisa ser feito depois dos updates dos 2 jogadores
 	 */
 	public void updateRei () {
-		ArrayList<Movimento> aux = reizaum.possiveisMovimentos ();
+		//~ ArrayList<Movimento> aux = reizaum.possiveisMovimentos ();
+		//~ aux.addAll (reizaum.Roques (roque_maior, roque_menor));
+		ArrayList<Movimento> aux = new ArrayList<> ();
 		aux.addAll (reizaum.Roques (roque_maior, roque_menor));
+		aux.addAll (reizaum.possiveisMovimentos ());
 		// se não tem movimento possível, indice_comeco e indice_fim serão iguais
 		reizaum.setIndiceComeco (movs.size ());
 		movs.addAll (aux);
@@ -144,7 +148,7 @@ public class Jogador {
 		return Tabuleiro.getTabuleiro ().getCasa (reizaum.getCoord ()).getDominio ().ameaca (cor);
 	}
 	public boolean estaXeque (Simulador sim) {
-		return sim.getCasa (reizaum.getCoord ()).getDominio ().ameaca (cor);
+		return sim.getCasa (sim.getReizaum (this.cor)).getDominio ().ameaca (cor);
 	}
 	/**
 	 * Dá um update nos peões - só pra quem acabou de jogar

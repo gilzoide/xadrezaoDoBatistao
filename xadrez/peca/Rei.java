@@ -105,10 +105,10 @@ public class Rei extends Peca {
 			if (i == coluna)
 				movs.add (new Roque (do_rei, da_torre, Roque.roque_tipo.MENOR));
 		}
-			
-		return movs;			
+
+		return movs;
 	}
-	
+
 	public void domina (Simulador sim) {
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
@@ -120,7 +120,7 @@ public class Rei extends Peca {
 				aux.addDominio (cor);
 		}
 	}
-	
+
 	/* GETTER */
 	public ImageIcon getIcone () {
 		return Icone.REI.getImg (cor);

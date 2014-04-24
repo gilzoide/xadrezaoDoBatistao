@@ -112,7 +112,6 @@ public class Gui extends JFrame {
 					@Override
 					public void actionPerformed (ActionEvent event) {
 						Point P = new Point (Integer.parseInt (botao.getName ().substring (1, 2)), Integer.parseInt (botao.getName ().substring (0, 1)));
-						//System.out.println (linha + " " + coluna);
 						motor.cliquei (P);
 					}
 				});

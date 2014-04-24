@@ -6,6 +6,8 @@ package xadrez.tabuleiro;
 
 import xadrez.movimento.Movimento;
 import xadrez.peca.Peca;
+import xadrez.peca.Rei;
+import ui.Cor;
 
 import java.awt.Point;
 
@@ -23,14 +25,14 @@ public class Simulador {
 	private Casa casa[][];
 	private Casa donde, pronde;
 	private Movimento mov;	/// Movimento a ser simulado
+	private Point rei_branco, rei_preto;	/// Posição do Reizão: pq se é ele que move, muda sua posição
 	
 	public Simulador (Casa donde, Casa pronde) {
 		casa = new Casa[8][8];
 
 		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
+			for (int j = 0; j < 8; j++)
 				casa[i][j] = new Casa (i, j);
-			}
 		}
 		
 		// duplica o tabuleiro
@@ -65,8 +67,15 @@ public class Simulador {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				Peca aux = casa[i][j].getPeca ();
-				if (aux != null)
+				if (aux != null) {
 					aux.domina (this);
+					if (aux instanceof Rei) {
+						if (aux.getCor () == Cor.BRANCO)
+							rei_branco = new Point (aux.getCoord ());
+						else
+							rei_preto = new Point (aux.getCoord ());
+					}
+				}
 			}
 		}
 	}
@@ -83,5 +92,11 @@ public class Simulador {
 			return casa[i][j];
 		else
 			return null;
+	}
+	public Point getReizaum (Cor cor) {
+		if (cor == Cor.BRANCO)
+			return rei_branco;
+		else
+			return rei_preto;
 	}
 }

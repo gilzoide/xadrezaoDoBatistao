@@ -26,7 +26,7 @@ public class Movimento {
 	protected Casa donde, pronde;		// Casas: donde saiu, pronde vai
 	protected boolean posso;	// Posso fazer esse movimento? Bom, só saberei depois de simular o movimento
 	
-	private String notacao_extra;	// notação extra (que nem sempre ocorre): toma peça
+	protected String notacao_extra;	// notação extra (que nem sempre ocorre): toma peça
 	
 	private static int num;		// Número total de jogadas
 	
@@ -133,12 +133,14 @@ public class Movimento {
 		String str = new String ();			// exemplo de notação
 		str += donde.getPeca ();			// D (peça)
 		str += notacao_extra;
-		str += 8 - pronde.getLinha ();		// 3 (linha)
 		str += (char) (pronde.getColuna () + 'a');	// g (coluna)
+		str += 8 - pronde.getLinha ();		// 3 (linha)
 		
 		return str;
 	}
-	
+	/**
+	 * Adiciona o movimento no log de movimentos
+	 */
 	public void jogaNoLog () {
 		Gui.getTela ().logMovimento (this);
 	}
@@ -153,6 +155,7 @@ public class Movimento {
 	public boolean ehEsseMovimento (Casa aux) {
 		return aux == pronde;
 	}
+	
 	/* SETTERS */
 	public void naoPosso () {
 		posso = false;
