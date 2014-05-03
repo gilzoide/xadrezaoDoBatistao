@@ -7,7 +7,6 @@ package xadrez;
  * @todo sons?! xD
  * @todo pt2 → relógios
  * @todo pt2 → exceção
- * @todo pt2 → refaz
  * @todo pt2 → save/load (autosave tb)
  */
 
@@ -114,8 +113,15 @@ public class Xadrez {
 
 					// joga movimento no log e cria snapshot
 					a_ser_feito.jogaNoLog ();
+					
+					/*  snapshots  */
+					snap_atual++;
+					// se tava desfeito movimento, remove os que tinha pra frente
+					if (snap_atual < historico.size ()) {
+						historico.removeAll (historico.subList (snap_atual, historico.size ()));
+					}
 					historico.add (new Snapshot (snap_atual, a_ser_feito));
-					snap_atual = historico.size () - 1;
+					
 				}
 				casa_marcada = false;
 			}
@@ -126,13 +132,25 @@ public class Xadrez {
 	 * Desfaz o último movimento
 	 */
 	public void desfazerMovimento () {
-		snap_atual = historico.get (snap_atual).getLast ();
-		historico.get (snap_atual).povoaTabuleiro (J1, J2);
-		// se for rodada inicial, troca a partir do jogador preto
-		if (snap_atual == 0)
-			jogador_da_vez = J2;
+		if (snap_atual > 0) {
+			snap_atual--;
 
-		trocaJogador ();
+			historico.get (snap_atual).povoaTabuleiro (J1, J2);
+
+			trocaJogador ();
+		}
+	}
+	/**
+	 * Refaz o último movimento
+	 */
+	public void refazerMovimento () {
+		if (snap_atual < historico.size () - 1) {
+			snap_atual++;
+
+			historico.get (snap_atual).povoaTabuleiro (J1, J2);
+			
+			trocaJogador ();
+		}
 	}
 	
 	/**

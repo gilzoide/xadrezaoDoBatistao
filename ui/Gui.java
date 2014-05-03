@@ -161,7 +161,7 @@ public class Gui extends JFrame {
 		Novo.setToolTipText ("Começa um novo jogo");
 		Jogo.add (Novo);
 		//ctrlN sai do jogo
-		Novo.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_N, InputEvent.CTRL_MASK), "novo");
+		Novo.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "novo");
 		Novo.getActionMap ().put ("novo", new AbstractAction () {
 			@Override
 			public void actionPerformed (ActionEvent event) {
@@ -178,11 +178,11 @@ public class Gui extends JFrame {
 		
 		// Item 'desfazer movimento'
 		JMenuItem Desfazer = new JMenuItem ("Desfazer Movimento   ^Z");
-		Desfazer.setMnemonic (KeyEvent.VK_N);
-		Desfazer.setToolTipText ("Começa um novo jogo");
+		Desfazer.setMnemonic (KeyEvent.VK_D);
+		Desfazer.setToolTipText ("Desfaz último movimento");
 		Jogo.add (Desfazer);
 		//ctrlN sai do jogo
-		Desfazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_Z, InputEvent.CTRL_MASK), "desfazer");
+		Desfazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "desfazer");
 		Desfazer.getActionMap ().put ("desfazer", new AbstractAction () {
 			@Override
 			public void actionPerformed (ActionEvent event) {
@@ -194,6 +194,27 @@ public class Gui extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				motor.desfazerMovimento ();
+			}
+		});
+		
+		// Item 'refazer movimento'
+		JMenuItem Refazer = new JMenuItem ("Refazer Movimento   ^R");
+		Refazer.setMnemonic (KeyEvent.VK_R);
+		Refazer.setToolTipText ("Refaz último movimento");
+		Jogo.add (Refazer);
+		//ctrlN sai do jogo
+		Refazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK), "refazer");
+		Refazer.getActionMap ().put ("refazer", new AbstractAction () {
+			@Override
+			public void actionPerformed (ActionEvent event) {
+				motor.refazerMovimento ();
+			}
+		});
+
+		Desfazer.addActionListener (new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				motor.refazerMovimento ();
 			}
 		});
 		
