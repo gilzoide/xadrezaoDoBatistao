@@ -34,11 +34,17 @@ public class Dama extends Peca {
 		direcoes.add (new Point (-1, 0));	// esquerda
 		direcoes.add (new Point (0, -1));	// baixo
 	}
+	public Dama (Cor nova_cor, int linha, int coluna) {
+		this (nova_cor, new Point (coluna, linha));
+	}
 	
+	
+	@Override
 	public String toString () {
 		return "D";
 	}
 	
+	@Override
 	public ArrayList<Movimento> possiveisMovimentos () {
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
@@ -72,6 +78,7 @@ public class Dama extends Peca {
 		return movs;
 	}
 	
+	@Override
 	public void domina (Simulador sim) {
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
@@ -89,8 +96,15 @@ public class Dama extends Peca {
 		}
 	}
 	
-	/* GETTER */
+	/* GETTERS */
+	@Override
 	public ImageIcon getIcone () {
 		return Icone.DAMA.getImg (cor);
+	}
+	
+	@Override
+	public byte getMask () {
+		int aux = (cor == Cor.BRANCO) ? 8 : 0;
+		return (byte) (5 + aux);
 	}
 }

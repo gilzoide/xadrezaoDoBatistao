@@ -10,6 +10,7 @@ import javax.swing.JTextArea;
 
 public class Log {
 	private JTextArea log;
+	private String anterior;
 	Cor cor;
 	
 	/**
@@ -50,8 +51,18 @@ public class Log {
 	 * Adiciona ao log a notação escrita do movimento 'mov'
 	 */
 	public void addMovimento (Movimento mov) {
-		addLinha (mov.notacaoEscrita ());
+		anterior = mov.notacaoEscrita ();
+		addLinha (anterior);
 		cor = cor.oposta ();
+	}
+	
+	/**
+	 * Se desfez o movimento, retira do log
+	 */
+	public void removeMovimento () {
+		String aux = log.getText ();
+		for (int i = 0; i <= anterior.length (); i++)
+			log.append ("\r");
 	}
 	
 	/* GETTERS */

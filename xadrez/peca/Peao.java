@@ -45,11 +45,17 @@ public class Peao extends Peca {
 		// dependendo da cor, vai pra frente ou pra trás
 		lado = (cor == Cor.BRANCO) ? -1 : 1;
 	}
+	public Peao (Cor nova_cor, int linha, int coluna) {
+		this (nova_cor, new Point (coluna, linha));
+	}
 	
+	
+	@Override
 	public String toString () {
 		return "";
 	}
 	
+	@Override
 	public ArrayList<Movimento> possiveisMovimentos () {
 		ArrayList<Movimento> movs = new ArrayList<> ();
 		ArrayList<Casa> casas = new ArrayList<> ();
@@ -93,6 +99,7 @@ public class Peao extends Peca {
 		return movs;
 	}
 	
+	@Override
 	public void domina (Simulador sim) {
 		Casa aux;
 		aux = sim.getCasa ((int) coord.getY () + lado, (int) coord.getX () + 1);
@@ -146,8 +153,15 @@ public class Peao extends Peca {
 		}
 	}
 	
-	/* GETTER */
+	/* GETTERS */
+	@Override
 	public ImageIcon getIcone () {
 		return Icone.PEAO.getImg (cor);
+	}
+	
+	@Override
+	public byte getMask () {
+		int aux = (cor == Cor.BRANCO) ? 8 : 0;
+		return (byte) (1 + aux);
 	}
 }

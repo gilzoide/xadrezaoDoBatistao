@@ -11,16 +11,10 @@ import xadrez.movimento.Movimento;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import java.util.Random;
 
@@ -85,7 +79,7 @@ public class Gui extends JFrame {
 		montaQuemJoga (panel);
 		montaTabuleiro (panel, motor);
 		montaLog (panel);
-		menu (panel);
+		menu (panel, motor);
 	}
 
 	/**
@@ -131,8 +125,7 @@ public class Gui extends JFrame {
 			panel.add (letra);
 		}
 
-		// Xadrez.novoJogo()
-		motor.novoJogo ();
+		Xadrez.novoJogo ();
 	}
 	/**
 	 * escreve em cima do tabuleiro de quem é a vez
@@ -156,7 +149,7 @@ public class Gui extends JFrame {
 	/**
 	 * monta o menu
 	 */
-	private void menu (JPanel panel) {
+	private void menu (JPanel panel, final Xadrez motor) {
 		JMenuBar barra = new JMenuBar ();
 		// MENU 'jogo'
 		JMenu Jogo = new JMenu ("Jogo");
@@ -180,6 +173,27 @@ public class Gui extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				novoJogo ();
+			}
+		});
+		
+		// Item 'desfazer movimento'
+		JMenuItem Desfazer = new JMenuItem ("Desfazer Movimento   ^Z");
+		Desfazer.setMnemonic (KeyEvent.VK_N);
+		Desfazer.setToolTipText ("Começa um novo jogo");
+		Jogo.add (Desfazer);
+		//ctrlN sai do jogo
+		Desfazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_Z, InputEvent.CTRL_MASK), "desfazer");
+		Desfazer.getActionMap ().put ("desfazer", new AbstractAction () {
+			@Override
+			public void actionPerformed (ActionEvent event) {
+				motor.desfazerMovimento ();
+			}
+		});
+
+		Desfazer.addActionListener (new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				motor.desfazerMovimento ();
 			}
 		});
 		
@@ -236,8 +250,7 @@ public class Gui extends JFrame {
 				int n = JOptionPane.showConfirmDialog (Gui.getTela (), Xadrez.getDaVez () + " está propondo um empate. Aceitas?", "Proposta de empate", JOptionPane.YES_NO_OPTION);
 				
 				if (n == JOptionPane.YES_OPTION) {	// quer empatar
-					quem_joga.setText ("Jogo empatado!");
-					Xadrez.acabaPartida ();
+					empata ();
 				}
 			}
 		});
@@ -253,7 +266,7 @@ public class Gui extends JFrame {
 				// para a tela e pergunta se quer começar novo jogo, ou quitar
 				int n = JOptionPane.showConfirmDialog (Gui.getTela (), Xadrez.getDaVez () + ", vai mesmo desistir?", "¿Fim de jogo?", JOptionPane.YES_NO_OPTION);
 				
-				if (n == JOptionPane.YES_OPTION) {	// quer empatar
+				if (n == JOptionPane.YES_OPTION) {	// quer desistir
 					quem_joga.setText (Xadrez.getDaVez () + " jogou a toalha!");
 					Xadrez.acabaPartida ();
 				}
@@ -271,8 +284,7 @@ public class Gui extends JFrame {
 	/**
 	 * Pediu novo jogo
 	 * 
-	 * Se tem que recomeçar um novo jogo (seja por fim do de antes, ou pediu no menu),
-	 * repõe as peças no lugar certo =]
+	 * Recomeça um novo jogo, repõe as peças no lugar certo
 	 */
 	private void novoJogo () {
 		Xadrez.novoJogo ();
@@ -310,6 +322,14 @@ public class Gui extends JFrame {
 		quem_joga.setText (J + ", " + str[rand.nextInt (16)]);
 	}
 	/**
+	 * Escreve na tela que empatou, e acaba o jogo
+	 */
+	public void empata () {
+		quem_joga.setText ("Jogo empatado!");
+		Xadrez.acabaPartida ();
+	}
+	
+	/**
 	 * Escreve na tela se deu xeque
 	 */
 	public void xeque (Jogador J) {
@@ -318,7 +338,7 @@ public class Gui extends JFrame {
 		log.addXeque ();
 	}
 	/**
-	 * Escreve na tela que deu mate! (e já 
+	 * Escreve na tela que deu mate
 	 */
 	public void mate (Jogador J) {
 		quem_joga.setForeground (Color.RED);

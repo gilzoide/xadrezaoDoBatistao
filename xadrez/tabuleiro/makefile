@@ -5,7 +5,7 @@
 # Package: Tabuleiro (o tabuleiro do jogo, com suas casas)
 src = *.java
 
-.PHONY : all $(pacotes) header clean
+.PHONY : all header clean
 
 .SUFFIXES : .java .class
 .java.class :

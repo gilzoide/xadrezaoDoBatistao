@@ -14,7 +14,6 @@ import xadrez.peca.PromoveuException;
 
 import java.util.ArrayList;
 import java.util.List;
-//import java.lang.NullPointerException;
 
 public class Jogador {
 	private Cor cor;
@@ -57,12 +56,10 @@ public class Jogador {
 		// linha dos não peões
 		linha = (cor == Cor.BRANCO) ? 7 : 0;
 		for (int i = 0; i < 8; i++) {
-			if (i != 4)		// pula o rei
-				todas_pecas.add (tab.getCasa (linha, i).getPeca ());
+			todas_pecas.add (tab.getCasa (linha, i).getPeca ());
 		}
 		// e o reizão xD
 		reizaum = (Rei) tab.getCasa (linha, 4).getPeca ();
-		//todas_pecas.add (reizaum);
 		// por enquanto posso fazer qualquer roque
 		roque_maior = roque_menor = true;
 	}
@@ -94,8 +91,6 @@ public class Jogador {
 	 * Update do rei: precisa ser feito depois dos updates dos 2 jogadores
 	 */
 	public void updateRei () {
-		//~ ArrayList<Movimento> aux = reizaum.possiveisMovimentos ();
-		//~ aux.addAll (reizaum.Roques (roque_maior, roque_menor));
 		ArrayList<Movimento> aux = new ArrayList<> ();
 		aux.addAll (reizaum.Roques (roque_maior, roque_menor));
 		aux.addAll (reizaum.possiveisMovimentos ());
@@ -111,7 +106,12 @@ public class Jogador {
 	public void checaXeque () {
 		// se não tem mais movimentos, é mate!
 		if (!possoMover ()) {
-			Gui.getTela ().mate (this);
+			if (estaXeque ())
+				// xeque mate!
+				Gui.getTela ().mate (this);
+			else
+				// stalemate!
+				Gui.getTela ().empata ();
 		}
 		// talvez não mate, mas um xequezinho básico
 		else if (estaXeque ()) {
@@ -178,6 +178,24 @@ public class Jogador {
 	public void setNome (String novo_nome) {
 		this.nome = novo_nome;
 	}
+	/**
+	 * Seta as peças guardadas pelo Jogador
+	 * 
+	 * Serve pra load game, a partir de Snapshots
+	 */
+	public void setPecas (ArrayList<Peca> pecas) {
+		// limpa o que tiver lá dentro, pra refazer
+		piaums.clear ();
+		todas_pecas.clear ();
+		
+		for (Peca P : pecas) {
+			todas_pecas.add (P);
+			if (P instanceof Peao)
+				piaums.add ((Peao) P);
+			else if (P instanceof Rei)
+				reizaum = (Rei) P;
+		}
+	}
 	
 	/* GETTERS */
 	public Cor getCor () {
@@ -193,7 +211,18 @@ public class Jogador {
 		return roque_menor;
 	}
 	
+	public void printPecas () {
+		System.out.print (this + " ");
+		for (Peca P : todas_pecas)
+			System.out.println (P + " " + P.getCoord ());
+		for (Peao P : piaums)
+			System.out.print ("peão" + P.getCoord ());
+			
+		System.out.print ('\n');
+	}
 	
+	
+	@Override
 	public String toString () {
 		return nome;
 	}

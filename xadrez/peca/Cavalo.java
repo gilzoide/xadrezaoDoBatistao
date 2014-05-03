@@ -35,11 +35,17 @@ public class Cavalo extends Peca {
 		direcoes.add (new Point (-1, -2));
 		direcoes.add (new Point (-2, -1));
 	}
+	public Cavalo (Cor nova_cor, int linha, int coluna) {
+		this (nova_cor, new Point (coluna, linha));
+	}
 	
+	
+	@Override
 	public String toString () {
 		return "C";
 	}
 	
+	@Override
 	public ArrayList<Movimento> possiveisMovimentos () {
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
@@ -69,6 +75,7 @@ public class Cavalo extends Peca {
 		return movs;
 	}
 	
+	@Override
 	public void domina (Simulador sim) {	
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
@@ -81,8 +88,15 @@ public class Cavalo extends Peca {
 		}
 	}
 	
-	/* GETTER */
+	/* GETTERS */
+	@Override
 	public ImageIcon getIcone () {
 		return Icone.CAVALO.getImg (cor);
+	}
+	
+	@Override
+	public byte getMask () {
+		int aux = (cor == Cor.BRANCO) ? 8 : 0;
+		return (byte) (3 + aux);
 	}
 }

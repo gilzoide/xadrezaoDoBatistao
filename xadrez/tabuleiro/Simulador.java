@@ -25,7 +25,7 @@ public class Simulador {
 	private Casa casa[][];
 	private Casa donde, pronde;
 	private Movimento mov;	/// Movimento a ser simulado
-	private Point rei_branco, rei_preto;	/// Posição do Reizão: pq se é ele que move, muda sua posição
+	private Point rei_branco, rei_preto;	/// Posição dos Reizão: pq se é ele que move, muda sua posição
 	
 	public Simulador (Casa donde, Casa pronde) {
 		casa = new Casa[8][8];
@@ -69,6 +69,7 @@ public class Simulador {
 				Peca aux = casa[i][j].getPeca ();
 				if (aux != null) {
 					aux.domina (this);
+					// se foi o rei, salva lá nos Point
 					if (aux instanceof Rei) {
 						if (aux.getCor () == Cor.BRANCO)
 							rei_branco = new Point (aux.getCoord ());

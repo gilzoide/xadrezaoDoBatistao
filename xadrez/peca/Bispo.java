@@ -30,11 +30,17 @@ public class Bispo extends Peca {
 		direcoes.add (new Point (-1, 1));	// diagonal secundária, pra baixo
 		direcoes.add (new Point (-1, -1));	// diagonal principal, pra cima
 	}
+	public Bispo (Cor nova_cor, int linha, int coluna) {
+		this (nova_cor, new Point (coluna, linha));
+	}
 	
+	
+	@Override
 	public String toString () {
 		return "B";
 	}
 	
+	@Override
 	public ArrayList<Movimento> possiveisMovimentos () {
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
@@ -68,6 +74,7 @@ public class Bispo extends Peca {
 		return movs;
 	}
 	
+	@Override
 	public void domina (Simulador sim) {
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
@@ -85,8 +92,15 @@ public class Bispo extends Peca {
 		}
 	}
 	
-	/* GETTER */
+	/* GETTERS */
+	@Override
 	public ImageIcon getIcone () {
 		return Icone.BISPO.getImg (cor);
+	}
+	
+	@Override
+	public byte getMask () {
+		int aux = (cor == Cor.BRANCO) ? 8 : 0;
+		return (byte) (4 + aux);
 	}
 }

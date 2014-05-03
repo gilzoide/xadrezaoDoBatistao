@@ -19,14 +19,11 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 public class Rei extends Peca {
-	/* Esse rei pode fazer roque? */
-	private boolean roque;
 	
 	private ArrayList<Point> direcoes;
 	
 	public Rei (Cor nova_cor, Point P) {
 		super (nova_cor, P);
-		roque = true;
 		
 		// inicializa direções possíveis
 		direcoes = new ArrayList<> ();
@@ -39,11 +36,17 @@ public class Rei extends Peca {
 		direcoes.add (new Point (-1, 0));	// esquerda
 		direcoes.add (new Point (0, -1));	// baixo
 	}
+	public Rei (Cor nova_cor, int linha, int coluna) {
+		this (nova_cor, new Point (coluna, linha));
+	}
 	
+	
+	@Override
 	public String toString () {
 		return "R";
 	}
 	
+	@Override
 	public ArrayList<Movimento> possiveisMovimentos () {
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();		
@@ -78,7 +81,7 @@ public class Rei extends Peca {
 		Casa do_rei = tab.getCasa (linha, 4);
 		
 		if (maior) {
-			// pega casa da torre
+			// casa da torre
 			int i, coluna = 0;
 			Casa da_torre = Tabuleiro.getTabuleiro ().getCasa (linha, coluna);
 			
@@ -92,7 +95,7 @@ public class Rei extends Peca {
 				movs.add (new Roque (do_rei, da_torre, Roque.roque_tipo.MAIOR));
 		}
 		if (menor) {
-			// pega casa da torre
+			// casa da torre
 			int i, coluna = 7;
 			Casa da_torre = Tabuleiro.getTabuleiro ().getCasa (linha, coluna);
 			
@@ -109,6 +112,7 @@ public class Rei extends Peca {
 		return movs;
 	}
 
+	@Override
 	public void domina (Simulador sim) {
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
@@ -121,8 +125,15 @@ public class Rei extends Peca {
 		}
 	}
 
-	/* GETTER */
+	/* GETTERS */
+	@Override
 	public ImageIcon getIcone () {
 		return Icone.REI.getImg (cor);
+	}
+	
+	@Override
+	public byte getMask () {
+		int aux = (cor == Cor.BRANCO) ? 8 : 0;
+		return (byte) (6 + aux);
 	}
 }

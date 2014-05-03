@@ -5,7 +5,6 @@
 package xadrez.movimento;
 
 import ui.Jogador;
-import ui.Cor;
 import ui.Gui;
 import ui.Icone;
 
@@ -93,8 +92,6 @@ public class Movimento {
 	
 	/**
 	 * Simula o movimento, pra ver se pode (se não deixa o rei em xeque)
-	 * 
-	 * Usando Threads pra simular, fica mais rapidim o rolê!
 	 */
 	public Simulador simula () {
 		Simulador sim = new Simulador (donde, pronde);
@@ -119,7 +116,7 @@ public class Movimento {
 	}
 	
 	/**
-	 * Formula e retorna a notação estrita da jogada
+	 * Formula e retorna a notação escrita da jogada
 	 * 
 	 * @note Aqui não estão incluídas as notações de xeque e mate
 	 */

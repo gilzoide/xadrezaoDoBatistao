@@ -5,7 +5,6 @@
 package xadrez.peca;
 
 import ui.Cor;
-import ui.Icone;
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
 import xadrez.tabuleiro.Simulador;
@@ -16,14 +15,19 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+/**
+ * Peças do jogo de xadrez
+ * 
+ * É abstrata, pois não faz sentido se ter uma instancia de peça
+ */
 public abstract class Peca {
 	protected Cor cor;	/// cor da peça
 	
 	protected Point coord;	/// coordenada da peça
-	protected boolean morreu;	/// se a peça tá em jogo ainda ou não
+	protected boolean morreu;	/// se a peça está em jogo ainda ou não
 
-	protected int indice_comeco;	/// índice dos seus possíveis movimentos dentro de todos os possíveis movimentos
-	protected int indice_fim;	/// indice fim dos seus possíveis movimentos dentro de todos os possíveis movimentos
+	protected int indice_comeco;	/// índice dos seus possíveis movimentos, dentro de todos os possíveis movimentos
+	protected int indice_fim;	/// indice fim dos seus possíveis movimentos, dentro de todos os possíveis movimentos
 	/**
 	 * Ctor: ajusta a cor e põe as coordenadas em 'coord'
 	 */
@@ -41,7 +45,7 @@ public abstract class Peca {
 	/**
 	 * Copia 2 peças, de 'src' a 'dest'
 	 * 
-	 * @note Essa função cria uma duplicata da peça, não simplesmente passando a referência das coisas
+	 * @note Essa função cria uma duplicata da peça, não simplesmente passando a referência
 	 */
 	public static Peca copia (final Peca src) {
 		if (src == null)
@@ -80,6 +84,11 @@ public abstract class Peca {
 
 	/* GETTERS */
 	public abstract ImageIcon getIcone ();
+	
+	/**
+	 * @return byte de máscara da peça
+	 */
+	public abstract byte getMask ();
 	
 	public Cor getCor () {
 		return this.cor;

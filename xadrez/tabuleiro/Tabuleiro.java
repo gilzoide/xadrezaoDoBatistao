@@ -4,8 +4,6 @@
  */
 package xadrez.tabuleiro;
 
-import ui.Cor;
-import xadrez.peca.Peca;
 
 import java.awt.Point;
 
@@ -27,9 +25,8 @@ public class Tabuleiro {
 		casa = new Casa[8][8];
 
 		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
+			for (int j = 0; j < 8; j++)
 				casa[i][j] = new Casa (i, j);
-			}
 		}
 	}
 	// quer o tabuleiro? usa esse método aqui
@@ -40,13 +37,13 @@ public class Tabuleiro {
 	/* GETTERS */
 	public Casa getCasa (int linha, int coluna) {
 		if (estaDentro (linha, coluna))
-			return this.casa[linha][coluna];
+			return Tabuleiro.casa[linha][coluna];
 		else
 			return null;
 	}
 	public Casa getCasa (Point P) {
 		if (estaDentro (P))
-			return this.casa[(int) P.getY ()][(int) P.getX ()];
+			return Tabuleiro.casa[(int) P.getY ()][(int) P.getX ()];
 		else
 			return null;
 	}
@@ -77,18 +74,36 @@ public class Tabuleiro {
 	 */
 	public void novoJogo () {
 		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
+			for (int j = 0; j < 8; j++)
 				casa[i][j].casaNovoJogo ();
-			}
 		}
 	}
 	
 	
 	public void printDominio () {
 		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
+			for (int j = 0; j < 8; j++)
 				System.out.println (casa[i][j].getDominio ());
-			}
+		}
+	}
+	
+	
+	/**
+	 * Reprinta todo o tabuleiro
+	 */
+	public void refreshTabuleiro () {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++)
+				casa[i][j].atualizaIcone ();
+		}
+	}
+	
+	public void printTabuleiro () {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++)
+				System.out.print (casa[i][j].getPeca ());
+			
+			System.out.print ('\n');
 		}
 	}
 }

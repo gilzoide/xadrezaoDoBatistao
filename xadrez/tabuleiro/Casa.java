@@ -5,7 +5,6 @@
 package xadrez.tabuleiro;
 
 import ui.Cor;
-import ui.Icone;
 import xadrez.peca.*;
 
 import java.awt.Point;
@@ -84,7 +83,7 @@ public class Casa {
 	/**
 	 * Copia 2 casas, de 'src' a 'dest'
 	 * 
-	 * @note Essa função cria uma duplicata da casa, não simplesmente passando a referência das coisas
+	 * @note Essa função cria uma duplicata da casa, não simplesmente passando a referência
 	 */
 	public static void copia (Casa dest, Casa src) {
 		// copia a peça lá dentro, que é só o que precisamos!
@@ -93,11 +92,14 @@ public class Casa {
 	
 	
 	/**
-	 * Ve se casa está ocupada
+	 * Verifica se casa está ocupada
 	 */
 	public boolean estaOcupada () {
 		return peca != null;
 	}
+	/**
+	 * Verifica se casa está ocupada por alguém da cor 'cor'
+	 */
 	public boolean estaOcupadaCor (Cor cor) {
 		if (estaOcupada ())
 			return peca.getCor () == cor;
@@ -150,12 +152,13 @@ public class Casa {
 		dominio = dominio.dominioAdd (jogador);
 	}
 	/**
-	 * Remove à casa domínio da cor do jogador
+	 * Remove da casa domínio da cor do jogador
 	 */
 	public void removeDominio (Cor jogador) {
 		dominio = dominio.dominioRemove (jogador);
 	}
 	
+	@Override
 	public String toString () {
 		return ("casa " + coord.getX () + " " + coord.getY ());
 	}

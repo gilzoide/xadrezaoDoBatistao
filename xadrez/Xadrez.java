@@ -5,7 +5,10 @@
 package xadrez;
 /**
  * @todo sons?! xD
- * @todo pt2 → relógios, exceção, desfaz/refaz, save/load
+ * @todo pt2 → relógios
+ * @todo pt2 → exceção
+ * @todo pt2 → refaz
+ * @todo pt2 → save/load (autosave tb)
  */
 
 import ui.Gui;
@@ -14,11 +17,11 @@ import ui.Jogador;
 
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
+import xadrez.tabuleiro.Snapshot;
 import xadrez.movimento.Movimento;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.lang.NullPointerException;
 
 import javax.swing.SwingUtilities;
 
@@ -29,6 +32,10 @@ public class Xadrez {
 	private	static Jogador J1;
 	private static Jogador J2;
 	private static Jogador jogador_da_vez;
+	
+	private static ArrayList<Snapshot> historico;	// guarda o histórico de snapshots
+	private static int snap_atual;	// snap atual
+	
 	private static boolean partida;	// a partida tá rolando?
 	
 	/**
@@ -38,6 +45,7 @@ public class Xadrez {
 		J1 = new Jogador (Cor.BRANCO);
 		J2 = new Jogador (Cor.PRETO);
 		mov = new ArrayList<> ();
+		historico = new ArrayList<> ();
 	}
 	
 	/**
@@ -61,14 +69,12 @@ public class Xadrez {
 	
 	// diz se já clicou em uma casa válida (ali pra 'cliquei')
 	private static boolean casa_marcada = false;
-	// casa anterior clicada, se já tivar marcada (ali pra 'cliquei')
-	private static Casa anterior = null;
 	// movimentos possíveis da peça marcada (ali pra 'cliquei')
 	private static ArrayList<Movimento> mov;
 	/**
 	 * Jogada em si: clica em uma peça [pra mover] e em outra pra mover pra lá
 	 * 
-	 * São dois estados: peça não marcada / peça marcada
+	 * Há dois estados: peça não marcada / peça marcada
 	 */
 	public void cliquei (Point P) {
 		if (partida) {
@@ -77,16 +83,10 @@ public class Xadrez {
 			if (casa_marcada == false) {
 				// se tem peça lá dentro
 				if (atual.estaOcupadaCor (jogador_da_vez.getCor ())) {
-					anterior = atual;
 					mov.clear ();
-					try {
-						mov.addAll (jogador_da_vez.getMovs (atual.getPeca ()));
-					}
-					// se não tem movimento possível, nem adianta, cara =/
-					catch (NullPointerException ex) {
-						return;
-					}
 					
+					mov.addAll (jogador_da_vez.getMovs (atual.getPeca ()));
+
 					// pra cada movimento possível faz ele aparecer possível
 					for (Movimento m : mov)
 						m.printPossivel ();
@@ -101,20 +101,38 @@ public class Xadrez {
 				for (Movimento m : mov) {
 					// vê se o clicado atual é um movimento previsto
 					if (m.ehEsseMovimento (P)) {
-						// se sim, marca pra mover lá! (e marca q clicou em um previsto)
+						// se sim, marca pra mover lá!
 						a_ser_feito = m;
 					}
 					// descolore os quadradim de possibilidade
 					m.unPrintPossivel ();
 				}
 				if (a_ser_feito != null) {
-					a_ser_feito.jogaNoLog ();
+					// move, e troca jogador
 					a_ser_feito.mover (jogador_da_vez);
 					trocaJogador ();
+
+					// joga movimento no log e cria snapshot
+					a_ser_feito.jogaNoLog ();
+					historico.add (new Snapshot (snap_atual, a_ser_feito));
+					snap_atual = historico.size () - 1;
 				}
 				casa_marcada = false;
 			}
 		}
+	}
+	
+	/**
+	 * Desfaz o último movimento
+	 */
+	public void desfazerMovimento () {
+		snap_atual = historico.get (snap_atual).getLast ();
+		historico.get (snap_atual).povoaTabuleiro (J1, J2);
+		// se for rodada inicial, troca a partir do jogador preto
+		if (snap_atual == 0)
+			jogador_da_vez = J2;
+
+		trocaJogador ();
 	}
 	
 	/**
@@ -152,6 +170,10 @@ public class Xadrez {
 	public static void novoJogo () {
 		// reconstrói as peças no tabuleiro
 		Tabuleiro.getTabuleiro ().novoJogo ();
+		// limpa o histórico de jogadas, pondo o snap do tabuleiro inicial
+		historico.clear ();
+		historico.add (new Snapshot (0, null));
+		snap_atual = 0;
 		// reinicia os jogadores
 		J1.novoJogo ();
 		J2.novoJogo ();

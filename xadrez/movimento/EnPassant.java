@@ -4,14 +4,11 @@
  */
 package xadrez.movimento;
 
-import ui.Cor;
 import ui.Icone;
 import ui.Jogador;
 import xadrez.tabuleiro.Casa;
-import xadrez.tabuleiro.Tabuleiro;
 import xadrez.peca.Peca;
 
-import java.awt.Point;
 
 import javax.swing.ImageIcon;
 

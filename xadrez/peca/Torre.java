@@ -20,6 +20,9 @@ import javax.swing.ImageIcon;
 public class Torre extends Peca {
 	private ArrayList<Point> direcoes;
 
+	/**
+	 * Ctor
+	 */
 	public Torre (Cor nova_cor, Point P) {
 		super (nova_cor, P);
 		
@@ -30,11 +33,18 @@ public class Torre extends Peca {
 		direcoes.add (new Point (-1, 0));	// esquerda
 		direcoes.add (new Point (0, -1));	// baixo
 	}
+	public Torre (Cor nova_cor, int linha, int coluna) {
+		this (nova_cor, new Point (coluna, linha));
+	}
 	
+	
+	
+	@Override
 	public String toString () {
 		return "T";
 	}
 	
+	@Override
 	public ArrayList<Movimento> possiveisMovimentos () {
 		ArrayList<Casa> casas = new ArrayList<> ();
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
@@ -68,6 +78,7 @@ public class Torre extends Peca {
 		return movs;
 	}
 	
+	@Override
 	public void domina (Simulador sim) {
 		for (int count = 0; count < direcoes.size (); count++) {
 			int i, j;
@@ -85,8 +96,15 @@ public class Torre extends Peca {
 		}
 	}
 	
-	/* GETTER */
+	/* GETTERS */
+	@Override
 	public ImageIcon getIcone () {
 		return Icone.TORRE.getImg (cor);
+	}
+	
+	@Override
+	public byte getMask () {
+		int aux = (cor == Cor.BRANCO) ? 8 : 0;
+		return (byte) (2 + aux);
 	}
 }

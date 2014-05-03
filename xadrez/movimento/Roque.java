@@ -4,7 +4,6 @@
  */
 package xadrez.movimento;
 
-import ui.Cor;
 import ui.Icone;
 import ui.Jogador;
 import xadrez.tabuleiro.Casa;
@@ -30,6 +29,7 @@ public class Roque extends Movimento {
 			this.notacao = notacao;
 		}
 		
+		@Override
 		public String toString () {
 			return notacao;
 		}
@@ -77,7 +77,7 @@ public class Roque extends Movimento {
 		tab.getCasa (do_rei).atualizaIcone ();
 	}
 	
-	// Printa casa possível nunca como pra tomar peça!
+	// Printa casa possível como movimento que não toma peça
 	@Override
 	public void printPossivel () {
 		if (posso) {

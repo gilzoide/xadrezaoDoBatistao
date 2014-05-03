@@ -8,9 +8,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 
-import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
-import javax.swing.Icon;
 
 public enum Icone {
 	BISPO ("bispo"),
@@ -31,6 +29,7 @@ public enum Icone {
 		nome = arq;
 	}
 	
+	@Override
 	public String toString () {
 		return nome;
 	}
