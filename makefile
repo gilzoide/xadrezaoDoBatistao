@@ -36,7 +36,7 @@ edit:
 
 # roda o projeto compilado
 run :
-	@java -classpath $(BUILD) xadrez.Xadrez
+	@java -splash:ui/img/splash.png -classpath $(BUILD) xadrez.Xadrez
 
 debug :
 	jdb -classpath $(BUILD) xadrez.Xadrez

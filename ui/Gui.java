@@ -9,6 +9,8 @@ import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
 import xadrez.movimento.Movimento;
 
+import java.awt.SplashScreen;
+import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -72,6 +74,28 @@ public class Gui extends JFrame {
 	 * Inicializa o tabuleiro, menu e log
 	 */
 	public void init (Xadrez motor) {
+		// splash screen
+		try {
+			SplashScreen window = SplashScreen.getSplashScreen ();
+			if (window == null) {
+				System.out.println ("SplashScreen não especificada. Por favor, rode o programa com a opção '-splash:ui/img/splash.png'");
+			}
+			else {
+				try {
+					Thread.sleep (1000);
+				}
+				catch(InterruptedException e) {
+					System.out.println ("mataram a splash screen");
+					System.exit (0);
+				}
+				window.close ();
+			}
+		}
+		catch (UnsupportedOperationException e) {
+			System.out.println ("SplashScreen não suportado");
+		}
+
+		// resto dos trem
 		JPanel panel = new JPanel ();
 		getContentPane ().add (panel);
 		panel.setLayout (null);
@@ -80,6 +104,10 @@ public class Gui extends JFrame {
 		montaTabuleiro (panel, motor);
 		montaLog (panel);
 		menu (panel, motor);
+		
+		novoJogo ();
+		
+		setVisible (true);
 	}
 
 	/**
@@ -123,9 +151,7 @@ public class Gui extends JFrame {
 			JLabel letra = new JLabel (String.valueOf ((char) (j + 'a')), SwingConstants.CENTER);
 			letra.setBounds ((int) INICIO_TABULEIRO.getX () + j * TAM_QUADRADO, (int) INICIO_TABULEIRO.getY () + TAM_TABULEIRO, TAM_QUADRADO, 15);
 			panel.add (letra);
-		}
-
-		Xadrez.novoJogo ();
+		}		
 	}
 	/**
 	 * escreve em cima do tabuleiro de quem é a vez
@@ -160,7 +186,7 @@ public class Gui extends JFrame {
 		Novo.setMnemonic (KeyEvent.VK_N);
 		Novo.setToolTipText ("Começa um novo jogo");
 		Jogo.add (Novo);
-		//ctrlN sai do jogo
+		//ctrlN começa novo jogo
 		Novo.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "novo");
 		Novo.getActionMap ().put ("novo", new AbstractAction () {
 			@Override
@@ -181,7 +207,7 @@ public class Gui extends JFrame {
 		Desfazer.setMnemonic (KeyEvent.VK_D);
 		Desfazer.setToolTipText ("Desfaz último movimento");
 		Jogo.add (Desfazer);
-		//ctrlN sai do jogo
+		//ctrlZ desfaz movimento
 		Desfazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "desfazer");
 		Desfazer.getActionMap ().put ("desfazer", new AbstractAction () {
 			@Override
@@ -202,7 +228,7 @@ public class Gui extends JFrame {
 		Refazer.setMnemonic (KeyEvent.VK_R);
 		Refazer.setToolTipText ("Refaz último movimento");
 		Jogo.add (Refazer);
-		//ctrlN sai do jogo
+		//ctrlR refaz movimento
 		Refazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK), "refazer");
 		Refazer.getActionMap ().put ("refazer", new AbstractAction () {
 			@Override
@@ -390,5 +416,11 @@ public class Gui extends JFrame {
 	 */
 	public void logMovimento (Movimento mov) {
 		log.addMovimento (mov);
+	}
+	public void unlogMovimento (String anterior) {
+		log.removeMovimento (anterior);
+	}
+	public String getLog () {
+		return log.getTextArea ().getText ();
 	}
 }

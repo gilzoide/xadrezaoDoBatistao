@@ -6,6 +6,7 @@ package xadrez.tabuleiro;
 
 import xadrez.movimento.Movimento;
 import xadrez.peca.*;
+import ui.Gui;
 import ui.Cor;
 import ui.Jogador;
 
@@ -24,16 +25,16 @@ import java.util.ArrayList;
  */
 public class Snapshot implements Comparable<Snapshot> {
 	private byte[] snap;	/// o snapshot em si (em um vetor 8x8=64)
-	private Movimento mov;	/// movimento que deu origem ao snapshot - null pra snap do início do jogo
-	private int last;	/// Último snap antes desse
+	private Movimento mov;	/// movimento que deu origem a esse snap; null pra início de jogo
+	private String log;		/// log naquele momento
 	
 	/**
 	 * Ctor: tira o snapshot do tabuleiro
 	 */
-	public Snapshot (int last, Movimento mov) {
+	public Snapshot (Movimento mov) {
 		snap = new byte[64];
 		this.mov = mov;
-		this.last = last;
+		log = Gui.getTela ().getLog ();
 		
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		int cont = 0;
@@ -70,24 +71,23 @@ public class Snapshot implements Comparable<Snapshot> {
 			for (int j = 0; j < 8; j++) {
 				switch (snap[cont]) {
 					// peças brancas
-					case 9: aux = new Peao (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); brancas.add (aux); break;
-					case 10: aux = new Torre (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); brancas.add (aux); break;
+					case 9:	 aux = new Peao (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); 	brancas.add (aux); break;
+					case 10: aux = new Torre (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); 	brancas.add (aux); break;
 					case 11: aux = new Cavalo (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); brancas.add (aux); break;
-					case 12: aux = new Bispo (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); brancas.add (aux); break;
-					case 13: aux = new Dama (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); brancas.add (aux); break;
-					case 14: aux = new Rei (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); brancas.add (aux); break;
+					case 12: aux = new Bispo (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux);	brancas.add (aux); break;
+					case 13: aux = new Dama (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); 	brancas.add (aux); break;
+					case 14: aux = new Rei (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); 	brancas.add (aux); break;
 					
 					// peças pretas
-					case 1: aux = new Peao (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); pretas.add (aux); break;
-					case 2: aux = new Torre (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); pretas.add (aux); break;
-					case 3: aux = new Cavalo (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); pretas.add (aux); break;
-					case 4: aux = new Bispo (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); pretas.add (aux); break;
-					case 5: aux = new Dama (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); pretas.add (aux); break;
-					case 6: aux = new Rei (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); pretas.add (aux); break;
+					case 1: aux = new Peao (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
+					case 2: aux = new Torre (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
+					case 3: aux = new Cavalo (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
+					case 4: aux = new Bispo (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
+					case 5: aux = new Dama (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
+					case 6: aux = new Rei (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 		pretas.add (aux); break;
 					
 					// ninguém
 					default: tab.getCasa (i, j).setPeca (null);
-					//System.out.print (i + "x" + j + " ");
 				}
 				
 				// próximo
@@ -115,7 +115,10 @@ public class Snapshot implements Comparable<Snapshot> {
 	}
 	
 	/* GETTERS */
-	public int getLast () {
-		return last;
+	public Movimento getMov () {
+		return mov;
+	}
+	public String getLog () {
+		return log;
 	}
 }

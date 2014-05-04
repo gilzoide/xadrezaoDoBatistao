@@ -51,18 +51,13 @@ public class Xadrez {
 	 * A main!
 	 */
 	public static void main (String[] args) {
-		SwingUtilities.invokeLater (new Runnable() {
+		SwingUtilities.invokeLater (new Runnable () {
 			@Override
 			public void run () {
-				jogar ();
+				Gui tela = Gui.getTela ();
+				tela.init (new Xadrez ());
 			}
         });
-	}
-	
-	private static void jogar () {
-		Gui tela = Gui.getTela ();
-		tela.init (new Xadrez ());
-		tela.setVisible (true);
 	}
 	
 	
@@ -107,12 +102,13 @@ public class Xadrez {
 					m.unPrintPossivel ();
 				}
 				if (a_ser_feito != null) {
+					// joga movimento no log
+					a_ser_feito.jogaNoLog ();
+					
 					// move, e troca jogador
 					a_ser_feito.mover (jogador_da_vez);
 					trocaJogador ();
 
-					// joga movimento no log e cria snapshot
-					a_ser_feito.jogaNoLog ();
 					
 					/*  snapshots  */
 					snap_atual++;
@@ -120,7 +116,7 @@ public class Xadrez {
 					if (snap_atual < historico.size ()) {
 						historico.removeAll (historico.subList (snap_atual, historico.size ()));
 					}
-					historico.add (new Snapshot (snap_atual, a_ser_feito));
+					historico.add (new Snapshot (a_ser_feito));
 					
 				}
 				casa_marcada = false;
@@ -136,6 +132,7 @@ public class Xadrez {
 			snap_atual--;
 
 			historico.get (snap_atual).povoaTabuleiro (J1, J2);
+			Gui.getTela ().unlogMovimento (historico.get (snap_atual).getLog ());
 
 			trocaJogador ();
 		}
@@ -148,6 +145,7 @@ public class Xadrez {
 			snap_atual++;
 
 			historico.get (snap_atual).povoaTabuleiro (J1, J2);
+			historico.get (snap_atual).getMov ().jogaNoLog ();
 			
 			trocaJogador ();
 		}
@@ -190,7 +188,7 @@ public class Xadrez {
 		Tabuleiro.getTabuleiro ().novoJogo ();
 		// limpa o histórico de jogadas, pondo o snap do tabuleiro inicial
 		historico.clear ();
-		historico.add (new Snapshot (0, null));
+		historico.add (new Snapshot (null));
 		snap_atual = 0;
 		// reinicia os jogadores
 		J1.novoJogo ();

@@ -126,7 +126,7 @@ public class Movimento {
 		if (aux != null) {
 			notacao_extra = "x" + aux;
 		}
-		
+
 		String str = new String ();			// exemplo de notação
 		str += donde.getPeca ();			// D (peça)
 		str += notacao_extra;
