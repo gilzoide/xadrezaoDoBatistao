@@ -55,12 +55,12 @@ public class Log {
 	}
 	
 	/**
-	 * Se desfez o movimento, retira do log
+	 * Refaz o log
 	 * 
-	 * @param mov Movimento anterior (pra saber a string 'anterior')
+	 * @param log string a ser escrita no log
 	 */
-	public void removeMovimento (String anterior) {
-		log.setText (anterior);
+	public void setLogText (String log) {
+		this.log.setText (log);
 		cor = cor.oposta ();
 	}
 	

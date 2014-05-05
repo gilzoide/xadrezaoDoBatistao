@@ -1,6 +1,11 @@
 # text backups
 *~
-*/*~
+*.swp
+
+# ctags
+tags
+# vim session
+all
 
 # zip
 *.zip

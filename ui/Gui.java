@@ -19,6 +19,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.Random;
+import java.applet.Applet;
+import java.applet.AudioClip;
+import java.io.File;
+import java.net.MalformedURLException;
 
 import javax.swing.KeyStroke;
 import javax.swing.JFrame;
@@ -81,6 +85,14 @@ public class Gui extends JFrame {
 				System.out.println ("SplashScreen não especificada. Por favor, rode o programa com a opção '-splash:ui/img/splash.png'");
 			}
 			else {
+				try {
+					AudioClip entrada = Applet.newAudioClip (new File ("audio/entrada.wav").toURI ().toURL ());
+					entrada.loop ();
+				}
+				catch (MalformedURLException e) {
+					System.out.println ("Audio não encontrado!");
+				}
+				
 				try {
 					Thread.sleep (1000);
 				}
@@ -417,8 +429,8 @@ public class Gui extends JFrame {
 	public void logMovimento (Movimento mov) {
 		log.addMovimento (mov);
 	}
-	public void unlogMovimento (String anterior) {
-		log.removeMovimento (anterior);
+	public void setLog (String log) {
+		this.log.setLogText (log);
 	}
 	public String getLog () {
 		return log.getTextArea ().getText ();

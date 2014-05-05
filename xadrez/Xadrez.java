@@ -132,7 +132,7 @@ public class Xadrez {
 			snap_atual--;
 
 			historico.get (snap_atual).povoaTabuleiro (J1, J2);
-			Gui.getTela ().unlogMovimento (historico.get (snap_atual).getLog ());
+			Gui.getTela ().setLog (historico.get (snap_atual).getLog ());
 
 			trocaJogador ();
 		}
@@ -145,7 +145,7 @@ public class Xadrez {
 			snap_atual++;
 
 			historico.get (snap_atual).povoaTabuleiro (J1, J2);
-			historico.get (snap_atual).getMov ().jogaNoLog ();
+			Gui.getTela ().setLog (historico.get (snap_atual).getLog ());
 			
 			trocaJogador ();
 		}
