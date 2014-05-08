@@ -27,10 +27,10 @@ public class Peao extends Peca {
 	 * 		NADA: se passou a chance de 'en passant', já era, tem mais nada não
 	 */
 	private enum Estado {
+		NADA,	// acabaram os estados especiais
 		PRIMEIRA,	// primeira jogada: posso mover duas
 		MOVI_DUAS,	// movi duas casas: tenho que poder ser tomado por en passant
-		EN_PASSANT,	// posso ser tomado por en passant
-		NADA;	// acabaram os estados especiais
+		EN_PASSANT;	// posso ser tomado por en passant
 	};
 	
 	private Estado estado;
@@ -47,6 +47,15 @@ public class Peao extends Peca {
 	}
 	public Peao (Cor nova_cor, int linha, int coluna) {
 		this (nova_cor, new Point (coluna, linha));
+	}
+	public Peao (Cor nova_cor, int linha, int coluna, int estado) {
+		this (nova_cor, new Point (coluna, linha));
+		switch (estado) {
+			case 1: this.estado = Estado.PRIMEIRA; break;
+			case 2: this.estado = Estado.MOVI_DUAS; break;
+			case 3: this.estado = Estado.EN_PASSANT; break;
+			default: this.estado = Estado.NADA;
+		}
 	}
 	
 	
@@ -161,7 +170,7 @@ public class Peao extends Peca {
 	
 	@Override
 	public byte getMask () {
-		int aux = (cor == Cor.BRANCO) ? 8 : 0;
-		return (byte) (1 + aux);
+		byte aux = super.getMask ();
+		return (byte) ((estado.ordinal () << 5) + 12 + aux);
 	}
 }

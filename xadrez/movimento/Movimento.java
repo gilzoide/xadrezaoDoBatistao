@@ -21,7 +21,9 @@ import java.awt.Point;
 
 import javax.swing.ImageIcon;
 
-public class Movimento {
+import java.io.Serializable;
+
+public class Movimento implements Serializable {
 	protected Casa donde, pronde;		// Casas: donde saiu, pronde vai
 	protected boolean posso;	// Posso fazer esse movimento? Bom, só saberei depois de simular o movimento
 	
@@ -166,5 +168,8 @@ public class Movimento {
 	}
 	public static int getNumMovs () {
 		return num;
+	}
+	public Casa getDonde () {
+		return donde;
 	}
 }

@@ -104,7 +104,7 @@ public class Torre extends Peca {
 	
 	@Override
 	public byte getMask () {
-		int aux = (cor == Cor.BRANCO) ? 8 : 0;
+		byte aux = super.getMask ();
 		return (byte) (2 + aux);
 	}
 }

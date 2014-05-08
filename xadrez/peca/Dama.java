@@ -104,7 +104,7 @@ public class Dama extends Peca {
 	
 	@Override
 	public byte getMask () {
-		int aux = (cor == Cor.BRANCO) ? 8 : 0;
-		return (byte) (5 + aux);
+		byte aux = super.getMask ();
+		return (byte) (8 + aux);
 	}
 }

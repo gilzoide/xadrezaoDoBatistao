@@ -15,12 +15,14 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+import java.io.Serializable;
+
 /**
  * Peças do jogo de xadrez
  * 
  * É abstrata, pois não faz sentido se ter uma instancia de peça
  */
-public abstract class Peca {
+public abstract class Peca implements Serializable {
 	protected Cor cor;	/// cor da peça
 	
 	protected Point coord;	/// coordenada da peça
@@ -88,7 +90,9 @@ public abstract class Peca {
 	/**
 	 * @return byte de máscara da peça
 	 */
-	public abstract byte getMask ();
+	public byte getMask () {
+		return (byte) ((cor == Cor.BRANCO) ? 1 : 0);
+	}
 	
 	public Cor getCor () {
 		return this.cor;

@@ -23,28 +23,51 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
+import java.io.Serializable;
+
+
+/**
+ * Uma partida!
+ */
+class Partida implements Serializable {
+	ArrayList<Snapshot> historico;	// guarda o histórico de snapshots
+	int snap_atual;	// snap atual
+
+	/**
+	 * Ctor
+	 */
+	Partida () {
+		historico = new ArrayList<> ();
+	}
+
+	void novoJogo () {
+		// limpa o histórico de jogadas, pondo o snap do tabuleiro inicial
+		historico.clear ();
+		historico.add (new Snapshot (null));
+		snap_atual = 0;
+	}
+}
+
 
 /**
  * Xadrez é a classe motora do jogo, com main e muito mais!
  */
 public class Xadrez {
-	private	static Jogador J1;
+	private static Jogador J1;
 	private static Jogador J2;
 	private static Jogador jogador_da_vez;
-	
-	private static ArrayList<Snapshot> historico;	// guarda o histórico de snapshots
-	private static int snap_atual;	// snap atual
-	
+	private static Partida P;
+
 	private static boolean partida;	// a partida tá rolando?
-	
+
 	/**
 	 * Ctor, a ser chamado ali em 'jogar' - inicia o motor do jogo (com os 'new')
 	 */
 	private Xadrez () {
 		J1 = new Jogador (Cor.BRANCO);
 		J2 = new Jogador (Cor.PRETO);
+		P = new Partida ();
 		mov = new ArrayList<> ();
-		historico = new ArrayList<> ();
 	}
 	
 	/**
@@ -70,10 +93,10 @@ public class Xadrez {
 	 * 
 	 * Há dois estados: peça não marcada / peça marcada
 	 */
-	public void cliquei (Point P) {
+	public void cliquei (Point p) {
 		if (partida) {
 			// casa clicada
-			Casa atual = Tabuleiro.getTabuleiro ().getCasa (P);
+			Casa atual = Tabuleiro.getTabuleiro ().getCasa (p);
 			if (casa_marcada == false) {
 				// se tem peça lá dentro
 				if (atual.estaOcupadaCor (jogador_da_vez.getCor ())) {
@@ -94,7 +117,7 @@ public class Xadrez {
 				// pra cada movimento anteriormente previso,
 				for (Movimento m : mov) {
 					// vê se o clicado atual é um movimento previsto
-					if (m.ehEsseMovimento (P)) {
+					if (m.ehEsseMovimento (p)) {
 						// se sim, marca pra mover lá!
 						a_ser_feito = m;
 					}
@@ -111,12 +134,12 @@ public class Xadrez {
 
 					
 					/*  snapshots  */
-					snap_atual++;
+					P.snap_atual++;
 					// se tava desfeito movimento, remove os que tinha pra frente
-					if (snap_atual < historico.size ()) {
-						historico.removeAll (historico.subList (snap_atual, historico.size ()));
+					if (P.snap_atual < P.historico.size ()) {
+						P.historico.removeAll (P.historico.subList (P.snap_atual, P.historico.size ()));
 					}
-					historico.add (new Snapshot (a_ser_feito));
+					P.historico.add (new Snapshot (a_ser_feito));
 					
 				}
 				casa_marcada = false;
@@ -128,32 +151,42 @@ public class Xadrez {
 	 * Desfaz o último movimento
 	 */
 	public void desfazerMovimento () {
-		if (snap_atual > 0) {
-			snap_atual--;
+		if (P.snap_atual > 0) {
+			P.snap_atual--;
 
-			historico.get (snap_atual).povoaTabuleiro (J1, J2);
-			Gui.getTela ().setLog (historico.get (snap_atual).getLog ());
-
-			trocaJogador ();
+			refreshSnap ();
 		}
 	}
 	/**
 	 * Refaz o último movimento
 	 */
 	public void refazerMovimento () {
-		if (snap_atual < historico.size () - 1) {
-			snap_atual++;
+		if (P.snap_atual < P.historico.size () - 1) {
+			P.snap_atual++;
 
-			historico.get (snap_atual).povoaTabuleiro (J1, J2);
-			Gui.getTela ().setLog (historico.get (snap_atual).getLog ());
-			
-			trocaJogador ();
+			refreshSnap ();
 		}
 	}
+	
+	public void refreshSnap () {
+		if (partida) {
+			P.historico.get (P.snap_atual).povoaTabuleiro (J1, J2);
+			Gui.getTela ().setLog (P.historico.get (P.snap_atual).getLog ());
+			
+			trocaJogador (P.snap_atual % 2 == 0 ? J1 : J2);
+		}
+	}
+	
 	
 	/**
 	 * Inverte o jogador - passa a vez
 	 */
+	private void trocaJogador (Jogador J) {
+		if (J == jogador_da_vez)
+			jogador_da_vez = outroJogador ();
+
+		trocaJogador ();
+	}
 	private void trocaJogador () {
 		if (partida) {
 			// peões que tinham andado 2 casas agora não podem mais ser tomados por en passant
@@ -176,20 +209,14 @@ public class Xadrez {
 	private Jogador outroJogador () {
 		return (jogador_da_vez == J1) ? J2 : J1;
 	}
-	/* GETTERS */
-	public static Jogador getDaVez () {
-		return jogador_da_vez;
-	}
+	
 	/**
 	 * Começa um novo jogo!
 	 */
 	public static void novoJogo () {
 		// reconstrói as peças no tabuleiro
 		Tabuleiro.getTabuleiro ().novoJogo ();
-		// limpa o histórico de jogadas, pondo o snap do tabuleiro inicial
-		historico.clear ();
-		historico.add (new Snapshot (null));
-		snap_atual = 0;
+		P.novoJogo ();
 		// reinicia os jogadores
 		J1.novoJogo ();
 		J2.novoJogo ();
@@ -206,5 +233,17 @@ public class Xadrez {
 	 */
 	public static void acabaPartida () {
 		partida = false;
+	}
+	
+	/* GETTERS */
+	public static Jogador getDaVez () {
+		return jogador_da_vez;
+	}
+	// getP é pelo pacote, pra só o SessionManager ver
+	public Partida getPartida () {
+		return P;
+	}
+	public void setPartida (Partida P) {
+		this.P = P;
 	}
 }

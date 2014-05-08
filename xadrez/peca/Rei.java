@@ -133,7 +133,7 @@ public class Rei extends Peca {
 	
 	@Override
 	public byte getMask () {
-		int aux = (cor == Cor.BRANCO) ? 8 : 0;
-		return (byte) (6 + aux);
+		byte aux = super.getMask ();
+		return (byte) (10 + aux);
 	}
 }

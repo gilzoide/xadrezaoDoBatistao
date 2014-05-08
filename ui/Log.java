@@ -10,7 +10,6 @@ import javax.swing.JTextArea;
 
 public class Log {
 	private JTextArea log;
-	Cor cor;
 	
 	/**
 	 * Ctor - constrói o log
@@ -22,7 +21,6 @@ public class Log {
 	}
 	
 	public void novoJogo () {
-		cor = Cor.BRANCO;
 		log.setText ("");
 		log.append ("         Log de Jogadas\n");
 		log.append ("Branco\tPreto\n");
@@ -31,7 +29,7 @@ public class Log {
 	/**
 	 * Adiciona uma linha no log
 	 */
-	public void addLinha (String str) {
+	public void addLinha (String str, Cor cor) {
 		if (cor == Cor.BRANCO)
 			log.append ("\n" + str);
 		else
@@ -50,8 +48,7 @@ public class Log {
 	 * Adiciona ao log a notação escrita do movimento 'mov'
 	 */
 	public void addMovimento (Movimento mov) {
-		addLinha (mov.notacaoEscrita ());
-		cor = cor.oposta ();
+		addLinha (mov.notacaoEscrita (), mov.getDonde ().getPeca ().getCor ());
 	}
 	
 	/**
@@ -61,7 +58,6 @@ public class Log {
 	 */
 	public void setLogText (String log) {
 		this.log.setText (log);
-		cor = cor.oposta ();
 	}
 	
 	/* GETTERS */

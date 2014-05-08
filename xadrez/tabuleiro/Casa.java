@@ -12,10 +12,12 @@ import java.awt.Point;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
+import java.io.Serializable;
+
 /**
  * Cada casa do tabuleiro: tem uma cor e possivelmente uma peça
  */
-public class Casa {
+public class Casa implements Serializable {
 	private Peca peca;
 	private Point coord;
 	/**

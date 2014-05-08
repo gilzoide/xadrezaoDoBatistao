@@ -4,7 +4,9 @@
  */
 package ui;
 
-public enum Cor {
+import java.io.Serializable;
+
+public enum Cor implements Serializable {
 	BRANCO,
 	PRETO,
 	// específicos de domínio na casa

@@ -33,10 +33,12 @@ $(pacotes) :
 
 # manda editar todos os .java
 edit:
-	gedit `locate .java | grep xadrezao`
+	geany `locate .java | grep xadrezao`
 
 # roda o projeto compilado
 run :
+	@java -classpath $(BUILD) xadrez.Xadrez
+run_splash :
 	@java -splash:ui/img/splash.png -classpath $(BUILD) xadrez.Xadrez
 
 debug :

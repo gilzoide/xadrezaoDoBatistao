@@ -12,6 +12,8 @@ import ui.Jogador;
 
 import java.util.ArrayList;
 
+import java.io.Serializable;
+
 /**
  * Snapshot é um snapshot do tabuleiro.
  * 
@@ -23,7 +25,7 @@ import java.util.ArrayList;
  * 	 + se >0, BRANCO moveu;
  * 	 + se <0, PRETO moveu.
  */
-public class Snapshot implements Comparable<Snapshot> {
+public class Snapshot implements Comparable<Snapshot>, Serializable {
 	private byte[] snap;	/// o snapshot em si (em um vetor 8x8=64)
 	private Movimento mov;	/// movimento que deu origem a esse snap; null pra início de jogo
 	private String log;		/// log naquele momento
@@ -63,28 +65,25 @@ public class Snapshot implements Comparable<Snapshot> {
 		Tabuleiro tab = Tabuleiro.getTabuleiro ();
 		int cont = 0;
 		
+		ArrayList<Peca> todas = new ArrayList<> ();
 		ArrayList<Peca> brancas = new ArrayList<> ();
 		ArrayList<Peca> pretas = new ArrayList<> ();
 		Peca aux;
 		
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				switch (snap[cont]) {
-					// peças brancas
-					case 9:	 aux = new Peao (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); 	brancas.add (aux); break;
-					case 10: aux = new Torre (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); 	brancas.add (aux); break;
-					case 11: aux = new Cavalo (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); brancas.add (aux); break;
-					case 12: aux = new Bispo (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux);	brancas.add (aux); break;
-					case 13: aux = new Dama (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); 	brancas.add (aux); break;
-					case 14: aux = new Rei (Cor.BRANCO, i, j); tab.getCasa (i, j).setPeca (aux); 	brancas.add (aux); break;
-					
-					// peças pretas
-					case 1: aux = new Peao (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
-					case 2: aux = new Torre (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
-					case 3: aux = new Cavalo (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
-					case 4: aux = new Bispo (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
-					case 5: aux = new Dama (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 	pretas.add (aux); break;
-					case 6: aux = new Rei (Cor.PRETO, i, j); tab.getCasa (i, j).setPeca (aux); 		pretas.add (aux); break;
+				// vê a cor do sujeito (racismo =/)
+				Cor cor = (snap[cont] % 2 == 0) ? Cor.PRETO : Cor.BRANCO;
+				
+				switch (snap[cont] & 0b1110) {
+					// alguém
+					case 2: aux = new Torre (cor, i, j); tab.getCasa (i, j).setPeca (aux); todas.add (aux); break;
+					case 4: aux = new Cavalo (cor, i, j); tab.getCasa (i, j).setPeca (aux); todas.add (aux); break;
+					case 6: aux = new Bispo (cor, i, j); tab.getCasa (i, j).setPeca (aux); todas.add (aux); break;
+					case 8: aux = new Dama (cor, i, j); tab.getCasa (i, j).setPeca (aux); todas.add (aux); break;
+					case 10: aux = new Rei (cor, i, j); tab.getCasa (i, j).setPeca (aux); todas.add (aux); break;
+					// em especial, um peão
+					case 12: aux = new Peao (cor, i, j, snap[cont] >>> 5); tab.getCasa (i, j).setPeca (aux); todas.add (aux); break;
 					
 					// ninguém
 					default: tab.getCasa (i, j).setPeca (null);
@@ -96,6 +95,12 @@ public class Snapshot implements Comparable<Snapshot> {
 		}
 		tab.refreshTabuleiro ();
 		
+		for (Peca P : todas) {
+			if (P.getCor () == Cor.BRANCO)
+				brancas.add (P);
+			else
+				pretas.add (P);
+		}
 		branco.setPecas (brancas);
 		preto.setPecas (pretas);
 	}

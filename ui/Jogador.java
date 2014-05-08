@@ -15,7 +15,9 @@ import xadrez.peca.PromoveuException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Jogador {
+import java.io.Serializable;
+
+public class Jogador implements Serializable {
 	private Cor cor;
 	private String nome;	// nome do jogador; padrão: "Jogador 'cor'"
 	/// Referências de peças importantes (que têm update);

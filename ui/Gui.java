@@ -5,6 +5,7 @@
 package ui;
 
 import xadrez.Xadrez;
+import xadrez.SessionManager;
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
 import xadrez.movimento.Movimento;
@@ -21,8 +22,9 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 import java.applet.Applet;
 import java.applet.AudioClip;
-import java.io.File;
 import java.net.MalformedURLException;
+
+import java.io.*;
 
 import javax.swing.KeyStroke;
 import javax.swing.JFrame;
@@ -46,6 +48,8 @@ import javax.swing.AbstractAction;
  */
 public class Gui extends JFrame {
 	private static Gui tela = new Gui ();
+	private SessionManager sessao;
+	private Xadrez motor;
 
 	public static Gui getTela () {
 		return tela;
@@ -78,11 +82,13 @@ public class Gui extends JFrame {
 	 * Inicializa o tabuleiro, menu e log
 	 */
 	public void init (Xadrez motor) {
+		this.motor = motor;
+
 		// splash screen
 		try {
 			SplashScreen window = SplashScreen.getSplashScreen ();
 			if (window == null) {
-				System.out.println ("SplashScreen não especificada. Por favor, rode o programa com a opção '-splash:ui/img/splash.png'");
+				System.out.println ("SplashScreen não especificada. Para mostrá-la, rode o programa com a opção '-splash:ui/img/splash.png'");
 			}
 			else {
 				try {
@@ -108,14 +114,16 @@ public class Gui extends JFrame {
 		}
 
 		// resto dos trem
+		sessao = new SessionManager ();
+
 		JPanel panel = new JPanel ();
 		getContentPane ().add (panel);
 		panel.setLayout (null);
 		
 		montaQuemJoga (panel);
-		montaTabuleiro (panel, motor);
+		montaTabuleiro (panel);
 		montaLog (panel);
-		menu (panel, motor);
+		menu (panel);
 		
 		novoJogo ();
 		
@@ -125,7 +133,7 @@ public class Gui extends JFrame {
 	/**
 	 * monta o tabuleiro em botões
 	 */
-	private void montaTabuleiro (JPanel panel, final Xadrez motor) {
+	private void montaTabuleiro (JPanel panel) {
 		// cada casa é um botão
 		for (byte i = 0; i < 8; i++) {
 			// escreve o número da linha
@@ -187,7 +195,7 @@ public class Gui extends JFrame {
 	/**
 	 * monta o menu
 	 */
-	private void menu (JPanel panel, final Xadrez motor) {
+	private void menu (JPanel panel) {
 		JMenuBar barra = new JMenuBar ();
 		// MENU 'jogo'
 		JMenu Jogo = new JMenu ("Jogo");
@@ -214,6 +222,48 @@ public class Gui extends JFrame {
 			}
 		});
 		
+		// Item 'carregar jogo'
+		JMenuItem Carregar = new JMenuItem ("Carregar jogo		^O");
+		Carregar.setMnemonic (KeyEvent.VK_C);
+		Carregar.setToolTipText ("Carrega um jogo salvo");
+		Jogo.add (Carregar);
+		//ctrlO Carrega jogo salvo
+		Carregar.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK), "carregar");
+		Carregar.getActionMap ().put ("carregar", new AbstractAction () {
+			@Override
+			public void actionPerformed (ActionEvent event) {
+				carregarJogo ();
+			}
+		});
+
+		Carregar.addActionListener (new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				carregarJogo ();
+			}
+		});
+
+		// Item 'salvar jogo'
+		JMenuItem Salvar = new JMenuItem ("Salvar jogo		^S");
+		Salvar.setMnemonic (KeyEvent.VK_V);
+		Salvar.setToolTipText ("Salva a partida atual, no estado atual");
+		Jogo.add (Salvar);
+		//ctrlO Carrega jogo salvo
+		Salvar.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), "salvar");
+		Salvar.getActionMap ().put ("salvar", new AbstractAction () {
+			@Override
+			public void actionPerformed (ActionEvent event) {
+				salvarJogo ();
+			}
+		});
+
+		Salvar.addActionListener (new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				salvarJogo ();
+			}
+		});
+
 		// Item 'desfazer movimento'
 		JMenuItem Desfazer = new JMenuItem ("Desfazer Movimento   ^Z");
 		Desfazer.setMnemonic (KeyEvent.VK_D);
@@ -351,6 +401,43 @@ public class Gui extends JFrame {
 		log.novoJogo ();
 		quem_joga.setForeground (Color.BLACK);
 		quem_joga.setText ("Jogador BRANCO, comece o jogo!");
+	}
+
+	/**
+	 * Salva a partida atual
+	 */
+	private void salvarJogo () {
+		try {
+			sessao.setPartida (motor.getPartida ());
+			sessao.salvaPartida ("save.dat");
+			System.out.println ("Partida salva!");
+		}
+		catch (IOException ex) {
+			System.out.println ("Tentativa de salvar partida: " + ex.getCause ());
+		}
+	}
+	/**
+	 * Carrega a partida salva
+	 */
+	private void carregarJogo () {
+		try {
+			sessao.carregaPartida ("save.dat");
+			motor.setPartida (sessao.getPartida ());
+			motor.refreshSnap ();
+			System.out.println ("Partida carregada!");
+		}
+		catch (FileNotFoundException ex) {
+			System.out.println ("Tentativa de carregar partida: arquivo não encontrado!");
+		}
+		catch (ObjectStreamException ex) {
+			System.out.println ("Tentativa de carregar partida: falha no stream do objeto\n" + ex.getCause ());
+		}
+		catch (IOException ex) {
+			System.out.println ("Tentativa de carregar partida: falha na abertura de arquivo\n" + ex.getCause ());
+		}
+		catch (ClassNotFoundException ex) {
+			
+		}
 	}
 	
 	/**
