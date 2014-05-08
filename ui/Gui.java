@@ -28,6 +28,7 @@ import java.io.*;
 
 import javax.swing.KeyStroke;
 import javax.swing.JFrame;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -42,6 +43,9 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingConstants;
 import javax.swing.AbstractAction;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+
 
 /**
  * Gui: padrão singleton em POO, já que a tela é única e sem frescura
@@ -408,9 +412,21 @@ public class Gui extends JFrame {
 	 */
 	private void salvarJogo () {
 		try {
-			sessao.setPartida (motor.getPartida ());
-			sessao.salvaPartida ("save.dat");
-			System.out.println ("Partida salva!");
+			// uma janelinha pra escolher o arquivo
+			JFileChooser browser = new JFileChooser (".");
+			FileNameExtensionFilter filtro = new FileNameExtensionFilter ("Jogos salvos", "sav");
+			browser.addChoosableFileFilter (filtro);
+			browser.setFileFilter (filtro);
+			
+			if (browser.showSaveDialog (this) == JFileChooser.APPROVE_OPTION) {
+				File file = browser.getSelectedFile ();
+				if (!file.toString ().endsWith (".sav"))
+					file = new File (file + ".sav");
+				
+				sessao.setPartida (motor.getPartida ());
+				sessao.salvaPartida (file);
+				System.out.println ("Partida salva!");				
+			}			
 		}
 		catch (IOException ex) {
 			System.out.println ("Tentativa de salvar partida: " + ex.getCause ());
@@ -421,10 +437,24 @@ public class Gui extends JFrame {
 	 */
 	private void carregarJogo () {
 		try {
-			sessao.carregaPartida ("save.dat");
-			motor.setPartida (sessao.getPartida ());
-			motor.refreshSnap ();
-			System.out.println ("Partida carregada!");
+			// uma janelinha pra escolher o arquivo
+			JFileChooser browser = new JFileChooser (".");
+			FileNameExtensionFilter filtro = new FileNameExtensionFilter ("Jogos salvos", "sav");
+			browser.addChoosableFileFilter (filtro);
+			browser.setFileFilter (filtro);
+			
+			if (browser.showOpenDialog (this) == JFileChooser.APPROVE_OPTION) {
+				File file = browser.getSelectedFile ();
+				if (!file.toString ().endsWith (".sav"))
+					file = new File (file + ".sav");
+				
+				sessao.carregaPartida (file);
+				motor.setPartida (sessao.getPartida ());
+				motor.refreshSnap ();
+				System.out.println ("Partida carregada!");
+			}
+			
+			
 		}
 		catch (FileNotFoundException ex) {
 			System.out.println ("Tentativa de carregar partida: arquivo não encontrado!");

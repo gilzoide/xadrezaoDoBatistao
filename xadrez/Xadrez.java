@@ -28,15 +28,21 @@ import java.io.Serializable;
 
 /**
  * Uma partida!
+ * 
+ * Tem tudo o que deve ser salvo na vida
  */
 class Partida implements Serializable {
 	ArrayList<Snapshot> historico;	// guarda o histórico de snapshots
 	int snap_atual;	// snap atual
+	Jogador J1;
+	Jogador J2;
 
 	/**
 	 * Ctor
 	 */
 	Partida () {
+		J1 = new Jogador (Cor.BRANCO);
+		J2 = new Jogador (Cor.PRETO);
 		historico = new ArrayList<> ();
 	}
 
@@ -45,6 +51,13 @@ class Partida implements Serializable {
 		historico.clear ();
 		historico.add (new Snapshot (null));
 		snap_atual = 0;
+		
+		// reinicia os jogadores
+		J1.novoJogo ();
+		J2.novoJogo ();
+		// checa movimentos possíveis
+		J1.update ();
+		J2.update ();		
 	}
 }
 
@@ -53,8 +66,6 @@ class Partida implements Serializable {
  * Xadrez é a classe motora do jogo, com main e muito mais!
  */
 public class Xadrez {
-	private static Jogador J1;
-	private static Jogador J2;
 	private static Jogador jogador_da_vez;
 	private static Partida P;
 
@@ -64,8 +75,6 @@ public class Xadrez {
 	 * Ctor, a ser chamado ali em 'jogar' - inicia o motor do jogo (com os 'new')
 	 */
 	private Xadrez () {
-		J1 = new Jogador (Cor.BRANCO);
-		J2 = new Jogador (Cor.PRETO);
 		P = new Partida ();
 		mov = new ArrayList<> ();
 	}
@@ -170,10 +179,10 @@ public class Xadrez {
 	
 	public void refreshSnap () {
 		if (partida) {
-			P.historico.get (P.snap_atual).povoaTabuleiro (J1, J2);
+			P.historico.get (P.snap_atual).povoaTabuleiro (P.J1, P.J2);
 			Gui.getTela ().setLog (P.historico.get (P.snap_atual).getLog ());
 			
-			trocaJogador (P.snap_atual % 2 == 0 ? J1 : J2);
+			trocaJogador (P.snap_atual % 2 == 0 ? P.J2 : P.J1);
 		}
 	}
 	
@@ -182,8 +191,7 @@ public class Xadrez {
 	 * Inverte o jogador - passa a vez
 	 */
 	private void trocaJogador (Jogador J) {
-		if (J == jogador_da_vez)
-			jogador_da_vez = outroJogador ();
+		jogador_da_vez = J;
 
 		trocaJogador ();
 	}
@@ -207,7 +215,7 @@ public class Xadrez {
 		}
 	}
 	private Jogador outroJogador () {
-		return (jogador_da_vez == J1) ? J2 : J1;
+		return (jogador_da_vez == P.J1) ? P.J2 : P.J1;
 	}
 	
 	/**
@@ -217,14 +225,8 @@ public class Xadrez {
 		// reconstrói as peças no tabuleiro
 		Tabuleiro.getTabuleiro ().novoJogo ();
 		P.novoJogo ();
-		// reinicia os jogadores
-		J1.novoJogo ();
-		J2.novoJogo ();
-		// checa movimentos possíveis
-		J1.update ();
-		J2.update ();
 		// só pra constar, o jogador branco é que começa
-		jogador_da_vez = J1;
+		jogador_da_vez = P.J1;
 		// jogo tá rolando!
 		partida = true;
 	}

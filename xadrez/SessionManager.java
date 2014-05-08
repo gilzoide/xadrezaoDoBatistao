@@ -15,15 +15,15 @@ public class SessionManager {
 	/**
 	 * Salva a partida
 	 */
-	public void salvaPartida (String filename) throws IOException {
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename));
+	public void salvaPartida (File file) throws IOException {
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
 		out.writeObject (partida);
 	}
 	/**
 	 * Carrega partida
 	 */
-	public void carregaPartida (String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
+	public void carregaPartida (File file) throws FileNotFoundException, IOException, ClassNotFoundException {
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 		partida = (Partida) in.readObject ();
 	}
 
