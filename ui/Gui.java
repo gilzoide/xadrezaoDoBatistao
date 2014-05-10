@@ -13,7 +13,9 @@ import xadrez.movimento.Movimento;
 import java.awt.SplashScreen;
 import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.ActionEvent;
@@ -26,23 +28,7 @@ import java.net.MalformedURLException;
 
 import java.io.*;
 
-import javax.swing.KeyStroke;
-import javax.swing.JFrame;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingConstants;
-import javax.swing.AbstractAction;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
@@ -51,13 +37,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * Gui: padrão singleton em POO, já que a tela é única e sem frescura
  */
 public class Gui extends JFrame {
+	// Single...
 	private static Gui tela = new Gui ();
-	private SessionManager sessao;
-	private Xadrez motor;
-
 	public static Gui getTela () {
 		return tela;
 	}
+	// ...ton
+	
+	private SessionManager sessao;
+	private Xadrez motor;
 
 	/**
 	 * Constantes
@@ -66,9 +54,9 @@ public class Gui extends JFrame {
 	final private int TAM_TABULEIRO = TAM_QUADRADO * 8;	/// tamanho do lado do tabuleiro
 	
 	final private Point TAM_JANELA = new Point (800, 600);	/// tamanho total da janela
-	final private Point INICIO_TABULEIRO = new Point (110, 50);	/// início do tabuleiro (pra n ficar hardcodando se quiser trocar)
+	final private Point INICIO_TABULEIRO = new Point (10, 37);	/// início do tabuleiro (pra n ficar hardcodando se quiser trocar)
 	final private Point TAM_LOG = new Point (180, (int) TAM_TABULEIRO);	/// tamanho do log de movimentos
-	final private Point INICIO_LOG = new Point ((int) INICIO_TABULEIRO.getX () + TAM_TABULEIRO + 10, (int) INICIO_TABULEIRO.getY ());	/// início do log de movimentos #xupa hardcode
+	final private Point INICIO_LOG = new Point (0, 0);	/// início do log de movimentos #xupa hardcode
 	
 	private JLabel quem_joga;	// JLabel que escreve de quem é a vez
 	private Log log;		// lugar pra escrever o log de jogadas
@@ -78,7 +66,7 @@ public class Gui extends JFrame {
 	 */
 	private Gui () {
 		setTitle ("Xadrezão do Batistão");
-		setSize ((int) TAM_JANELA.getX (), (int) TAM_JANELA.getY ());		// 800x600, é um tamanho bom
+		setSize ((int) TAM_JANELA.getX (), (int) TAM_JANELA.getY ());		// 800x600, é um tamanho bom; clááááássico SVGA
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation (EXIT_ON_CLOSE);
 	}
@@ -88,9 +76,9 @@ public class Gui extends JFrame {
 	public void init (Xadrez motor) {
 		this.motor = motor;
 
-		// splash screen
+		// abre splash screen
+		SplashScreen window = SplashScreen.getSplashScreen ();
 		try {
-			SplashScreen window = SplashScreen.getSplashScreen ();
 			if (window == null) {
 				System.out.println ("SplashScreen não especificada. Para mostrá-la, rode o programa com a opção '-splash:ui/img/splash.png'");
 			}
@@ -102,35 +90,38 @@ public class Gui extends JFrame {
 				catch (MalformedURLException e) {
 					System.out.println ("Audio não encontrado!");
 				}
-				
-				try {
-					Thread.sleep (1000);
-				}
-				catch(InterruptedException e) {
-					System.out.println ("mataram a splash screen");
-					System.exit (0);
-				}
-				window.close ();
 			}
 		}
 		catch (UnsupportedOperationException e) {
-			System.out.println ("SplashScreen não suportado");
+			System.out.println ("SplashScreen não suportada");
 		}
 
-		// resto dos trem
+		// constrói resto dos trem; enquanto isso, a splashscreen ainda tá lá
 		sessao = new SessionManager ();
 
-		JPanel panel = new JPanel ();
-		getContentPane ().add (panel);
-		panel.setLayout (null);
+		JPanel tab = new JPanel ();
+		tab.setLayout (null);
+		JPanel log = new JPanel ();
+		JPanel rel = new JPanel ();
+		rel.setLayout (new BorderLayout ());
+		getContentPane ().add (tab, BorderLayout.CENTER);
+		getContentPane ().add (log, BorderLayout.LINE_END);
+		getContentPane ().add (rel, BorderLayout.PAGE_START);
 		
-		montaQuemJoga (panel);
-		montaTabuleiro (panel);
-		montaLog (panel);
-		menu (panel);
+		montaQuemJoga (tab);
+		montaTabuleiro (tab);
+		montaLog (log);
+		menu ();
+		montaRelojs (rel);
 		
 		novoJogo ();
 		
+		// fecha splash screen
+		if (window != null) {
+			window.close ();
+		}
+		
+		// mostra janela do jogo
 		setVisible (true);
 	}
 
@@ -192,14 +183,15 @@ public class Gui extends JFrame {
 	private void montaLog (JPanel panel) {
 		log = new Log (20, 1);
 		JScrollPane scroller = new JScrollPane (log.getTextArea ());
-		scroller.setBounds ((int) INICIO_LOG.getX (), (int) INICIO_LOG.getY (), (int) TAM_LOG.getX (), (int) TAM_LOG.getY ());
+		//~ scroller.setBounds ((int) INICIO_LOG.getX (), (int) INICIO_LOG.getY (), (int) TAM_LOG.getX (), (int) TAM_LOG.getY ());
+		scroller.setPreferredSize (new Dimension ((int) TAM_LOG.getX (), (int) TAM_LOG.getY ()));
 		
-		panel.add (scroller);
+		panel.add (scroller, BorderLayout.CENTER);
 	}
 	/**
 	 * monta o menu
 	 */
-	private void menu (JPanel panel) {
+	private void menu () {
 		JMenuBar barra = new JMenuBar ();
 		// MENU 'jogo'
 		JMenu Jogo = new JMenu ("Jogo");
@@ -393,6 +385,23 @@ public class Gui extends JFrame {
 
 		setJMenuBar (barra);
 	}
+	
+	/**
+	 * Monta os relógios
+	 */
+	private void montaRelojs (JPanel panel) {
+		Relogio R = motor.getRelogio ();
+		new Thread (R).start ();
+		panel.add (R, BorderLayout.CENTER);
+		
+		R = Xadrez.getDaVez ().getRelogio ();
+		new Thread (R).start ();
+		panel.add (R, BorderLayout.LINE_START);
+		
+		R = Xadrez.outroJogador ().getRelogio ();
+		new Thread (R).start ();
+		panel.add (R, BorderLayout.LINE_END);
+	}
 
 	/**
 	 * Pediu novo jogo
@@ -453,8 +462,6 @@ public class Gui extends JFrame {
 				motor.refreshSnap ();
 				System.out.println ("Partida carregada!");
 			}
-			
-			
 		}
 		catch (FileNotFoundException ex) {
 			System.out.println ("Tentativa de carregar partida: arquivo não encontrado!");

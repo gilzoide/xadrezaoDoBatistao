@@ -7,12 +7,13 @@ package xadrez;
  * @todo sons?! xD
  * @todo pt2 → relógios
  * @todo pt2 → exceção
- * @todo pt2 → save/load (autosave tb)
+ * @todo pt2 → autosave
  */
 
 import ui.Gui;
 import ui.Cor;
 import ui.Jogador;
+import ui.Relogio;
 
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
@@ -29,13 +30,14 @@ import java.io.Serializable;
 /**
  * Uma partida!
  * 
- * Tem tudo o que deve ser salvo na vida
+ * Tem tudo o que deve ser salvo na vida (por isso é Serializable)
  */
 class Partida implements Serializable {
 	ArrayList<Snapshot> historico;	// guarda o histórico de snapshots
 	int snap_atual;	// snap atual
 	Jogador J1;
 	Jogador J2;
+	Relogio relogio;
 
 	/**
 	 * Ctor
@@ -44,14 +46,22 @@ class Partida implements Serializable {
 		J1 = new Jogador (Cor.BRANCO);
 		J2 = new Jogador (Cor.PRETO);
 		historico = new ArrayList<> ();
+		relogio = new Relogio ();
 	}
 
+	/**
+	 * E recomeeeeeeça a partiiiiida
+	 */
 	void novoJogo () {
 		// limpa o histórico de jogadas, pondo o snap do tabuleiro inicial
 		historico.clear ();
 		historico.add (new Snapshot (null));
 		snap_atual = 0;
-		
+
+		// reinicia o relógio
+		relogio.setTempo (0);
+		relogio.start ();
+
 		// reinicia os jogadores
 		J1.novoJogo ();
 		J2.novoJogo ();
@@ -76,6 +86,7 @@ public class Xadrez {
 	 */
 	private Xadrez () {
 		P = new Partida ();
+		jogador_da_vez = P.J1;
 		mov = new ArrayList<> ();
 	}
 	
@@ -141,7 +152,7 @@ public class Xadrez {
 					a_ser_feito.mover (jogador_da_vez);
 					trocaJogador ();
 
-					
+
 					/*  snapshots  */
 					P.snap_atual++;
 					// se tava desfeito movimento, remove os que tinha pra frente
@@ -199,6 +210,12 @@ public class Xadrez {
 		if (partida) {
 			// peões que tinham andado 2 casas agora não podem mais ser tomados por en passant
 			jogador_da_vez.updatePiaums ();
+			
+			// relógio do da vez para - vez do otro agora
+			jogador_da_vez.getRelogio ().stop ();
+			// e começa o do outro!
+			outroJogador ().getRelogio ().start ();
+			
 			// troca o jogador
 			jogador_da_vez = outroJogador ();
 			Gui.getTela ().trocaJogador (jogador_da_vez);
@@ -214,7 +231,7 @@ public class Xadrez {
 			jogador_da_vez.checaXeque ();
 		}
 	}
-	private Jogador outroJogador () {
+	public static Jogador outroJogador () {
 		return (jogador_da_vez == P.J1) ? P.J2 : P.J1;
 	}
 	
@@ -225,8 +242,9 @@ public class Xadrez {
 		// reconstrói as peças no tabuleiro
 		Tabuleiro.getTabuleiro ().novoJogo ();
 		P.novoJogo ();
-		// só pra constar, o jogador branco é que começa
 		jogador_da_vez = P.J1;
+		outroJogador ().getRelogio ().stop ();
+		// só pra constar, o jogador branco é que começa
 		// jogo tá rolando!
 		partida = true;
 	}
@@ -235,16 +253,22 @@ public class Xadrez {
 	 */
 	public static void acabaPartida () {
 		partida = false;
+		P.relogio.stop ();
+		P.J1.getRelogio ().stop ();
+		P.J2.getRelogio ().stop ();
 	}
 	
 	/* GETTERS */
 	public static Jogador getDaVez () {
 		return jogador_da_vez;
 	}
-	// getP é pelo pacote, pra só o SessionManager ver
 	public Partida getPartida () {
 		return P;
 	}
+	public Relogio getRelogio () {
+		return P.relogio;
+	}
+	/* SETTERS */
 	public void setPartida (Partida P) {
 		this.P = P;
 	}

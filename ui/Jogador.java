@@ -27,6 +27,8 @@ public class Jogador implements Serializable {
 	private boolean roque_maior, roque_menor;	/// posso fazer roque? (maior e menor)
 	/// Todos os movimentos possíveis naquela rodada!
 	private ArrayList<Movimento> movs;
+	/// Relógio, pra marcar o tempo corrente
+	private Relogio relogio;
 
 
 	/**
@@ -38,6 +40,7 @@ public class Jogador implements Serializable {
 		piaums = new ArrayList<> ();
 		todas_pecas = new ArrayList<> ();
 		movs = new ArrayList<> ();
+		relogio = new Relogio ();
 	}
 	/**
 	 * Marca as peças importantes (com base na posição de começo de jogo)
@@ -64,6 +67,10 @@ public class Jogador implements Serializable {
 		reizaum = (Rei) tab.getCasa (linha, 4).getPeca ();
 		// por enquanto posso fazer qualquer roque
 		roque_maior = roque_menor = true;
+		
+		// reseta o relógio
+		relogio.setTempo (0);
+		relogio.start ();
 	}
 	
 	/**
@@ -211,6 +218,9 @@ public class Jogador implements Serializable {
 	}
 	public boolean getRoqueMenor () {
 		return roque_menor;
+	}
+	public Relogio getRelogio () {
+		return relogio;
 	}
 	
 	public void printPecas () {

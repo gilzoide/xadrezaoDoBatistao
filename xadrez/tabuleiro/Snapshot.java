@@ -19,13 +19,8 @@ import java.io.Serializable;
  * 
  * Pode ser usado pra salvar o jogo, pra salvar jogadas,
  * pra voltar no tempo, checar empate, essas coisas
- * 
- * É Comparable pra saber quem moveu:
- * 	 + se 0, são iguais;
- * 	 + se >0, BRANCO moveu;
- * 	 + se <0, PRETO moveu.
  */
-public class Snapshot implements Comparable<Snapshot>, Serializable {
+public class Snapshot implements Serializable {
 	private byte[] snap;	/// o snapshot em si (em um vetor 8x8=64)
 	private Movimento mov;	/// movimento que deu origem a esse snap; null pra início de jogo
 	private String log;		/// log naquele momento
@@ -103,20 +98,6 @@ public class Snapshot implements Comparable<Snapshot>, Serializable {
 		}
 		branco.setPecas (brancas);
 		preto.setPecas (pretas);
-	}
-
-	@Override
-	public int compareTo (Snapshot S) {
-		int retorno = 0;
-		
-		// percorre o tabuleiro, achando as diferenças
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				
-			}
-		}
-		
-		return retorno;
 	}
 	
 	/* GETTERS */
