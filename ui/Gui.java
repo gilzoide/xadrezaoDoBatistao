@@ -5,6 +5,7 @@
 package ui;
 
 import xadrez.Xadrez;
+import xadrez.Partida;
 import xadrez.SessionManager;
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
@@ -60,6 +61,7 @@ public class Gui extends JFrame {
 	
 	private JLabel quem_joga;	// JLabel que escreve de quem é a vez
 	private Log log;		// lugar pra escrever o log de jogadas
+	private JPanel rel;		// painel dos relógios
 	
 	/**
 	 * Ctor: contrói a tela principal
@@ -97,12 +99,12 @@ public class Gui extends JFrame {
 		}
 
 		// constrói resto dos trem; enquanto isso, a splashscreen ainda tá lá
-		sessao = new SessionManager ();
+		sessao = new SessionManager (motor);
 
 		JPanel tab = new JPanel ();
 		tab.setLayout (null);
 		JPanel log = new JPanel ();
-		JPanel rel = new JPanel ();
+		rel = new JPanel ();
 		rel.setLayout (new BorderLayout ());
 		getContentPane ().add (tab, BorderLayout.CENTER);
 		getContentPane ().add (log, BorderLayout.LINE_END);
@@ -112,7 +114,6 @@ public class Gui extends JFrame {
 		montaTabuleiro (tab);
 		montaLog (log);
 		menu ();
-		montaRelojs (rel);
 		
 		novoJogo ();
 		
@@ -390,17 +391,22 @@ public class Gui extends JFrame {
 	 * Monta os relógios
 	 */
 	private void montaRelojs (JPanel panel) {
+		panel.removeAll ();
+		
 		Relogio R = motor.getRelogio ();
-		new Thread (R).start ();
+		R.start ();
 		panel.add (R, BorderLayout.CENTER);
 		
-		R = Xadrez.getDaVez ().getRelogio ();
-		new Thread (R).start ();
+		R = motor.getPartida ().getJ1 ().getRelogio ();
+		R.start ();
 		panel.add (R, BorderLayout.LINE_START);
 		
-		R = Xadrez.outroJogador ().getRelogio ();
-		new Thread (R).start ();
+		R = motor.getPartida ().getJ2 ().getRelogio ();
+		R.start ();
 		panel.add (R, BorderLayout.LINE_END);
+		
+		// relógio doutro jogador tá parado
+		Xadrez.outroJogador ().getRelogio ().stop ();
 	}
 
 	/**
@@ -414,6 +420,7 @@ public class Gui extends JFrame {
 		log.novoJogo ();
 		quem_joga.setForeground (Color.BLACK);
 		quem_joga.setText ("Jogador BRANCO, comece o jogo!");
+		montaRelojs (rel);
 	}
 
 	/**
@@ -432,12 +439,12 @@ public class Gui extends JFrame {
 				if (!file.toString ().endsWith (".sav"))
 					file = new File (file + ".sav");
 				
-				sessao.setPartida (motor.getPartida ());
 				sessao.salvaPartida (file);
-				System.out.println ("Partida salva!");				
+				System.out.println ("Partida salva!");
 			}			
 		}
 		catch (IOException ex) {
+			JOptionPane.showMessageDialog (this, "Tentativa de salvar partida: " + ex.getCause ());
 			System.out.println ("Tentativa de salvar partida: " + ex.getCause ());
 		}
 	}
@@ -460,20 +467,26 @@ public class Gui extends JFrame {
 				sessao.carregaPartida (file);
 				motor.setPartida (sessao.getPartida ());
 				motor.refreshSnap ();
+				// remonta os relógio
+				montaRelojs (rel);
 				System.out.println ("Partida carregada!");
 			}
 		}
 		catch (FileNotFoundException ex) {
-			System.out.println ("Tentativa de carregar partida: arquivo não encontrado!");
+			JOptionPane.showMessageDialog (this, "Tentativa de carregar partida: falha no stream do objeto\n" + ex.getCause ());
+			System.out.println ("Tentativa de carregar partida: falha no stream do objeto\n" + ex.getCause ());
 		}
 		catch (ObjectStreamException ex) {
+			JOptionPane.showMessageDialog (this, "Tentativa de carregar partida: falha no stream do objeto\n" + ex.getCause ());
 			System.out.println ("Tentativa de carregar partida: falha no stream do objeto\n" + ex.getCause ());
 		}
 		catch (IOException ex) {
+			JOptionPane.showMessageDialog (this, "Tentativa de carregar partida: falha na abertura de arquivo\n" + ex.getCause ());
 			System.out.println ("Tentativa de carregar partida: falha na abertura de arquivo\n" + ex.getCause ());
 		}
 		catch (ClassNotFoundException ex) {
-			
+			JOptionPane.showMessageDialog (this, "Tentativa de carregar partida: classe não encontrada\n" + ex.getCause ());
+			System.out.println ("Tentativa de carregar partida: classe não encontrada\n" + ex.getCause ());			
 		}
 	}
 	

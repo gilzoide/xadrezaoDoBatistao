@@ -12,6 +12,8 @@ import xadrez.peca.Peao;
 import xadrez.peca.Rei;
 import xadrez.peca.PromoveuException;
 
+import java.awt.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class Jogador implements Serializable {
 		piaums = new ArrayList<> ();
 		todas_pecas = new ArrayList<> ();
 		movs = new ArrayList<> ();
-		relogio = new Relogio ();
+		relogio = new Relogio (nome);
 	}
 	/**
 	 * Marca as peças importantes (com base na posição de começo de jogo)
@@ -186,6 +188,11 @@ public class Jogador implements Serializable {
 	}
 	public void setNome (String novo_nome) {
 		this.nome = novo_nome;
+		relogio.setNome (novo_nome);
+		if (novo_nome.equals ("cuzao"))
+			relogio.setForeground (new Color (255, 0, 255));
+		else
+			relogio.setForeground (Color.BLACK);
 	}
 	/**
 	 * Seta as peças guardadas pelo Jogador

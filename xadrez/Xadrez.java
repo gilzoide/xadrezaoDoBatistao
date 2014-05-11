@@ -4,8 +4,7 @@
  */
 package xadrez;
 /**
- * @todo sons?! xD
- * @todo pt2 → relógios
+ * @todo pt2 → relógio - load
  * @todo pt2 → exceção
  * @todo pt2 → autosave
  */
@@ -24,52 +23,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
-import java.io.Serializable;
-
-
-/**
- * Uma partida!
- * 
- * Tem tudo o que deve ser salvo na vida (por isso é Serializable)
- */
-class Partida implements Serializable {
-	ArrayList<Snapshot> historico;	// guarda o histórico de snapshots
-	int snap_atual;	// snap atual
-	Jogador J1;
-	Jogador J2;
-	Relogio relogio;
-
-	/**
-	 * Ctor
-	 */
-	Partida () {
-		J1 = new Jogador (Cor.BRANCO);
-		J2 = new Jogador (Cor.PRETO);
-		historico = new ArrayList<> ();
-		relogio = new Relogio ();
-	}
-
-	/**
-	 * E recomeeeeeeça a partiiiiida
-	 */
-	void novoJogo () {
-		// limpa o histórico de jogadas, pondo o snap do tabuleiro inicial
-		historico.clear ();
-		historico.add (new Snapshot (null));
-		snap_atual = 0;
-
-		// reinicia o relógio
-		relogio.setTempo (0);
-		relogio.start ();
-
-		// reinicia os jogadores
-		J1.novoJogo ();
-		J2.novoJogo ();
-		// checa movimentos possíveis
-		J1.update ();
-		J2.update ();		
-	}
-}
 
 
 /**
@@ -243,7 +196,6 @@ public class Xadrez {
 		Tabuleiro.getTabuleiro ().novoJogo ();
 		P.novoJogo ();
 		jogador_da_vez = P.J1;
-		outroJogador ().getRelogio ().stop ();
 		// só pra constar, o jogador branco é que começa
 		// jogo tá rolando!
 		partida = true;

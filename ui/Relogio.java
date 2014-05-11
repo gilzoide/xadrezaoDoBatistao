@@ -18,29 +18,31 @@ import javax.swing.Timer;
 public class Relogio extends JLabel implements Runnable {
 	private Timer timer;
 	private double tempo;
+	private String nome;
 	
 	/**
 	 * Ctor
 	 */
-	public Relogio (double novo_tempo) {
+	public Relogio () {
+		this ("");
+	}
+	public Relogio (String novo_nome) {
 		setHorizontalAlignment (SwingConstants.CENTER);
-		tempo = novo_tempo;
+		setTempo (0);
+		this.nome = novo_nome;
 		
 		// conta a cada centésimo de segundo
 		timer = new Timer (10, new ActionListener () {
 			public void actionPerformed (ActionEvent evt) {
 				tempo += 0.01;
-				setText (String.format ("%2d:%2d", (int) tempo/60, (int) tempo%60));
+				setText (String.format ("%s: %2d:%2d", nome, (int) tempo/60, (int) tempo % 60));
 			}
 		});
-	}
-	public Relogio () {
-		this (0);
 	}
 	
 	@Override
 	public void run () {
-		start ();
+		timer.start ();
 	}
 	/**
 	 * Começa ou para o timer
@@ -59,6 +61,10 @@ public class Relogio extends JLabel implements Runnable {
 	/* SETTERS */
 	public void setTempo (double tempo) {
 		this.tempo = tempo;
+		setText (String.format ("%s: %2d:%2d", nome, (int) tempo/60, (int) tempo % 60));
+	}
+	public void setNome (String nome) {
+		this.nome = nome;
 	}
 	
 	@Override
