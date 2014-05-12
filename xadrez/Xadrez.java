@@ -31,6 +31,8 @@ import javax.swing.SwingUtilities;
 public class Xadrez {
 	private static Jogador jogador_da_vez;
 	private static Partida P;
+	private static Relogio J1relogio;
+	private static Relogio J2relogio;
 
 	private static boolean partida;	// a partida tá rolando?
 
@@ -41,6 +43,8 @@ public class Xadrez {
 		P = new Partida ();
 		jogador_da_vez = P.J1;
 		mov = new ArrayList<> ();
+		J1relogio = new Relogio (P.J1.toString ());
+		J2relogio = new Relogio (P.J2.toString ());
 	}
 	
 	/**
@@ -164,9 +168,9 @@ public class Xadrez {
 			jogador_da_vez.updatePiaums ();
 			
 			// relógio do da vez para - vez do otro agora
-			jogador_da_vez.getRelogio ().stop ();
+			getRelogio (jogador_da_vez).stop ();
 			// e começa o do outro!
-			outroJogador ().getRelogio ().start ();
+			getRelogio (outroJogador ()).start ();
 			
 			// troca o jogador
 			jogador_da_vez = outroJogador ();
@@ -194,6 +198,13 @@ public class Xadrez {
 		// reconstrói as peças no tabuleiro
 		Tabuleiro.getTabuleiro ().novoJogo ();
 		P.novoJogo ();
+		
+		// reseta relógios
+		J1relogio.setTempo (0);
+		J1relogio.start ();
+		J2relogio.setTempo (0);
+		J2relogio.start ();
+		
 		jogador_da_vez = P.J1;
 		// só pra constar, o jogador branco é que começa
 		// jogo tá rolando!
@@ -205,8 +216,8 @@ public class Xadrez {
 	public static void acabaPartida () {
 		partida = false;
 		P.relogio.stop ();
-		P.J1.getRelogio ().stop ();
-		P.J2.getRelogio ().stop ();
+		J1relogio.stop ();
+		J2relogio.stop ();
 	}
 	
 	/* GETTERS */
@@ -218,6 +229,14 @@ public class Xadrez {
 	}
 	public Relogio getRelogio () {
 		return P.relogio;
+	}
+	public Relogio getRelogio (Jogador J) {
+		if (J == P.J1)
+			return J1relogio;
+		else if (J == P.J2)
+			return J2relogio;
+		else
+			return null;
 	}
 	/* SETTERS */
 	public void setPartida (Partida P) {

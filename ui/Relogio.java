@@ -6,6 +6,8 @@ package ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -62,6 +64,10 @@ public class Relogio extends JLabel {
 	}
 	public void setNome (String nome) {
 		this.nome = nome;
+		if (nome.equals ("cuzao"))
+			setForeground (new Color (255, 0, 255));
+		else
+			setForeground (Color.BLACK);
 	}
 	
 	@Override

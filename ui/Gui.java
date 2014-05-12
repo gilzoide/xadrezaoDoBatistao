@@ -340,6 +340,7 @@ public class Gui extends JFrame {
 				
 				String novo_nome = JOptionPane.showInputDialog ("Novo nome pr@ " + j);
 				
+				motor.getRelogio (j).setNome (novo_nome);
 				j.setNome (novo_nome);
 				trocaJogador (j);	// escreve lá novo nome
 			}
@@ -392,20 +393,24 @@ public class Gui extends JFrame {
 	 * Monta os relógios
 	 */
 	private void montaRelojs (JPanel panel) {
+		panel.removeAll ();
+		
 		Relogio R = motor.getRelogio ();
 		R.start ();
 		panel.add (R, BorderLayout.CENTER);
 		
-		R = motor.getPartida ().getJ1 ().getRelogio ();
+		R = motor.getRelogio (motor.getPartida ().getJ1 ());
+		R.setNome (motor.getPartida ().getJ1 ().toString ());
 		R.start ();
 		panel.add (R, BorderLayout.LINE_START);
 		
-		R = motor.getPartida ().getJ2 ().getRelogio ();
+		R = motor.getRelogio (motor.getPartida ().getJ2 ());
+		R.setNome (motor.getPartida ().getJ2 ().toString ());
 		R.start ();
 		panel.add (R, BorderLayout.LINE_END);
 		
 		// relógio doutro jogador tá parado
-		Xadrez.outroJogador ().getRelogio ().stop ();
+		motor.getRelogio (Xadrez.outroJogador ()).stop ();
 	}
 
 	/**

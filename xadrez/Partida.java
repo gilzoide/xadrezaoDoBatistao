@@ -44,7 +44,7 @@ public class Partida implements Serializable {
 		historico.add (new Snapshot (null));
 		snap_atual = 0;
 
-		// reinicia o relógio
+		// reinicia os relógios
 		relogio.setTempo (0);
 		relogio.start ();
 
