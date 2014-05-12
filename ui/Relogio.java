@@ -12,16 +12,19 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
+import java.io.Serializable;
+
 /**
  * Reloginho cronômetro do xadrez!
  * 
  * É um JPanel com o relógio dentro. Como o swing.Timer
  * já roda em paralelo, nem pus o Relogio Runnable nem Thread.
  */
-public class Relogio extends JLabel {
+public class Relogio implements Serializable {
 	private Timer timer;
 	private double tempo;
 	private String nome;
+	private JLabel label;
 	
 	/**
 	 * Ctor
@@ -30,7 +33,7 @@ public class Relogio extends JLabel {
 		this ("");
 	}
 	public Relogio (String novo_nome) {
-		setHorizontalAlignment (SwingConstants.CENTER);
+		label = new JLabel ();
 		setTempo (0);
 		this.nome = novo_nome;
 		
@@ -38,9 +41,13 @@ public class Relogio extends JLabel {
 		timer = new Timer (10, new ActionListener () {
 			public void actionPerformed (ActionEvent evt) {
 				tempo += 0.01;
-				setText (String.format ("%s: %2d:%2d", nome, (int) tempo/60, (int) tempo % 60));
+				update ();
 			}
 		});
+	}
+	
+	private void update () {
+		label.setText (String.format ("%s: %2d:%2d", nome, (int) tempo/60, (int) tempo % 60));
 	}
 	
 	/**
@@ -60,14 +67,20 @@ public class Relogio extends JLabel {
 	/* SETTERS */
 	public void setTempo (double tempo) {
 		this.tempo = tempo;
-		setText (String.format ("%s: %2d:%2d", nome, (int) tempo/60, (int) tempo % 60));
+		update ();
 	}
 	public void setNome (String nome) {
 		this.nome = nome;
 		if (nome.equals ("cuzao"))
-			setForeground (new Color (255, 0, 255));
+			label.setForeground (new Color (255, 0, 255));
 		else
-			setForeground (Color.BLACK);
+			label.setForeground (Color.BLACK);
+		
+		update ();
+	}
+	public void setLabel (JLabel novo_label) {
+		label = novo_label;
+		update ();
 	}
 	
 	@Override

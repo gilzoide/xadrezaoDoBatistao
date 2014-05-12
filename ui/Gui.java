@@ -62,7 +62,9 @@ public class Gui extends JFrame {
 	
 	private JLabel quem_joga;	// JLabel que escreve de quem é a vez
 	private Log log;		// lugar pra escrever o log de jogadas
+	// Relógios
 	private JPanel rel;		// painel dos relógios
+	private JLabel J1, total, J2;
 	
 	/**
 	 * Ctor: contrói a tela principal
@@ -110,6 +112,10 @@ public class Gui extends JFrame {
 		getContentPane ().add (tab, BorderLayout.CENTER);
 		getContentPane ().add (log, BorderLayout.LINE_END);
 		getContentPane ().add (rel, BorderLayout.PAGE_START);
+		
+		total = new JLabel ("", SwingConstants.CENTER);
+		J1 = new JLabel ("", SwingConstants.CENTER);
+		J2 = new JLabel ("", SwingConstants.CENTER);
 		
 		montaQuemJoga (tab);
 		montaTabuleiro (tab);
@@ -340,7 +346,7 @@ public class Gui extends JFrame {
 				
 				String novo_nome = JOptionPane.showInputDialog ("Novo nome pr@ " + j);
 				
-				motor.getRelogio (j).setNome (novo_nome);
+				j.getRelogio ().setNome (novo_nome);
 				j.setNome (novo_nome);
 				trocaJogador (j);	// escreve lá novo nome
 			}
@@ -393,24 +399,43 @@ public class Gui extends JFrame {
 	 * Monta os relógios
 	 */
 	private void montaRelojs (JPanel panel) {
-		panel.removeAll ();
-		
 		Relogio R = motor.getRelogio ();
+		R.setLabel (total);
 		R.start ();
-		panel.add (R, BorderLayout.CENTER);
+		panel.add (total, BorderLayout.CENTER);
 		
-		R = motor.getRelogio (motor.getPartida ().getJ1 ());
+		R = motor.getPartida ().getJ1 ().getRelogio ();
+		R.setLabel (J1);
 		R.setNome (motor.getPartida ().getJ1 ().toString ());
 		R.start ();
-		panel.add (R, BorderLayout.LINE_START);
+		panel.add (J1, BorderLayout.LINE_START);
 		
-		R = motor.getRelogio (motor.getPartida ().getJ2 ());
+		R = motor.getPartida ().getJ2 ().getRelogio ();
+		R.setLabel (J2);
 		R.setNome (motor.getPartida ().getJ2 ().toString ());
 		R.start ();
-		panel.add (R, BorderLayout.LINE_END);
+		panel.add (J2, BorderLayout.LINE_END);
 		
 		// relógio doutro jogador tá parado
-		motor.getRelogio (Xadrez.outroJogador ()).stop ();
+		Xadrez.outroJogador ().getRelogio ().stop ();
+	}
+	private void updateRelojs (Partida partida) {
+		Relogio R = motor.getRelogio ();
+		R.setLabel (total);
+		R.start ();
+		
+		R = partida.getJ1 ().getRelogio ();
+		R.setLabel (J1);
+		R.setNome (partida.getJ1 ().toString ());
+		R.start ();
+		
+		R = partida.getJ2 ().getRelogio ();
+		R.setLabel (J2);
+		R.setNome (partida.getJ2 ().toString ());
+		R.start ();
+		
+		// relógio doutro jogador tá parado
+		Xadrez.outroJogador ().getRelogio ().stop ();
 	}
 
 	/**
@@ -448,8 +473,8 @@ public class Gui extends JFrame {
 			}			
 		}
 		catch (IOException ex) {
-			JOptionPane.showMessageDialog (this, "Tentativa de salvar partida: " + ex.getCause ());
-			System.out.println ("Tentativa de salvar partida: " + ex.getCause ());
+			JOptionPane.showMessageDialog (this, "Tentativa de salvar partida: erro de IO\n" + ex.getCause ());
+			ex.printStackTrace();
 		}
 	}
 	/**
@@ -470,6 +495,7 @@ public class Gui extends JFrame {
 				
 				sessao.carregaPartida (file);
 				motor.refreshSnap ();
+				updateRelojs (sessao.getPartida ());
 				System.out.println ("Partida carregada!");
 			}
 		}

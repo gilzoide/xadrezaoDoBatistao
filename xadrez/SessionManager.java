@@ -27,7 +27,8 @@ public class SessionManager {
 					salvaPartida (new File (".", "autosave.sav"));
 				}
 				catch (IOException ex) {
-					System.out.println ("Falha no autosave: " + ex.getCause ());
+					System.out.println ("Falha no autosave");
+					ex.printStackTrace ();
 				}
 			}
 		});
