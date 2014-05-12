@@ -13,9 +13,10 @@ import javax.swing.Timer;
 /**
  * Reloginho cronômetro do xadrez!
  * 
- * É um JPanel com o relógio dentro, runnable pra ser executado concorrentemente.
+ * É um JPanel com o relógio dentro. Como o swing.Timer
+ * já roda em paralelo, nem pus o Relogio Runnable nem Thread.
  */
-public class Relogio extends JLabel implements Runnable {
+public class Relogio extends JLabel {
 	private Timer timer;
 	private double tempo;
 	private String nome;
@@ -40,10 +41,6 @@ public class Relogio extends JLabel implements Runnable {
 		});
 	}
 	
-	@Override
-	public void run () {
-		timer.start ();
-	}
 	/**
 	 * Começa ou para o timer
 	 */

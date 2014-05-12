@@ -6,7 +6,6 @@ package xadrez;
 /**
  * @todo pt2 → relógio - load
  * @todo pt2 → exceção
- * @todo pt2 → autosave
  */
 
 import ui.Gui;
@@ -18,6 +17,7 @@ import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
 import xadrez.tabuleiro.Snapshot;
 import xadrez.movimento.Movimento;
+import xadrez.movimento.IllegalChessMovement;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -113,7 +113,6 @@ public class Xadrez {
 						P.historico.removeAll (P.historico.subList (P.snap_atual, P.historico.size ()));
 					}
 					P.historico.add (new Snapshot (a_ser_feito));
-					
 				}
 				casa_marcada = false;
 			}

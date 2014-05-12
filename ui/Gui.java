@@ -10,6 +10,7 @@ import xadrez.SessionManager;
 import xadrez.tabuleiro.Casa;
 import xadrez.tabuleiro.Tabuleiro;
 import xadrez.movimento.Movimento;
+import xadrez.movimento.IllegalChessMovement;
 
 import java.awt.SplashScreen;
 import java.awt.Graphics2D;
@@ -391,8 +392,6 @@ public class Gui extends JFrame {
 	 * Monta os relógios
 	 */
 	private void montaRelojs (JPanel panel) {
-		panel.removeAll ();
-		
 		Relogio R = motor.getRelogio ();
 		R.start ();
 		panel.add (R, BorderLayout.CENTER);
@@ -465,10 +464,7 @@ public class Gui extends JFrame {
 					file = new File (file + ".sav");
 				
 				sessao.carregaPartida (file);
-				motor.setPartida (sessao.getPartida ());
 				motor.refreshSnap ();
-				// remonta os relógio
-				montaRelojs (rel);
 				System.out.println ("Partida carregada!");
 			}
 		}
