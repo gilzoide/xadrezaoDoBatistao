@@ -1,6 +1,6 @@
 # Gil Barbosa Reis - 8532248
 # SCC 604 - POO - Turma C
-# 20/04/2014
+# 11/05/2014
 
 # Package: UI (interface com o usuário: jogador e GUI)
 src = *.java
