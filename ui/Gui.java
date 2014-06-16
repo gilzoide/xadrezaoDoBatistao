@@ -5,6 +5,7 @@
 package ui;
 
 import xadrez.Xadrez;
+import xadrez.ObServer;
 import xadrez.Partida;
 import xadrez.SessionManager;
 import xadrez.tabuleiro.Casa;
@@ -24,9 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.Random;
-import java.applet.Applet;
-import java.applet.AudioClip;
-import java.net.MalformedURLException;
 
 import java.io.*;
 
@@ -37,6 +35,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Gui: padrão singleton em POO, já que a tela é única e sem frescura
+ * 
+ * Implementa a interface Runnable pra rodar em uma Thread separada,
+ * pra não ser bloqueado pela conexão (veja ObServer).
  */
 public class Gui extends JFrame {
 	// Single...
@@ -75,6 +76,7 @@ public class Gui extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation (EXIT_ON_CLOSE);
 	}
+
 	/**
 	 * Inicializa o tabuleiro, menu e log
 	 */
@@ -83,22 +85,8 @@ public class Gui extends JFrame {
 
 		// abre splash screen
 		SplashScreen window = SplashScreen.getSplashScreen ();
-		try {
-			if (window == null) {
-				System.out.println ("SplashScreen não especificada. Para mostrá-la, rode o programa com a opção '-splash:ui/img/splash.png'");
-			}
-			else {
-				try {
-					AudioClip entrada = Applet.newAudioClip (new File ("audio/entrada.wav").toURI ().toURL ());
-					entrada.loop ();
-				}
-				catch (MalformedURLException e) {
-					System.out.println ("Audio não encontrado!");
-				}
-			}
-		}
-		catch (UnsupportedOperationException e) {
-			System.out.println ("SplashScreen não suportada");
+		if (window == null) {
+			System.out.println ("SplashScreen não especificada. Para mostrá-la, rode o programa com a opção '-splash:ui/img/splash.png'");
 		}
 
 		// constrói resto dos trem; enquanto isso, a splashscreen ainda tá lá
@@ -120,6 +108,13 @@ public class Gui extends JFrame {
 		montaQuemJoga (tab);
 		montaTabuleiro (tab);
 		montaLog (log);
+		// mostra janela do jogo
+		setVisible (true);
+		
+		// Pergunta se quer jogar na rede
+		perguntaConexao ();
+		
+		// Monta menu (algumas opções são desativadas se estiver em rede)
 		menu ();
 		
 		novoJogo ();
@@ -129,8 +124,6 @@ public class Gui extends JFrame {
 			window.close ();
 		}
 		
-		// mostra janela do jogo
-		setVisible (true);
 	}
 
 	/**
@@ -197,6 +190,23 @@ public class Gui extends JFrame {
 		panel.add (scroller, BorderLayout.CENTER);
 	}
 	/**
+	 * 
+	 */
+	private void perguntaConexao () {
+		String[] opcoes = { "Offline", "Servidor", "Cliente" };
+		String escolhido = (String) JOptionPane.showInputDialog (null, "Tipo de jogo", "Selecione o tipo de jogo", JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+		if (escolhido == "Servidor") {
+			motor.conecta (ObServer.Lado.SERVIDOR);
+			System.out.println ("Servidor mode!");
+		}
+		else if (escolhido == "Cliente") {
+			motor.conecta (ObServer.Lado.CLIENTE);
+			System.out.println ("Cliente mode!");
+		}
+		else
+			System.out.println ("offline mode!");
+	}
+	/**
 	 * monta o menu
 	 */
 	private void menu () {
@@ -205,110 +215,112 @@ public class Gui extends JFrame {
 		JMenu Jogo = new JMenu ("Jogo");
 		Jogo.setMnemonic (KeyEvent.VK_J);
 		
-		// Item 'novo jogo'
-		JMenuItem Novo = new JMenuItem ("Novo jogo   ^N");
-		Novo.setMnemonic (KeyEvent.VK_N);
-		Novo.setToolTipText ("Começa um novo jogo");
-		Jogo.add (Novo);
-		//ctrlN começa novo jogo
-		Novo.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "novo");
-		Novo.getActionMap ().put ("novo", new AbstractAction () {
-			@Override
-			public void actionPerformed (ActionEvent event) {
-				novoJogo ();
-			}
-		});
+		if (!ObServer.estaEmRede ()) {
+			// Item 'novo jogo'
+			JMenuItem Novo = new JMenuItem ("Novo jogo   ^N");
+			Novo.setMnemonic (KeyEvent.VK_N);
+			Novo.setToolTipText ("Começa um novo jogo");
+			Jogo.add (Novo);
+			//ctrlN começa novo jogo
+			Novo.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "novo");
+			Novo.getActionMap ().put ("novo", new AbstractAction () {
+				@Override
+				public void actionPerformed (ActionEvent event) {
+					novoJogo ();
+				}
+			});
 
-		Novo.addActionListener (new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				novoJogo ();
-			}
-		});
-		
-		// Item 'carregar jogo'
-		JMenuItem Carregar = new JMenuItem ("Carregar jogo		^O");
-		Carregar.setMnemonic (KeyEvent.VK_C);
-		Carregar.setToolTipText ("Carrega um jogo salvo");
-		Jogo.add (Carregar);
-		//ctrlO Carrega jogo salvo
-		Carregar.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK), "carregar");
-		Carregar.getActionMap ().put ("carregar", new AbstractAction () {
-			@Override
-			public void actionPerformed (ActionEvent event) {
-				carregarJogo ();
-			}
-		});
+			Novo.addActionListener (new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					novoJogo ();
+				}
+			});
+			
+			// Item 'carregar jogo'
+			JMenuItem Carregar = new JMenuItem ("Carregar jogo		^O");
+			Carregar.setMnemonic (KeyEvent.VK_C);
+			Carregar.setToolTipText ("Carrega um jogo salvo");
+			Jogo.add (Carregar);
+			//ctrlO Carrega jogo salvo
+			Carregar.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK), "carregar");
+			Carregar.getActionMap ().put ("carregar", new AbstractAction () {
+				@Override
+				public void actionPerformed (ActionEvent event) {
+					carregarJogo ();
+				}
+			});
 
-		Carregar.addActionListener (new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				carregarJogo ();
-			}
-		});
+			Carregar.addActionListener (new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					carregarJogo ();
+				}
+			});
 
-		// Item 'salvar jogo'
-		JMenuItem Salvar = new JMenuItem ("Salvar jogo		^S");
-		Salvar.setMnemonic (KeyEvent.VK_V);
-		Salvar.setToolTipText ("Salva a partida atual, no estado atual");
-		Jogo.add (Salvar);
-		//ctrlO Carrega jogo salvo
-		Salvar.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), "salvar");
-		Salvar.getActionMap ().put ("salvar", new AbstractAction () {
-			@Override
-			public void actionPerformed (ActionEvent event) {
-				salvarJogo ();
-			}
-		});
+			// Item 'salvar jogo'
+			JMenuItem Salvar = new JMenuItem ("Salvar jogo		^S");
+			Salvar.setMnemonic (KeyEvent.VK_V);
+			Salvar.setToolTipText ("Salva a partida atual, no estado atual");
+			Jogo.add (Salvar);
+			//ctrlO Carrega jogo salvo
+			Salvar.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), "salvar");
+			Salvar.getActionMap ().put ("salvar", new AbstractAction () {
+				@Override
+				public void actionPerformed (ActionEvent event) {
+					salvarJogo ();
+				}
+			});
 
-		Salvar.addActionListener (new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				salvarJogo ();
-			}
-		});
+			Salvar.addActionListener (new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					salvarJogo ();
+				}
+			});
 
-		// Item 'desfazer movimento'
-		JMenuItem Desfazer = new JMenuItem ("Desfazer Movimento   ^Z");
-		Desfazer.setMnemonic (KeyEvent.VK_D);
-		Desfazer.setToolTipText ("Desfaz último movimento");
-		Jogo.add (Desfazer);
-		//ctrlZ desfaz movimento
-		Desfazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "desfazer");
-		Desfazer.getActionMap ().put ("desfazer", new AbstractAction () {
-			@Override
-			public void actionPerformed (ActionEvent event) {
-				motor.desfazerMovimento ();
-			}
-		});
+			// Item 'desfazer movimento'
+			JMenuItem Desfazer = new JMenuItem ("Desfazer Movimento   ^Z");
+			Desfazer.setMnemonic (KeyEvent.VK_D);
+			Desfazer.setToolTipText ("Desfaz último movimento");
+			Jogo.add (Desfazer);
+			//ctrlZ desfaz movimento
+			Desfazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "desfazer");
+			Desfazer.getActionMap ().put ("desfazer", new AbstractAction () {
+				@Override
+				public void actionPerformed (ActionEvent event) {
+					motor.desfazerMovimento ();
+				}
+			});
 
-		Desfazer.addActionListener (new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				motor.desfazerMovimento ();
-			}
-		});
-		
-		// Item 'refazer movimento'
-		JMenuItem Refazer = new JMenuItem ("Refazer Movimento   ^R");
-		Refazer.setMnemonic (KeyEvent.VK_R);
-		Refazer.setToolTipText ("Refaz último movimento");
-		Jogo.add (Refazer);
-		//ctrlR refaz movimento
-		Refazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK), "refazer");
-		Refazer.getActionMap ().put ("refazer", new AbstractAction () {
-			@Override
-			public void actionPerformed (ActionEvent event) {
-				motor.refazerMovimento ();
-			}
-		});
+			Desfazer.addActionListener (new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					motor.desfazerMovimento ();
+				}
+			});
+			
+			// Item 'refazer movimento'
+			JMenuItem Refazer = new JMenuItem ("Refazer Movimento   ^R");
+			Refazer.setMnemonic (KeyEvent.VK_R);
+			Refazer.setToolTipText ("Refaz último movimento");
+			Jogo.add (Refazer);
+			//ctrlR refaz movimento
+			Refazer.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).put (KeyStroke.getKeyStroke (KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK), "refazer");
+			Refazer.getActionMap ().put ("refazer", new AbstractAction () {
+				@Override
+				public void actionPerformed (ActionEvent event) {
+					motor.refazerMovimento ();
+				}
+			});
 
-		Desfazer.addActionListener (new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				motor.refazerMovimento ();
-			}
-		});
+			Desfazer.addActionListener (new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					motor.refazerMovimento ();
+				}
+			});
+		}
 		
 		// Item 'sair'
 		JMenuItem Sair = new JMenuItem ("Sair   ^Q");
@@ -353,40 +365,42 @@ public class Gui extends JFrame {
 		});
 		jogador.add (Renomear);
 		
-		// Item 'empatar'
-		JMenuItem Empatar = new JMenuItem ("Empatar jogo");
-		Empatar.setMnemonic (KeyEvent.VK_E);
-		Empatar.setToolTipText ("Propõe um empate ao outro jogador");
-		Empatar.addActionListener (new ActionListener() {
-			@Override
-			public void actionPerformed (ActionEvent event) {
-				// para a tela e pergunta se quer começar novo jogo, ou quitar
-				int n = JOptionPane.showConfirmDialog (Gui.getTela (), Xadrez.getDaVez () + " está propondo um empate. Aceitas?", "Proposta de empate", JOptionPane.YES_NO_OPTION);
-				
-				if (n == JOptionPane.YES_OPTION) {	// quer empatar
-					empata ();
+		if (!ObServer.estaEmRede ()) {
+			// Item 'empatar'
+			JMenuItem Empatar = new JMenuItem ("Empatar jogo");
+			Empatar.setMnemonic (KeyEvent.VK_E);
+			Empatar.setToolTipText ("Propõe um empate ao outro jogador");
+			Empatar.addActionListener (new ActionListener() {
+				@Override
+				public void actionPerformed (ActionEvent event) {
+					// para a tela e pergunta se quer começar novo jogo, ou quitar
+					int n = JOptionPane.showConfirmDialog (Gui.getTela (), Xadrez.getDaVez () + " está propondo um empate. Aceitas?", "Proposta de empate", JOptionPane.YES_NO_OPTION);
+					
+					if (n == JOptionPane.YES_OPTION) {	// quer empatar
+						empata ();
+					}
 				}
-			}
-		});
-		jogador.add (Empatar);
-		
-		// Item 'desistir'
-		JMenuItem Desistir = new JMenuItem ("Desistir do jogo");
-		Desistir.setMnemonic (KeyEvent.VK_D);
-		Desistir.setToolTipText ("Dá um peteleco no rei e desiste da partida");
-		Desistir.addActionListener (new ActionListener() {
-			@Override
-			public void actionPerformed (ActionEvent event) {
-				// para a tela e pergunta se quer começar novo jogo, ou quitar
-				int n = JOptionPane.showConfirmDialog (Gui.getTela (), Xadrez.getDaVez () + ", vai mesmo desistir?", "¿Fim de jogo?", JOptionPane.YES_NO_OPTION);
-				
-				if (n == JOptionPane.YES_OPTION) {	// quer desistir
-					quem_joga.setText (Xadrez.getDaVez () + " jogou a toalha!");
-					Xadrez.acabaPartida ();
+			});
+			jogador.add (Empatar);
+			
+			// Item 'desistir'
+			JMenuItem Desistir = new JMenuItem ("Desistir do jogo");
+			Desistir.setMnemonic (KeyEvent.VK_D);
+			Desistir.setToolTipText ("Dá um peteleco no rei e desiste da partida");
+			Desistir.addActionListener (new ActionListener() {
+				@Override
+				public void actionPerformed (ActionEvent event) {
+					// para a tela e pergunta se quer começar novo jogo, ou quitar
+					int n = JOptionPane.showConfirmDialog (Gui.getTela (), Xadrez.getDaVez () + ", vai mesmo desistir?", "¿Fim de jogo?", JOptionPane.YES_NO_OPTION);
+					
+					if (n == JOptionPane.YES_OPTION) {	// quer desistir
+						quem_joga.setText (Xadrez.getDaVez () + " jogou a toalha!");
+						Xadrez.acabaPartida ();
+					}
 				}
-			}
-		});
-		jogador.add (Desistir);
+			});
+			jogador.add (Desistir);
+		}
 		
 		// povoa a barra de menu
 		barra.add (Jogo);
@@ -585,6 +599,14 @@ public class Gui extends JFrame {
 			case JOptionPane.NO_OPTION: case JOptionPane.CLOSED_OPTION:
 				System.exit (0);
 		}
+	}
+	
+	/**
+	 * Pega do usuário o endereço do servidor
+	 * a conectar. Endereço padrão é 'localhost'.
+	 */
+	public String getEndereco () {
+		return JOptionPane.showInputDialog ("Endereço do servidor", "localhost");
 	}
 	
 	/**

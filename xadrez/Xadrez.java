@@ -27,12 +27,16 @@ import javax.swing.SwingUtilities;
 
 /**
  * Xadrez é a classe motora do jogo, com main e muito mais!
+ * 
+ * Como a conexão usa o padrão Observer, o Xadrez é a classe
+ * observada, que notifica quando a jogada é realizada
  */
 public class Xadrez {
 	private static Jogador jogador_da_vez;
 	private static Partida P;
 
 	private static boolean partida;	// a partida tá rolando?
+	private ObServer conexao;
 
 	/**
 	 * Ctor, a ser chamado ali em 'jogar' - inicia o motor do jogo (com os 'new')
@@ -67,7 +71,7 @@ public class Xadrez {
 	 * Há dois estados: peça não marcada / peça marcada
 	 */
 	public void cliquei (Point p) {
-		if (partida) {
+		if (partida && (!ObServer.estaEmRede () || conexao.get)) {
 			// casa clicada
 			Casa atual = Tabuleiro.getTabuleiro ().getCasa (p);
 			if (casa_marcada == false) {
@@ -98,25 +102,34 @@ public class Xadrez {
 					m.unPrintPossivel ();
 				}
 				if (a_ser_feito != null) {
-					// joga movimento no log
-					a_ser_feito.jogaNoLog ();
-					
-					// move, e troca jogador
-					a_ser_feito.mover (jogador_da_vez);
-					trocaJogador ();
-
-
-					/*  snapshots  */
-					P.snap_atual++;
-					// se tava desfeito movimento, remove os que tinha pra frente
-					if (P.snap_atual < P.historico.size ()) {
-						P.historico.removeAll (P.historico.subList (P.snap_atual, P.historico.size ()));
-					}
-					P.historico.add (new Snapshot (a_ser_feito));
+					processaMovimento (a_ser_feito);
+					if (ObServer.estaEmRede ())
+						conexao.update ();
 				}
 				casa_marcada = false;
 			}
 		}
+	}
+	
+	/**
+	 * Processa o Movimento a ser feito, jogando no Log, movendo em si, trocando o jogador e salvando o snapshot
+	 */
+	private void processaMovimento (Movimento a_ser_feito) {
+		// joga movimento no log
+		a_ser_feito.jogaNoLog ();
+		
+		// move, e troca jogador
+		a_ser_feito.mover (jogador_da_vez);
+		trocaJogador ();
+
+
+		/*  snapshots  */
+		P.snap_atual++;
+		// se tava desfeito movimento, remove os que tinha pra frente
+		if (P.snap_atual < P.historico.size ()) {
+			P.historico.removeAll (P.historico.subList (P.snap_atual, P.historico.size ()));
+		}
+		P.historico.add (new Snapshot (a_ser_feito));
 	}
 	
 	/**
@@ -209,6 +222,12 @@ public class Xadrez {
 		P.J1.getRelogio ().stop ();
 		P.J2.getRelogio ().stop ();
 	}
+	
+	public void conecta (ObServer.Lado lado) {
+		conexao = new ObServer (lado, this);
+		conexao.start ();
+	}
+	
 	
 	/* GETTERS */
 	public static Jogador getDaVez () {

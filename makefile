@@ -40,6 +40,11 @@ run :
 	@java -classpath $(BUILD) xadrez.Xadrez
 run_splash :
 	@java -splash:ui/img/splash.png -classpath $(BUILD) xadrez.Xadrez
+# roda duas instâncias, para facilitar o teste da rede
+run_rede :
+	@java -classpath $(BUILD) xadrez.Xadrez &
+	@java -classpath $(BUILD) xadrez.Xadrez &
+
 
 debug :
 	jdb -classpath $(BUILD) xadrez.Xadrez
