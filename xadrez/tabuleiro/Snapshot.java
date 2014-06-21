@@ -11,6 +11,7 @@ import ui.Cor;
 import ui.Jogador;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import java.io.Serializable;
 
@@ -106,5 +107,35 @@ public class Snapshot implements Serializable {
 	}
 	public String getLog () {
 		return log;
+	}
+	public String getTabString () {
+		String aux = "";
+		for (int i = 0; i < 64; i++) {
+			char peca;
+			// peças
+			switch (snap[i] & 0b1110) {
+				case 2: peca = 'T'; break;
+				case 4: peca = 'C'; break;
+				case 6: peca = 'B'; break;
+				case 8: peca = 'D'; break;
+				case 10: peca = 'R'; break;
+				case 12: peca = 'P'; break;
+				default: peca = ' ';
+			}
+			// se for preto, fica minúsculo
+			if (snap[i] % 2 == 0)
+				peca = Character.toLowerCase (peca);
+			
+			aux += peca;
+			// pula linha no fim do tabuleiro
+			if (i % 8 == 7)
+				aux += '\n';
+		}
+		return aux;
+	}
+	
+	@Override
+	public String toString () {
+		return "Snap Hash no: " + Arrays.hashCode (snap) + "\n";
 	}
 }

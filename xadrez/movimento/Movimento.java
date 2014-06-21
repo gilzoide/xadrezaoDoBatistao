@@ -130,7 +130,7 @@ public class Movimento implements Serializable {
 		}
 
 		String str = new String ();			// exemplo de notação
-		str += donde.getPeca ();			// D (peça)
+		str += donde.getPeca ().getNotacao ();			// D (peça)
 		str += notacao_extra;
 		str += (char) (pronde.getColuna () + 'a');	// g (coluna)
 		str += 8 - pronde.getLinha ();		// 3 (linha)

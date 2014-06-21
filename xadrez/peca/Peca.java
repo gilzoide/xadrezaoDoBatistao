@@ -128,4 +128,10 @@ public abstract class Peca implements Serializable {
 	public void setIndiceFim (int indice) {
 		this.indice_fim = indice;
 	}
+	/**
+	 * Retorna a notação específica de xadrez
+	 */
+	public String getNotacao () {
+		return toString ();
+	}
 }

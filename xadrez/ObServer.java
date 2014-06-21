@@ -6,6 +6,8 @@ package xadrez;
 
 import xadrez.movimento.Movimento;
 import ui.Gui;
+import ui.Cor;
+import ui.Jogador;
 
 import java.net.Socket;
 import java.net.ServerSocket;
@@ -51,7 +53,7 @@ public class ObServer extends Thread {
 	public void run () {
 		abreConexao (lado);
 		while (true) {
-			comunica ();
+			comunica (true);
 		}
 	}
 	
@@ -70,6 +72,9 @@ public class ObServer extends Thread {
 			entrada = new ObjectInputStream (conexao.getInputStream ());
 			usando_rede = true;
 			System.err.println ("Conectado!");
+			
+			if (lado == Lado.CLIENTE)
+				comunica (false);
 		}
 		catch (UnknownHostException ex) {
 			System.err.println ("Servidor não encontrado!");
@@ -94,14 +99,22 @@ public class ObServer extends Thread {
 	/**
 	 * Manda o movimento feito e recebe o do outro jogador
 	 */
-	public void comunica () {
+	public void comunica (boolean devo_mandar) {
 		try {
 			if (devo_comunicar) {
-				Partida P = observado.getPartida ();
-				saida.writeObject (P);
+				Partida P;
+				if (devo_mandar) {
+					// manda
+					P = observado.getPartida ();
+					saida.writeObject (P);
+					System.out.println ("mandei partida: " + P);
+				}
+				// recebe
 				P = (Partida) entrada.readObject ();
 				observado.setPartida (P);
 				observado.refreshSnap ();
+				System.out.println ("recebi partida: " + P);
+				
 				devo_comunicar = false;
 			}
 		}
@@ -114,6 +127,18 @@ public class ObServer extends Thread {
 		devo_comunicar = true;
 	}
 	
+	/**
+	 * Servidor é o Jogador Branco e Cliente é o Preto.
+	 * Se as informações baterem, posso jogar!
+	 */
+	boolean possoJogar (Jogador J) {
+		if (J.getCor () == Cor.BRANCO && lado == Lado.SERVIDOR || J.getCor () == Cor.PRETO && lado == Lado.CLIENTE)
+			return true;
+		else
+			return false;
+	}
+	
+	// Ao coletar um ObServer, fecha os canais
 	@Override
 	protected void finalize () throws Throwable {
 		entrada.close ();

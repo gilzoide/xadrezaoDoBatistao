@@ -462,7 +462,13 @@ public class Gui extends JFrame {
 		Movimento.novoJogo ();
 		log.novoJogo ();
 		quem_joga.setForeground (Color.BLACK);
-		quem_joga.setText ("Jogador BRANCO, comece o jogo!");
+		
+		// se está conectado e é cliente, manda esperar
+		if (!motor.possoJogar ())
+			quem_joga.setText ("O servidor começa o jogo, aguarde");
+		else
+			quem_joga.setText ("Jogador BRANCO, comece o jogo!");
+
 		montaRelojs (rel);
 	}
 
@@ -477,8 +483,10 @@ public class Gui extends JFrame {
 			browser.addChoosableFileFilter (filtro);
 			browser.setFileFilter (filtro);
 			
+			// Aceitou: salva lá!
 			if (browser.showSaveDialog (this) == JFileChooser.APPROVE_OPTION) {
 				File file = browser.getSelectedFile ();
+				// extensão .sav (se tiver ou não colocado)
 				if (!file.toString ().endsWith (".sav"))
 					file = new File (file + ".sav");
 				
@@ -502,8 +510,10 @@ public class Gui extends JFrame {
 			browser.addChoosableFileFilter (filtro);
 			browser.setFileFilter (filtro);
 			
+			// Aceitou: carrega lá!
 			if (browser.showOpenDialog (this) == JFileChooser.APPROVE_OPTION) {
 				File file = browser.getSelectedFile ();
+				// extensão .sav (se tiver ou não colocado)
 				if (!file.toString ().endsWith (".sav"))
 					file = new File (file + ".sav");
 				
@@ -513,11 +523,7 @@ public class Gui extends JFrame {
 				System.out.println ("Partida carregada!");
 			}
 		}
-		catch (FileNotFoundException ex) {
-			JOptionPane.showMessageDialog (this, "Tentativa de carregar partida: falha no stream do objeto\n" + ex.getCause ());
-			System.out.println ("Tentativa de carregar partida: falha no stream do objeto\n" + ex.getCause ());
-		}
-		catch (ObjectStreamException ex) {
+		catch (FileNotFoundException | ObjectStreamException ex) {
 			JOptionPane.showMessageDialog (this, "Tentativa de carregar partida: falha no stream do objeto\n" + ex.getCause ());
 			System.out.println ("Tentativa de carregar partida: falha no stream do objeto\n" + ex.getCause ());
 		}
@@ -556,7 +562,10 @@ public class Gui extends JFrame {
 		};
 		
 		quem_joga.setForeground (Color.BLACK);
-		quem_joga.setText (J + ", " + str[rand.nextInt (16)]);
+		if (motor.possoJogar ())
+			quem_joga.setText (J + ", " + str[rand.nextInt (16)]);
+		else
+			quem_joga.setText ("Esperando jogada pela rede, aguarde!");
 	}
 	/**
 	 * Escreve na tela que empatou, e acaba o jogo

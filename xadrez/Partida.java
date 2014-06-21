@@ -66,4 +66,10 @@ public class Partida implements Serializable {
 	public Jogador getJ2 () {
 		return J2;
 	}
+	@Override
+	public String toString () {
+		String aux = "J1: " + J1 + "\tJ2: " + J2 + "\n";
+		aux += historico.get (snap_atual).toString ();
+		return aux;
+	}
 }

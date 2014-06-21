@@ -5,7 +5,7 @@
 package xadrez;
 /**
  * @todo pt2 → relógio - load
- * @todo pt2 → exceção
+ * @todo pt3 → patterns
  */
 
 import ui.Gui;
@@ -71,14 +71,13 @@ public class Xadrez {
 	 * Há dois estados: peça não marcada / peça marcada
 	 */
 	public void cliquei (Point p) {
-		if (partida && (!ObServer.estaEmRede () || conexao.get)) {
+		if (partida && possoJogar ()) {
 			// casa clicada
 			Casa atual = Tabuleiro.getTabuleiro ().getCasa (p);
 			if (casa_marcada == false) {
 				// se tem peça lá dentro
 				if (atual.estaOcupadaCor (jogador_da_vez.getCor ())) {
 					mov.clear ();
-					
 					mov.addAll (jogador_da_vez.getMovs (atual.getPeca ()));
 
 					// pra cada movimento possível faz ele aparecer possível
@@ -208,8 +207,8 @@ public class Xadrez {
 		Tabuleiro.getTabuleiro ().novoJogo ();
 		P.novoJogo ();
 		
-		jogador_da_vez = P.J1;
 		// só pra constar, o jogador branco é que começa
+		jogador_da_vez = P.J1;
 		// jogo tá rolando!
 		partida = true;
 	}
@@ -226,6 +225,9 @@ public class Xadrez {
 	public void conecta (ObServer.Lado lado) {
 		conexao = new ObServer (lado, this);
 		conexao.start ();
+		// se for cliente, já começa recebendo jogada
+		if (lado == ObServer.Lado.CLIENTE)
+			conexao.update ();
 	}
 	
 	
@@ -242,5 +244,8 @@ public class Xadrez {
 	/* SETTERS */
 	public void setPartida (Partida P) {
 		this.P = P;
+	}
+	public boolean possoJogar () {
+		return !ObServer.estaEmRede () || conexao.possoJogar (jogador_da_vez);
 	}
 }

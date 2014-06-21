@@ -61,6 +61,10 @@ public class Peao extends Peca {
 	
 	@Override
 	public String toString () {
+		return "P";
+	}
+	@Override	// Só o peão sobreescreve esse método: notação enxadrística é nada
+	public String getNotacao () {
 		return "";
 	}
 	
