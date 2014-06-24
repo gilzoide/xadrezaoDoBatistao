@@ -119,7 +119,7 @@ public class Snapshot implements Serializable {
 				case 6: peca = 'B'; break;
 				case 8: peca = 'D'; break;
 				case 10: peca = 'R'; break;
-				case 12: peca = 'P'; break;
+				case 12: peca = 'P'; System.out.print ((snap[i] >>> 5) + " "); break;
 				default: peca = ' ';
 			}
 			// se for preto, fica minúsculo

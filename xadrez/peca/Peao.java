@@ -41,7 +41,7 @@ public class Peao extends Peca {
 	 */
 	public Peao (Cor nova_cor, Point P) {
 		super (nova_cor, P);
-		estado = Estado.PRIMEIRA;		
+		estado = Estado.PRIMEIRA;	
 		// dependendo da cor, vai pra frente ou pra trás
 		lado = (cor == Cor.BRANCO) ? -1 : 1;
 	}

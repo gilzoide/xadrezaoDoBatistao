@@ -6,6 +6,7 @@ package xadrez;
 /**
  * @todo pt2 → relógio - load
  * @todo pt3 → patterns
+ * @todo pt3 → rede: estado do peão
  */
 
 import ui.Gui;
@@ -119,7 +120,7 @@ public class Xadrez {
 		
 		// move, e troca jogador
 		a_ser_feito.mover (jogador_da_vez);
-		trocaJogador ();
+		trocaJogador (false);
 
 
 		/*  snapshots  */
@@ -168,12 +169,15 @@ public class Xadrez {
 	private void trocaJogador (Jogador J) {
 		jogador_da_vez = J;
 
-		trocaJogador ();
+		trocaJogador (true);
 	}
-	private void trocaJogador () {
+	// se refresh, é porque veio do refreshSnap: não dá update nos peões!
+	private void trocaJogador (boolean refresh) {
 		if (partida) {
-			// peões que tinham andado 2 casas agora não podem mais ser tomados por en passant
-			jogador_da_vez.updatePiaums ();
+			if (!refresh) {
+				// peões que tinham andado 2 casas agora não podem mais ser tomados por en passant
+				jogador_da_vez.updatePiaums ();
+			}
 			
 			// relógio do da vez para - vez do otro agora
 			jogador_da_vez.getRelogio ().stop ();
@@ -190,9 +194,9 @@ public class Xadrez {
 			// depois do domínio pronto, faz o rolê pros reis (que dependem do passo anterior)
 			outroJogador ().updateRei ();	// quem acabou de jogar
 			jogador_da_vez.updateRei ();	// o da vez agora
-			
+
 			// verifica situação de quem vai jogar: xeque/mate
-			jogador_da_vez.checaXeque ();
+			jogador_da_vez.checaXeque (refresh);
 		}
 	}
 	public static Jogador outroJogador () {
@@ -244,6 +248,7 @@ public class Xadrez {
 	/* SETTERS */
 	public void setPartida (Partida P) {
 		this.P = P;
+		
 	}
 	public boolean possoJogar () {
 		return !ObServer.estaEmRede () || conexao.possoJogar (jogador_da_vez);

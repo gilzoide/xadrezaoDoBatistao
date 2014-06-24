@@ -41,16 +41,18 @@ public class SessionManager {
 	 */
 	public void salvaPartida (File file) throws IOException {
 		partida = xadrez.getPartida ();
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+		ObjectOutputStream out = new ObjectOutputStream (new FileOutputStream(file));
 		out.writeObject (partida);
+		out.close ();
 	}
 	/**
 	 * Carrega partida
 	 */
 	public void carregaPartida (File file) throws FileNotFoundException, IOException, ClassNotFoundException {
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+		ObjectInputStream in = new ObjectInputStream (new FileInputStream(file));
 		partida = (Partida) in.readObject ();
 		xadrez.setPartida (partida);
+		in.close ();
 	}
 
 	/* GETTERS */

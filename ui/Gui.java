@@ -433,7 +433,7 @@ public class Gui extends JFrame {
 		// relógio doutro jogador tá parado
 		Xadrez.outroJogador ().getRelogio ().stop ();
 	}
-	private void updateRelojs (Partida partida) {
+	public void updateRelojs (Partida partida) {
 		Relogio R = motor.getRelogio ();
 		R.setLabel (total);
 		R.start ();
@@ -578,10 +578,17 @@ public class Gui extends JFrame {
 	/**
 	 * Escreve na tela se deu xeque
 	 */
-	public void xeque (Jogador J) {
+	public void xeque (Jogador J, boolean refresh) {
 		quem_joga.setForeground (Color.RED);
-		quem_joga.setText (J + " está em xeque, faça alguma coisa! =S");
-		log.addXeque ();
+		if (motor.possoJogar ())	// é offline ou online e minha vez
+			quem_joga.setText (J + " está em xeque, faça alguma coisa! =S");
+		else
+			quem_joga.setText (J + " está em xeque, vamos esperar a sequência!");
+		
+		// só põe '+' se não tiver refreshando =P
+		if (!refresh) {
+			log.addXeque ();
+		}
 	}
 	/**
 	 * Escreve na tela que deu mate
@@ -616,6 +623,14 @@ public class Gui extends JFrame {
 	 */
 	public String getEndereco () {
 		return JOptionPane.showInputDialog ("Endereço do servidor", "localhost");
+	}
+	/**
+	 * Conexão falhou =/
+	 * fecha o trem
+	 */
+	public void falhaComunicacao () {
+		JOptionPane.showConfirmDialog (this, "A conexão falhou, e a culpa não é do programa =P\nAcabou o jogo...", "Conexão perdida",  JOptionPane.OK_CANCEL_OPTION);
+		System.exit (0);
 	}
 	
 	/**

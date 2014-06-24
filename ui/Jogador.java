@@ -114,7 +114,7 @@ public class Jogador implements Serializable {
 	/**
 	 * Checa se jogador está em cheque, ou até mate!
 	 */
-	public void checaXeque () {
+	public void checaXeque (boolean refresh) {
 		// se não tem mais movimentos, é mate!
 		if (!possoMover ()) {
 			if (estaXeque ())
@@ -126,7 +126,7 @@ public class Jogador implements Serializable {
 		}
 		// talvez não mate, mas um xequezinho básico
 		else if (estaXeque ()) {
-			Gui.getTela ().xeque (this);
+			Gui.getTela ().xeque (this, refresh);
 		}
 	}
 	/**

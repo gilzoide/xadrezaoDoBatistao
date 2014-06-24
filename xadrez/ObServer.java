@@ -10,11 +10,13 @@ import ui.Cor;
 import ui.Jogador;
 
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.ServerSocket;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
 import java.io.IOException;
+import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -54,6 +56,12 @@ public class ObServer extends Thread {
 		abreConexao (lado);
 		while (true) {
 			comunica (true);
+			try {
+				sleep (1000);
+			}
+			catch (InterruptedException ex) {
+				ex.printStackTrace ();
+			}
 		}
 	}
 	
@@ -65,13 +73,13 @@ public class ObServer extends Thread {
 			}
 			else {
 				conexao = new Socket ();
-				conexao.connect (new InetSocketAddress (Gui.getTela ().getEndereco (), port), 5000);
+				conexao.connect (new InetSocketAddress (Gui.getTela ().getEndereco (), port), 7000);
 			}
 			
 			saida = new ObjectOutputStream (conexao.getOutputStream ());
 			entrada = new ObjectInputStream (conexao.getInputStream ());
 			usando_rede = true;
-			System.err.println ("Conectado!");
+			System.out.println ("Conectado!");
 			
 			if (lado == Lado.CLIENTE)
 				comunica (false);
@@ -107,6 +115,7 @@ public class ObServer extends Thread {
 					// manda
 					P = observado.getPartida ();
 					saida.writeObject (P);
+					saida.flush ();
 					System.out.println ("mandei partida: " + P);
 				}
 				// recebe
@@ -118,6 +127,11 @@ public class ObServer extends Thread {
 				devo_comunicar = false;
 			}
 		}
+		// comunicação foi fechada
+		catch (EOFException | SocketException ex) {
+			Gui.getTela ().falhaComunicacao ();
+		}
+		// resto
 		catch (IOException | ClassNotFoundException ex) {
 			ex.printStackTrace ();
 		}

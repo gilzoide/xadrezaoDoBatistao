@@ -126,7 +126,7 @@ public class Movimento implements Serializable {
 		Peca aux = pronde.getPeca ();
 		// se a casa está ocupada, notação de 'tomou peça'
 		if (aux != null) {
-			notacao_extra = "x" + aux;
+			notacao_extra = "x" + aux.getNotacao ();
 		}
 
 		String str = new String ();			// exemplo de notação
