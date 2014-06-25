@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 11/05/2014
+ * 25/06/2014
  */
 package xadrez.movimento;
 
@@ -168,6 +168,9 @@ public class Movimento implements Serializable {
 	}
 	public static int getNumMovs () {
 		return num;
+	}
+	public static void incNumMovs () {
+		num++;
 	}
 	public Casa getDonde () {
 		return donde;

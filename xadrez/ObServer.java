@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 11/05/2014
+ * 25/06/2014
  */
 package xadrez;
 
@@ -49,17 +49,27 @@ public class ObServer extends Thread {
 	public ObServer (Lado lado, Xadrez observado) {
 		this.lado = lado;
 		this.observado = observado;
-		devo_comunicar = false;
+		// é daemon: programa fecha mesmo se essa thread tiver rodando
+		setDaemon (true);
+		abreConexao (lado);
 	}
 	
 	public void run () {
-		abreConexao (lado);
 		while (true) {
-			comunica (true);
 			try {
-				sleep (1000);
+				// recebe
+				Partida P = (Partida) entrada.readObject ();
+				observado.setPartida (P);
+				observado.refreshSnap ();
+				System.out.println ("recebi partida: " + P);
+				Movimento.incNumMovs ();
 			}
-			catch (InterruptedException ex) {
+			// comunicação foi fechada
+			catch (EOFException | SocketException ex) {
+				Gui.getTela ().falhaComunicacao ();
+			}
+			// resto
+			catch (IOException | ClassNotFoundException ex) {
 				ex.printStackTrace ();
 			}
 		}
@@ -69,6 +79,7 @@ public class ObServer extends Thread {
 		try {
 			if (lado == Lado.SERVIDOR) {
 				ouvido = new ServerSocket (port);
+				System.out.println ("Esperando conexão...");
 				conexao = ouvido.accept ();
 			}
 			else {
@@ -80,9 +91,6 @@ public class ObServer extends Thread {
 			entrada = new ObjectInputStream (conexao.getInputStream ());
 			usando_rede = true;
 			System.out.println ("Conectado!");
-			
-			if (lado == Lado.CLIENTE)
-				comunica (false);
 		}
 		catch (UnknownHostException ex) {
 			System.err.println ("Servidor não encontrado!");
@@ -103,42 +111,22 @@ public class ObServer extends Thread {
 		return usando_rede;
 	}
 	
-	
-	/**
-	 * Manda o movimento feito e recebe o do outro jogador
-	 */
-	public void comunica (boolean devo_mandar) {
+	public void update () {
 		try {
-			if (devo_comunicar) {
-				Partida P;
-				if (devo_mandar) {
-					// manda
-					P = observado.getPartida ();
-					saida.writeObject (P);
-					saida.flush ();
-					System.out.println ("mandei partida: " + P);
-				}
-				// recebe
-				P = (Partida) entrada.readObject ();
-				observado.setPartida (P);
-				observado.refreshSnap ();
-				System.out.println ("recebi partida: " + P);
-				
-				devo_comunicar = false;
-			}
+			// manda
+			Partida P = observado.getPartida ();
+			saida.writeObject (P);
+			saida.flush ();
+			System.out.println ("mandei partida: " + P);
 		}
 		// comunicação foi fechada
 		catch (EOFException | SocketException ex) {
 			Gui.getTela ().falhaComunicacao ();
 		}
-		// resto
-		catch (IOException | ClassNotFoundException ex) {
+		// outras exceções
+		catch (IOException ex) {
 			ex.printStackTrace ();
 		}
-	}
-	
-	public void update () {
-		devo_comunicar = true;
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 11/05/2014
+ * 25/06/2014
  */
 package xadrez;
 /**
@@ -229,9 +229,6 @@ public class Xadrez {
 	public void conecta (ObServer.Lado lado) {
 		conexao = new ObServer (lado, this);
 		conexao.start ();
-		// se for cliente, já começa recebendo jogada
-		if (lado == ObServer.Lado.CLIENTE)
-			conexao.update ();
 	}
 	
 	
