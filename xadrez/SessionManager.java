@@ -35,6 +35,20 @@ public class SessionManager {
 		
 		timer.start ();
 	}
+	
+	/**
+	 * Setta autosave em relação ao parâmetro: se true, liga; se false, desliga
+	 */
+	public void setAutosave (boolean auto) {
+		if (auto) {
+			timer.start ();
+			System.out.println ("Ligando autosave");
+		}
+		else {
+			timer.stop ();
+			System.out.println ("Desligando autosave");
+		}
+	}
 
 	/**
 	 * Salva a partida

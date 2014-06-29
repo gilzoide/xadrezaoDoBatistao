@@ -119,6 +119,9 @@ public abstract class Peca implements Serializable {
 	public void setCoord (int linha, int coluna) {
 		coord.setLocation (coluna, linha);
 	}
+	public void setCor (Cor cor) {
+		this.cor = cor;
+	}
 	public void morre () {
 		morreu = true;
 	}

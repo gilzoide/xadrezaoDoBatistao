@@ -90,8 +90,6 @@ public class Gui extends JFrame {
 		}
 
 		// constrói resto dos trem; enquanto isso, a splashscreen ainda tá lá
-		sessao = new SessionManager (motor);
-
 		JPanel tab = new JPanel ();
 		tab.setLayout (null);
 		JPanel log = new JPanel ();
@@ -114,7 +112,9 @@ public class Gui extends JFrame {
 		// Pergunta se quer jogar na rede
 		perguntaConexao ();
 		
-		// Monta menu (algumas opções são desativadas se estiver em rede)
+		// Monta menu (algumas opções são desativadas se estiver em rede, inclusive save/auto)
+		if (!ObServer.estaEmRede ())
+			sessao = new SessionManager (motor);
 		menu ();
 		
 		novoJogo ();
@@ -276,6 +276,26 @@ public class Gui extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					salvarJogo ();
+				}
+			});
+			
+			// Item 'autosave'
+			JMenuItem Autosave = new JMenuItem ("Autosave");
+			Autosave.setMnemonic (KeyEvent.VK_A);
+			Autosave.setToolTipText ("Ativa ou desativa o autosave");
+			Jogo.add (Autosave);
+			//ctrlO Carrega jogo salvo
+			Autosave.getActionMap ().put ("autosave", new AbstractAction () {
+				@Override
+				public void actionPerformed (ActionEvent event) {
+					autosave ();
+				}
+			});
+
+			Autosave.addActionListener (new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					autosave ();
 				}
 			});
 
@@ -535,6 +555,17 @@ public class Gui extends JFrame {
 			JOptionPane.showMessageDialog (this, "Tentativa de carregar partida: classe não encontrada\n" + ex.getCause ());
 			System.out.println ("Tentativa de carregar partida: classe não encontrada\n" + ex.getCause ());			
 		}
+	}
+	/**
+	 * Ativa ou desativa o autosave
+	 */
+	private void autosave () {
+		int auto = JOptionPane.showConfirmDialog (this, "Deixar o autosave rodando?", "Autosave", JOptionPane.YES_NO_OPTION);
+		
+		if (auto == JOptionPane.YES_OPTION)
+			sessao.setAutosave (true);
+		else if (auto == JOptionPane.NO_OPTION)
+			sessao.setAutosave (false);
 	}
 	
 	/**

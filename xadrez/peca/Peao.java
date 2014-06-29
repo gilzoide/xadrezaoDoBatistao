@@ -146,17 +146,12 @@ public class Peao extends Peca {
 			else if ((int) coord.getY () == 0 || (int) coord.getY () == 7) {
 				// não tem mais eu
 				morre ();
-				Object[] opcoes = { "Bispo", "Cavalo", "Dama", "Torre" };		// opções pra promoção
-				Object selecionado = JOptionPane.showInputDialog (null, "Promove pra que peça?", "Promoção do Peão! Só aqui, no Xadrezão do Batistão!", JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
-				Peca nova;
-				if (selecionado.toString () == "Bispo")
-					nova = new Bispo (cor, coord);
-				else if (selecionado.toString () == "Cavalo")
-					nova = new Cavalo (cor, coord);
-				else if (selecionado.toString () == "Dama")
-					nova = new Dama (cor, coord);
-				else
-					nova = new Torre (cor, coord);
+				String[] opcoes = { "Bispo", "Cavalo", "Dama", "Torre" };		// opções pra promoção
+				String selecionado = (String) JOptionPane.showInputDialog (null, "Promove pra que peça?", "Promoção do Peão! Só aqui, no Xadrezão do Batistão!", JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+				PecaFactory fabrica = new PecaFactory ();
+				Peca nova = fabrica.cria (selecionado);
+				nova.setCoord (coord);
+				nova.setCor (cor);
 
 				Tabuleiro.getTabuleiro ().getCasa (coord).setPeca (nova);
 				Tabuleiro.getTabuleiro ().getCasa (coord).atualizaIcone ();
