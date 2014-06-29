@@ -37,46 +37,38 @@ public class Casa implements Serializable {
 	 * Constrói casas do novo jogo (ou seja, só seta as peças no lugar certo =P)
 	 */
 	void casaNovoJogo () {
+		Cor nova_cor = Cor.BRANCO;
+		PecaFactory fabrica = new PecaFactory ();
 		
 		switch ((int) coord.getY ()) {
-			// Peças PRETAS: primeira fila (torres, cavalos, bispos, dama e rei)
+			// primeira fila (torres, cavalos, bispos, dama e rei)
 			case 0:
+				nova_cor = Cor.PRETO;
+			case 7:
 				if (coord.getX () % 7 == 0)
-					peca = new Torre (Cor.PRETO, coord);
+					peca = fabrica.criaTorre ();
 				else if (coord.getX () % 5 == 1)
-					peca = new Cavalo (Cor.PRETO, coord);
+					peca = fabrica.criaCavalo ();
 				else if (coord.getX () % 3 == 2)
-					peca = new Bispo (Cor.PRETO, coord);
+					peca = fabrica.criaBispo ();
 				else if (coord.getX () == 4)
-					peca = new Rei (Cor.PRETO, coord);
+					peca = fabrica.criaRei ();
 				else
-					peca = new Dama (Cor.PRETO, coord);
+					peca = fabrica.criaDama ();
 				break;
 			// segunda fila (peões)
 			case 1:
-				peca = new Peao (Cor.PRETO, coord);
-				break;
-
-			// Peças BRANCAS: segunda fila (peões)
+				nova_cor = Cor.PRETO;
 			case 6:
-				peca = new Peao (Cor.BRANCO, coord);
+				peca = fabrica.criaPeao ();
 				break;
-			// primeira fila ((torres, cavalos, bispos, dama e rei)
-			case 7:
-				if (coord.getX () % 7 == 0)
-					peca = new Torre (Cor.BRANCO, coord);
-				else if (coord.getX () % 5 == 1)
-					peca = new Cavalo (Cor.BRANCO, coord);
-				else if (coord.getX () % 3 == 2)
-					peca = new Bispo (Cor.BRANCO, coord);
-				else if (coord.getX () == 4)
-					peca = new Rei (Cor.BRANCO, coord);
-				else
-					peca = new Dama (Cor.BRANCO, coord);
-				break;
-
+				
 			default:
 				peca = null;
+		}
+		if (peca != null) {
+			peca.setCoord (coord);
+			peca.setCor (nova_cor);
 		}
 		
 		atualizaIcone ();

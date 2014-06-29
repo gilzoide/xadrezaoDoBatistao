@@ -172,4 +172,10 @@ public class Peao extends Peca {
 		byte aux = super.getMask ();
 		return (byte) ((estado.ordinal () << 5) + 12 + aux);
 	}
+	/* SETTERS */
+	@Override
+	public void setCor (Cor cor) {
+		super.setCor (cor);
+		lado = (cor == Cor.BRANCO) ? -1 : 1;
+	}
 }
