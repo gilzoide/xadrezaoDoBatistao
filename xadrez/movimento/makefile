@@ -1,6 +1,6 @@
 # Gil Barbosa Reis - 8532248
 # SCC 604 - POO - Turma C
-# 25/06/2014
+# 29/06/2014
 
 # Package: Movimento (os movimentos das peças, inclusive especiais)
 src = *.java

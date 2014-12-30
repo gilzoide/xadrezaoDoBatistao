@@ -1,6 +1,6 @@
 # Gil Barbosa Reis - 8532248
 # SCC 604 - POO - Turma C
-# 25/06/2014
+# 29/06/2014
 
 # Make do Xadrezão do Batistão
 
@@ -22,18 +22,12 @@ pacotes = xadrez ui
 # compila todo o projeto
 all : $(pacotes)
 	cp -r ui/img build/ui
-	cp -r ui/audio build/ui
 
 .PHONY : $(pacotes) run header zip clean debug edit todo
 # compila cada pacote, usando o makefile lá dentro
 $(pacotes) :
 	$(MAKE) -C $@ all
 
-
-
-# manda editar todos os .java
-edit:
-	geany `locate .java | grep xadrezao`
 
 # roda o projeto compilado
 run :
@@ -45,6 +39,8 @@ run_rede :
 	@java -classpath $(BUILD) xadrez.Xadrez &
 	@java -classpath $(BUILD) xadrez.Xadrez &
 
+jar :
+	jar cvfm xadrezaoDoBatistao.jar manifest.txt -C build ui -C build xadrez
 
 debug :
 	jdb -classpath $(BUILD) xadrez.Xadrez
@@ -61,9 +57,9 @@ header :
 
 # zipa o projeto, pra mandar no SSP
 zip :
-	zip Xadrez -r $(pacotes) build makefile
+	zip xadrezaoDoBatistao -r $(pacotes) build makefile designPattern.pdf
 
 # limpa os descartáveis da vida
 clean :
-	$(RM) -r *~ *.zip build/*
+	$(RM) -r *~ *.zip build/* *.jar
 	$(foreach pac, $(pacotes), $(MAKE) -C $(pac) clean;)

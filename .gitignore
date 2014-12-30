@@ -12,6 +12,7 @@ all
 
 # objetos do java
 *.class
+*.jar
 # pasta de build
 build
 # save do jogo

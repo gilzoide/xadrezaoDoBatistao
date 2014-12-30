@@ -1,6 +1,6 @@
 /* Gil Barbosa Reis - 8532248
  * SCC 604 - POO - Turma C
- * 25/06/2014
+ * 29/06/2014
  */
 package ui;
 
@@ -106,6 +106,12 @@ public class Gui extends JFrame {
 		montaQuemJoga (tab);
 		montaTabuleiro (tab);
 		montaLog (log);
+
+		// fecha splash screen
+		if (window != null) {
+			window.close ();
+		}
+
 		// mostra janela do jogo
 		setVisible (true);
 		
@@ -118,11 +124,6 @@ public class Gui extends JFrame {
 		menu ();
 		
 		novoJogo ();
-		
-		// fecha splash screen
-		if (window != null) {
-			window.close ();
-		}
 		
 	}
 

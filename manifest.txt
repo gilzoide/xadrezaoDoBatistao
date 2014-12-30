@@ -1,0 +1,3 @@
+Main-Class: xadrez.Xadrez
+SplashScreen-Image: ui/img/splash.png
+
